@@ -1,4 +1,4 @@
-package com.core;
+package main.java.com.core;
 
 public class SessionCreate {
 
