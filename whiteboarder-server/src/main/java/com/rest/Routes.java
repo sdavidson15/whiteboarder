@@ -1,4 +1,4 @@
-package main.java.com.rest;
+package com.rest;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 

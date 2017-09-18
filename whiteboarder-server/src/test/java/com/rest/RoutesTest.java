@@ -1,4 +1,4 @@
-package test.java.com.rest;
+package com.rest;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -20,9 +20,6 @@ public class RoutesTest {
     public void setUp() throws Exception {
         server = Main.startServer();
         Client mockClient = ClientBuilder.newClient();
-
-        // This enables JSON on our mock client
-        mockClient.configuration().enable(new org.glassfish.jersey.media.json.JsonJaxbFeature());
 
         target = mockClient.target(Main.BASE_URI);
     }

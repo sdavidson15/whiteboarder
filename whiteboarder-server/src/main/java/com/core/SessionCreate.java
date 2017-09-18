@@ -1,8 +1,9 @@
-package main.java.com.core;
+package com.core;
 
 public class SessionCreate {
 
-    public static createSessionsID() {
+    public static String createSessionsID() {
         // TODO - generate uuid
+        return "";
     }
 }
