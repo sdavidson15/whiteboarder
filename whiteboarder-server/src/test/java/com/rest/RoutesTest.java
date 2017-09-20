@@ -36,15 +36,13 @@ public class RoutesTest {
 
     @Test
     public void testUploadImage() {
-        // TODO: Upload an image binary to server, confirm status ok
+        // TODO: Upload an image to the server, confirm status ok.
     }
 
     @Test
     public void testGetImage() {
-        // Use session id to make sure you're getting the same image back that
-        // you posted earlier. You may need to mock some storage stuff
-        String resp = target.path("wb/image").request().get(String.class);
+        String resp = target.path("wb/image/sessionID").request().get(String.class);
         // TODO: Deserialize response
-        assertEquals("Ok", resp); // FIXME
+        assertEquals("This should be JSON", resp);
     }
 }
