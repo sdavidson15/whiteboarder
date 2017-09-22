@@ -2,6 +2,7 @@ package com.model;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Whiteboard {
 
@@ -10,9 +11,9 @@ public class Whiteboard {
     private List<Image> imageHistory;
     private List<Edit> edits;
 
-    public Whiteboard(String uuid, String name) {
-        this.uuid = uuid;
+    public Whiteboard(String name) {
         this.name = name;
+        this.uuid = UUID.randomUUID().toString();
     }
 
     public String getUUID() {
@@ -36,7 +37,9 @@ public class Whiteboard {
         return this.imageHistory;
     }
     public void addImage(Image img) {
-        // TODO: Do some validation on the image
+        if (img == null || img.getBytes() == null || img.getBytes().length == 0) {
+            return;
+        }
 
         if (this.imageHistory == null) {
             this.imageHistory = new ArrayList<Image>();

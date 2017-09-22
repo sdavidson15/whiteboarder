@@ -1,6 +1,7 @@
 package com.model;
 
 import java.util.Date;
+import java.util.UUID;
 
 public class Image {
     
@@ -9,15 +10,15 @@ public class Image {
     private byte[] bytes;
     private Date date;
 
-    public Image(String id, String filename, byte[] bytes) {
-        this.id = id;
+    public Image(String filename, byte[] bytes) {
         this.filename = filename;
         this.bytes = bytes;
 
+        this.id = UUID.randomUUID().toString();
         this.date = new Date();  
     }
 
-    public String getId() {
+    public String getID() {
         return this.id;
     }
 

@@ -1,6 +1,9 @@
 package com.model;
 
 public class User {
+    public enum Mode {
+        HOST, COLLABORATOR, VIEWER;
+    }
 
     private String name;
     private int id;

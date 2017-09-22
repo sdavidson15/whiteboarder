@@ -2,6 +2,13 @@ package com.rest;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
+import com.model.Image;
+import com.model.Whiteboard;
+
+import java.util.UUID;
+
+import java.lang.reflect.Type;
+
 import javax.annotation.PostConstruct;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -13,6 +20,11 @@ import javax.ws.rs.core.Response;
 
 import jdk.nashorn.internal.objects.annotations.Getter;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+
 @Path("/wb")
 public class Routes {
 
@@ -21,9 +33,27 @@ public class Routes {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     public Response createSession(String payload) {
-        // TODO: Process the payload, generate session id, persist appropriate data model
-        String output = "This should be JSON";
-        return Response.ok(output, APPLICATION_JSON).build();
+        Gson gson = new GsonBuilder().create();
+
+        Image img = new Image("Blank Image", null);
+        if (payload != null && payload.length() > 0) {
+            try {
+                // TODO: If this fails, will img still be reassigned?
+                img = gson.fromJson(payload, new TypeToken<Image>() {}.getType());
+            } catch(JsonSyntaxException e) {
+                return Response.status(400).entity("Incorrect JSON format for the image payload.").build();
+            } catch(Exception e) {
+                return Response.serverError().entity(e.toString()).build();
+            }
+        }
+
+        Whiteboard wb = new Whiteboard("New Whiteboard");
+        wb.addImage(img);
+
+        // TODO: Store the image, even if bytes is null/empty.
+        // TODO: Store the whiteboard
+        
+        return Response.ok(wb.getUUID(), APPLICATION_JSON).build();
     }
 
     @GET
@@ -33,21 +63,47 @@ public class Routes {
         if (sessionID == null || sessionID.trim().length() == 0) {
             return Response.serverError().entity("Session ID cannot be empty.").build();
         }
-        // TODO: Return image from storage
-        String output = "This should be JSON";
-        return Response.ok(output, APPLICATION_JSON).build();
+        Gson gson = new GsonBuilder().create();
+
+        Whiteboard wb = new Whiteboard(sessionID); // FIXME: Get Whiteboard from storage by session ID
+        if (wb == null) {
+            return Response.status(100).entity("Invalid session ID.").build();
+        }
+
+        Image img = wb.getCurrentImage();
+        String resp = img != null ? gson.toJson(img) : null;
+        return Response.ok(resp, APPLICATION_JSON).build();
     }
 
     @POST
     @Path("/image/{sessionID}")
     @Consumes(APPLICATION_JSON)
-    @Produces(APPLICATION_JSON)
-    public Response uploadImage(String payload, @PathParam("sessionID") String sessionID) {
+    public Response uploadImage(@PathParam("sessionID") String sessionID, String payload) {
         if (sessionID == null || sessionID.trim().length() == 0) {
-            return Response.serverError().entity("Session ID cannot be empty.").build();
+            return Response.status(400).entity("Session ID cannot be empty.").build();
         }
-        // TODO: Process the payload, persist appropriate data model
-        String output = "This should be JSON";
-        return Response.ok(output, APPLICATION_JSON).build();
+        Gson gson = new GsonBuilder().create();
+
+        Image img = new Image("Blank Image", null);
+        try {
+            // TODO: If this fails, will img still be reassigned?
+            img = gson.fromJson(payload, new TypeToken<Image>() {}.getType());
+        } catch(JsonSyntaxException e) {
+            return Response.status(400).entity("Incorrect JSON format for the image payload.").build();
+        } catch(Exception e) {
+            return Response.serverError().entity(e.toString()).build();
+        }
+
+        Whiteboard wb = new Whiteboard(sessionID); // FIXME: Get Whiteboard from storage by session ID
+        if (wb == null) {
+            return Response.status(100).entity("Invalid session ID.").build();
+        }
+
+        wb.addImage(img);
+
+        // TODO: Store the image, even if bytes is null/empty.
+        // TODO: Store the whiteboard, with the new image in it's image history
+
+        return Response.ok().build();
     }
 }

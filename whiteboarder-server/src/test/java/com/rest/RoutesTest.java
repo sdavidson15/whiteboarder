@@ -1,15 +1,18 @@
 package com.rest;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-
-import org.glassfish.grizzly.http.server.HttpServer;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
+
+import org.glassfish.grizzly.http.server.HttpServer;
 
 public class RoutesTest {
 
@@ -31,18 +34,19 @@ public class RoutesTest {
 
     @Test
     public void testCreateSession() {
-        // TODO: Test create session, and confirm status ok and a 9 digit session id.
+        Response resp = target.path("wb/session").request(APPLICATION_JSON).post(null);
+        assertEquals(200, resp.getStatus());
     }
 
     @Test
     public void testUploadImage() {
-        // TODO: Upload an image to the server, confirm status ok.
+        Response resp = target.path("wb/image/sessionID").request(APPLICATION_JSON).post(null);
+        assertEquals(500, resp.getStatus());
     }
 
     @Test
     public void testGetImage() {
-        String resp = target.path("wb/image/sessionID").request().get(String.class);
-        // TODO: Deserialize response
-        assertEquals("This should be JSON", resp);
+        Response resp = target.path("wb/image/sessionID").request().get();
+        assertEquals(200, resp.getStatus());
     }
 }
