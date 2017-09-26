@@ -44,6 +44,33 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private final View.OnClickListener cameraButtonOnClickListener =  new View.OnClickListener() {
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        @Override
+        public void onClick(View view) {
+            if (checkSelfPermission(Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                requestPermissions(new String[]{Manifest.permission.CAMERA}, 0);
+                return;
+            }
+
+            Camera c = Camera.open(0);
+            c.setDisplayOrientation(90);
+            c.startPreview();
+
+            SurfaceView surfaceView = (SurfaceView) findViewById(R.id.cameraPreviewSurface);
+            SurfaceHolder surfaceHolder = surfaceView.getHolder();
+            try {
+                c.setPreviewDisplay(surfaceHolder);
+            } catch (IOException e) {
+                System.out.println(e);
+            }
+
+            System.out.println(view);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,33 +80,6 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         Button openCameraButton = (Button) findViewById(R.id.cameraButton);
-
-        final Activity activity = this;
-        openCameraButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View view) {
-                if (checkSelfPermission(Manifest.permission.CAMERA)
-                        != PackageManager.PERMISSION_GRANTED) {
-
-                    requestPermissions(new String[]{Manifest.permission.CAMERA}, 0);
-                    return;
-                }
-
-                Camera c = Camera.open(0);
-                c.setDisplayOrientation(90);
-                c.startPreview();
-
-                SurfaceView surfaceView = (SurfaceView) findViewById(R.id.cameraPreviewSurface);
-                SurfaceHolder surfaceHolder = surfaceView.getHolder();
-                try {
-                    c.setPreviewDisplay(surfaceHolder);
-                } catch (IOException e) {
-                    System.out.println(e);
-                }
-
-                System.out.println(view);
-            }
-        });
+        openCameraButton.setOnClickListener(cameraButtonOnClickListener);
     }
 }
