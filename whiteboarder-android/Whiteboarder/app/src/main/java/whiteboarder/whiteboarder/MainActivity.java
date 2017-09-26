@@ -23,6 +23,7 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
+    private Camera camera;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -44,6 +45,23 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private final View.OnClickListener takePhotoButtonOnClickListener = new View.OnClickListener() {
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        @Override
+
+        public void onClick(View view) {
+            if (camera == null) {
+                return;
+            }
+
+            camera.takePicture(null, null, null, new Camera.PictureCallback() {
+                public void onPictureTaken(byte[] data, Camera camera) {
+                    System.out.println("wow it's a lot of data");
+                }
+            });
+        }
+    }
+
     private final View.OnClickListener cameraButtonOnClickListener =  new View.OnClickListener() {
         @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
@@ -55,9 +73,14 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            Camera c = Camera.open(0);
-            c.setDisplayOrientation(90);
-            c.startPreview();
+            if (camera != null) {
+                // camera is already open.
+                return;
+            }
+
+            camera = Camera.open(0);
+            camera.setDisplayOrientation(90);
+            camera.startPreview();
 
             SurfaceView surfaceView = (SurfaceView) findViewById(R.id.cameraPreviewSurface);
             SurfaceHolder surfaceHolder = surfaceView.getHolder();
@@ -65,9 +88,8 @@ public class MainActivity extends AppCompatActivity {
                 c.setPreviewDisplay(surfaceHolder);
             } catch (IOException e) {
                 System.out.println(e);
+                return;
             }
-
-            System.out.println(view);
         }
     };
 
@@ -81,5 +103,7 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         Button openCameraButton = (Button) findViewById(R.id.cameraButton);
         openCameraButton.setOnClickListener(cameraButtonOnClickListener);
+        Button takePhotoButton = (Button) findViewById(R.id.takePhotoButton);
+        takePhotoButton.setOnClickListener(takePhotoButtonOnClickListener);
     }
 }
