@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-    }
+    };
 
     private final View.OnClickListener cameraButtonOnClickListener =  new View.OnClickListener() {
         @RequiresApi(api = Build.VERSION_CODES.M)
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             SurfaceView surfaceView = (SurfaceView) findViewById(R.id.cameraPreviewSurface);
             SurfaceHolder surfaceHolder = surfaceView.getHolder();
             try {
-                c.setPreviewDisplay(surfaceHolder);
+                camera.setPreviewDisplay(surfaceHolder);
             } catch (IOException e) {
                 System.out.println(e);
                 return;
@@ -98,9 +98,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         Button openCameraButton = (Button) findViewById(R.id.cameraButton);
         openCameraButton.setOnClickListener(cameraButtonOnClickListener);
         Button takePhotoButton = (Button) findViewById(R.id.takePhotoButton);
