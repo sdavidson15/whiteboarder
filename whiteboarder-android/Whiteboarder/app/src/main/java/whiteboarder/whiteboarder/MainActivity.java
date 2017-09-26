@@ -57,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
             camera.takePicture(null, null, null, new Camera.PictureCallback() {
                 public void onPictureTaken(byte[] data, Camera camera) {
                     System.out.println("wow it's a lot of data");
+
+                    // You have to restart the preview-- otherwise the camera freezes.
+                    camera.startPreview();
                 }
             });
         }
