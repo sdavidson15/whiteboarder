@@ -69,7 +69,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<mainClass>com.rest.Main</mainClass>
+					<mainClass>com.Main</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>

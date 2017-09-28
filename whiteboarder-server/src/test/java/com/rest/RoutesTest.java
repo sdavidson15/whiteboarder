@@ -24,7 +24,7 @@ public class RoutesTest {
         server = Main.startServer();
         Client mockClient = ClientBuilder.newClient();
 
-        target = mockClient.target(Main.LOCAL_BASE_URI);
+        target = mockClient.target(Rest.LOCAL_BASE_URI);
     }
 
     @After
@@ -41,7 +41,7 @@ public class RoutesTest {
     @Test
     public void testUploadImage() {
         Response resp = target.path("wb/image/sessionID").request(APPLICATION_JSON).post(null);
-        assertEquals(500, resp.getStatus());
+        assertEquals(200, resp.getStatus());
     }
 
     @Test
