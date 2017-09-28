@@ -2,13 +2,14 @@ package com.rest;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.model.Image;
 import com.model.Whiteboard;
-
-import java.util.UUID;
-
 import java.lang.reflect.Type;
-
+import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -17,13 +18,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
-
 import jdk.nashorn.internal.objects.annotations.Getter;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 
 @Path("/wb")
 public class Routes {

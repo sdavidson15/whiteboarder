@@ -24,7 +24,7 @@ public class RoutesTest {
         server = Main.startServer();
         Client mockClient = ClientBuilder.newClient();
 
-        target = mockClient.target(Main.BASE_URI);
+        target = mockClient.target(Main.LOCAL_BASE_URI);
     }
 
     @After

@@ -1,8 +1,8 @@
 package com.model;
 
-import java.util.Set;
-import java.util.Date;
 import java.awt.Point;
+import java.util.Date;
+import java.util.Set;
 
 public class Edit {
 
