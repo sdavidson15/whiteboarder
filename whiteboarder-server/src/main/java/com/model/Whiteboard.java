@@ -15,11 +15,11 @@ public class Whiteboard {
 
     public Whiteboard(String name) {
         this.name = name;
-        this.uuid = UUID.randomUUID().toString();
+        this.wbID = UUID.randomUUID().toString();
     }
 
-    public String getUUID() {
-        return this.uuid;
+    public String getWbID() {
+        return this.wbID;
     }
     
     public String getName() {

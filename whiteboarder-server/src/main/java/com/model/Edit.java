@@ -6,40 +6,45 @@ import java.util.Set;
 
 public class Edit {
 
+    private String wbID;
+    private String username;
     private int color;
-    private Set<Point> points;
     private int brushSize;
-    private int userID;
-    private int wbID;
-    private Date date;
+    private Set<Point> points;
+    private Date timestamp;
 
-    public Edit(int color, Set<Point> points, int brushSize, int userID) {
+    public Edit(String wbID, String username, int color, int brushSize, Set<Point> points) {
+        this.wbID = wbID;
+        this.username = username;
         this.color = color;
         this.brushSize = brushSize;
-        this.userID = userID;
         this.points = points;
 
-        this.date = new Date();
+        this.timestamp = new Date();
+    }
+
+    public String getWbID() {
+        return this.wbID;
+    }
+
+    public String getUsername() {
+        return this.username;
     }
 
     public int getColor() {
         return this.color;
     }
 
-    public Set<Point> getPoints() {
-        return this.points;
-    }
-
     public int getBrushSize() {
         return this.brushSize;
     }
 
-    public int getUserID() {
-        return this.userID;
+    public Set<Point> getPoints() {
+        return this.points;
     }
 
-    public Date getDate() {
-        return this.date;
+    public Date getTimestamp() {
+        return this.timestamp;
     }
 
     @Override
@@ -49,7 +54,8 @@ public class Edit {
         }
 
         Edit other = (Edit)o;
-        boolean datesMatch = (this.date == null && other.getDate() == null) || (this.date != null && this.date.equals((other.date)));
-        return datesMatch && other.userID == this.userID;
+        return (this.timestamp == null && other.getTimestamp() == null) || (this.timestamp != null && this.timestamp.equals((other.getTimestamp())))
+            && (this.username == null && other.getUsername() == null) || (this.username != null && this.username.equals((other.getUsername())))
+            && (this.wbID == null && other.getWbID() == null) || (this.wbID != null && this.wbID.equals((other.getWbID())));
     }
 }

@@ -22,6 +22,7 @@ public class Main {
         // TODO: Find a better way to stop the server. Once deployed, the server shouldn't go down right?
         System.in.read();
         server.stop();
+        dbc.endConnection();
 
         // TODO: If the host closes his client, do we end the session? Basically mark the Whiteboard as dead?
     }

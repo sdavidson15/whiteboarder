@@ -11,18 +11,27 @@ public class Image {
     private String wbID;
     private String filename;
     private byte[] bytes;
-    private Date date;
+    private Date timestamp;
 
-    public Image(String filename, byte[] bytes) {
+    public Image(String wbID, String filename, byte[] bytes) {
+        this.wbID = wbID;
         this.filename = filename;
         this.bytes = bytes;
 
-        this.id = UUID.randomUUID().toString();
-        this.date = new Date();  
+        this.imgID = UUID.randomUUID().toString();
+        this.timestamp = new Date();  
     }
 
-    public String getID() {
-        return this.id;
+    public String getImgID() {
+        return this.imgID;
+    }
+
+    public String getWbID() {
+        return this.wbID;
+    }
+    // Remove this after Demo 2
+    public void setWbID(String wbID) {
+        this.wbID = wbID;
     }
 
     public String getFilename() {
@@ -33,7 +42,7 @@ public class Image {
         return this.bytes;
     }
 
-    public Date getDate() {
-        return this.date;
+    public Date getTimestamp() {
+        return this.timestamp;
     }
 }

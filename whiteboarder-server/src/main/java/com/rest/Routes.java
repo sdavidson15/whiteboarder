@@ -42,10 +42,7 @@ public class Routes {
             }
         }
 
-        // TODO: Figure out who this user is
-        int userID = 0;
-
-        SessionCreate.createSession(userID, img);
+        // TODO: SessionCreate.createSession(dbc, img);
         
         return Response.ok(wb.getUUID(), APPLICATION_JSON).build();
     }
@@ -80,7 +77,6 @@ public class Routes {
 
         Image img = new Image("Blank Image", null);
         try {
-            // TODO: If this fails, will img still be reassigned?
             img = gson.fromJson(payload, new TypeToken<Image>() {}.getType());
         } catch(JsonSyntaxException e) {
             return Response.status(400).entity("Incorrect JSON format for the image payload.").build();

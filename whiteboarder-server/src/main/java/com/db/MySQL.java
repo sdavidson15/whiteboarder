@@ -6,48 +6,44 @@ import com.model.Whiteboard;
 
 
 public class MySQL {
-
-    // TODO: Create a set of all the sql commands you expect.
-
-    final String CREATE_WHITEBOARDS_TABLE = "CREATE TABLE IF NOT EXISTS Whiteboards ("
-        + "WhiteboardID char(32) NOT NULL, "
-        + "Name varchar(" + Whiteboard.MAX_WB_NAME_LENGTH + "), "
+    final static String CREATE_WHITEBOARDS_TABLE = "CREATE TABLE IF NOT EXISTS Whiteboards ("
+        + "WhiteboardID CHAR(32) NOT NULL, "
+        + "Name VARCHAR(" + Whiteboard.MAX_WB_NAME_LENGTH + "), "
         + "PRIMARY KEY(WhiteboardID))";
 
-    // TODO: Order by WhiteboardID, then by timestamp (is that possible?)
-    // TODO: You will only add to this table
-    final String CREATE_IMAGES_TABLE = "CREATE TABLE IF NOT EXISTS Images ("
-        + "ImageID char(32) NOT NULL, "
-        + "WhiteboardID char(32) NOT NULL, "
-        + "Filename varchar(" + Image.MAX_IMG_NAME_LENGTH + "), "
+    final static String CREATE_IMAGES_TABLE = "CREATE TABLE IF NOT EXISTS Images ("
+        + "ImageID CHAR(32) NOT NULL, "
+        + "WhiteboardID CHAR(32) NOT NULL, "
+        + "Filename VARCHAR(" + Image.MAX_IMG_NAME_LENGTH + "), "
         + "Bytes BLOB, "
         + "Date TIMESTAMP(6) NOT NULL, "
-        + "PRIMARY KEY(ImageID))"; // TODO: Maybe not?
+        + "PRIMARY KEY(ImageID))";
 
-    // TODO: Order by WhiteboardID, then by timestamp (is that possible?)
-    // TODO: You will add and delete from this table
-    final String CREATE_EDITS_TABLE = "CREATE TABLE IF NOT EXISTS Edits ("
-        + "UserID char(32) NOT NULL, "
-        + "WhiteboardID char(32) NOT NULL, "
+    // TODO: How do I do points?
+    final static String CREATE_EDITS_TABLE = "CREATE TABLE IF NOT EXISTS Edits ("
+        + "WhiteboardID CHAR(32) NOT NULL, "
+        + "Username VARCHAR(" + User.MAX_USER_NAME_LENGTH + ") NOT NULL, "
         + "Color INT NOT NULL, "
         + "BrushSize INT NOT NULL, "
-        + "Date TIMESTAMP(6) NOT NULL, "
-        + "UNIQUE(UserID, Date))";
+        + "Timestamp TIMESTAMP(6) NOT NULL, "
+        + "UNIQUE(WhiteboardID, Username, Date))";
 
-    final String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS Users ("
-        + "UserID char(32) NOT NULL, "
-        + "WhiteboardID char(32) NOT NULL, "
-        + "Username varchar(" + User.MAX_USER_NAME_LENGTH + "), NOT NULL"
+    final static String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS Users ("
+        + "WhiteboardID CHAR(32) NOT NULL, "
+        + "Username VARCHAR(" + User.MAX_USER_NAME_LENGTH + ") NOT NULL,"
         + "Mode TINYINT NOT NULL, "
-        + "PRIMARY KEY(UserID))";
+        + "UNIQUE(WhiteboardID, Username))";
 
-    final String ADD_WHITEBOARD = "INSERT"; // TODO
-    final String REMOVE_WHITEBOARD = "DELETE FROM Whiteboards WHERE"; // TODO
-    final String RENAME_WHITEBOARD = "UPDATE Whiteboards SET Name = ?"; // TODO
-    final String ADD_IMAGE = "INSERT"; // TODO
-    final String ADD_EDIT = "INSERT"; // TODO
-    final String REMOVE_EDIT = "DELETE FROM Edits WHERE"; // TODO
-    final String ADD_USER = "INSERT"; // TODO
-    final String REMOVE_USER = "DELETE FROM Users WHERE"; // TODO
-    final String RENAME_USER = "UPDATE Users SET Name = ?"; // TODO
+    final static String ADD_WHITEBOARD = "INSERT INTO Whiteboards (WhiteboardID, Name) VALUES (?, ?)";
+    final static String REMOVE_WHITEBOARD = "DELETE FROM Whiteboards WHERE WhiteboardID = ?";
+    final static String RENAME_WHITEBOARD = "UPDATE Whiteboards SET Name = ? WHERE WhiteboardID = ?";
+    final static String ADD_IMAGE = "INSERT INTO Images (ImageID, WhiteboardID, Filename, Bytes, Date) VALUES (?, ?, ?, ?, ?)";
+    final static String ADD_EDIT = "INSERT INTO Edits (WhiteboardID, Username, Color, BrushSize, Date) VALUES (?, ?, ?, ?, ?)";
+    final static String REMOVE_EDIT = "DELETE FROM Edits WHERE WhiteboardID = ? AND Username = ? AND Timestamp = ?";
+    final static String ADD_USER = "INSERT INTO Users (WhiteboardID, Username, Mode) VALUES (?, ?, ?)";
+    final static String REMOVE_USER = "DELETE FROM Users WHERE WhiteboardID = ? AND Username = ?";
+    final static String RENAME_USER = "UPDATE Users SET Username = ? WHERE WhiteboardID = ? AND Username = ?"; // TODO: Is this legal?
+    final static String SET_USER_MODE = "UPDATE Users SET Mode = ? WHERE WhiteboardID = ? AND Username = ?";
+
+    // TODO: Database queries
 }
