@@ -27,11 +27,15 @@ public class DatabaseConnector {
         // TODO
     }
 
+    public void AddImage(String wbID, Image img) {
+        // TODO
+    }
+
     public void AddEdit(String wbID, Edit edit) {
         // TODO
     }
 
-    public void AddImage(String wbID, Image img) {
+    public void RemoveEdit(String wbID, Edit edit) {
         // TODO
     }
 

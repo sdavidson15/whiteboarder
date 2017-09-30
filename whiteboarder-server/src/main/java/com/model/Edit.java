@@ -10,6 +10,7 @@ public class Edit {
     private Set<Point> points;
     private int brushSize;
     private int userID;
+    private int wbID;
     private Date date;
 
     public Edit(int color, Set<Point> points, int brushSize, int userID) {

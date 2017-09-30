@@ -6,7 +6,9 @@ import java.util.UUID;
 
 public class Whiteboard {
 
-    private String uuid;
+    public final int MAX_WB_NAME_LENGTH = 32;
+
+    private String wbID;
     private String name;
     private List<Image> imageHistory;
     private List<Edit> edits;

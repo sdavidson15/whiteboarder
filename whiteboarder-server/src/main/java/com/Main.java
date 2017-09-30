@@ -18,7 +18,11 @@ public class Main {
         DatabaseConnector dbc = new DatabaseConnector(LOCAL_MYSQL_DB, LOCAL_MYSQL_USER, LOCAL_MYSQL_PASS);
 
         final HttpServer server = Rest.startServer(true);
+
+        // TODO: Find a better way to stop the server. Once deployed, the server shouldn't go down right?
         System.in.read();
         server.stop();
+
+        // TODO: If the host closes his client, do we end the session? Basically mark the Whiteboard as dead?
     }
 }

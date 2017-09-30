@@ -4,8 +4,11 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Image {
+
+    public final int MAX_WB_NAME_LENGTH = 32;
     
-    private String id;
+    private String imgID;
+    private String wbID;
     private String filename;
     private byte[] bytes;
     private Date date;

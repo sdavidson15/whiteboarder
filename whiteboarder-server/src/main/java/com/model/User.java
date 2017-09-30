@@ -5,8 +5,11 @@ public class User {
         HOST, COLLABORATOR, VIEWER;
     }
 
-    private String name;
-    private int id;
+    public final int MAX_USER_NAME_LENGTH = 32;
+
+    private String userID;
+    private String wbID;
+    private String username;
     private Mode mode;
 
     public User(String name, int id, Mode mode) {
