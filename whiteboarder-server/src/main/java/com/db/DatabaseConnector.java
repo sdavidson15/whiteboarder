@@ -12,7 +12,7 @@ public class DatabaseConnector {
     public DatabaseConnector(String host, String username, String password) {
         Connection connection;
         try {
-            Class.forName("com.mysql.jdbc.Driver"); // TODO: Figure out wtf this does
+            Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(host, username, password);
         } catch (SQLException e) {
             // TODO
@@ -21,6 +21,7 @@ public class DatabaseConnector {
         initTables();
     }
 
+    // Create Tables
     private void initTables() {
         Statement stmt = c.createStatement();
         stmt.addBatch(MySQL.CREATE_WHITEBOARDS_TABLE);
@@ -35,6 +36,7 @@ public class DatabaseConnector {
         c.close();
     }
 
+    // Mutations
     public void addWhiteboarderSession(Whiteboard wb) {
         PreparedStatement stmt = c.prepareStatement(MySQL.ADD_WHITEBOARD);
         stmt.setString(1, wb.getWbID());
@@ -115,5 +117,17 @@ public class DatabaseConnector {
         stmt.close();
     }
 
-    // TODO: Database queries
+    // Queries
+    public Whiteboard getWhiteboard(String wbID) {
+        PreparedStatement stmt = c.prepareStatement(MySQL.GET_WHITEBOARD);
+        stmt.setString(1, wbID);
+
+        ResultSet rs = stmt.executeQuery();
+
+        String name = rs.getString("Name");
+        rs.close();
+        stmt.close();
+
+        return new Whiteboard(wbID, name);
+    }
 }

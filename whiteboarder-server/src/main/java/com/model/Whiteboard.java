@@ -6,6 +6,9 @@ import java.util.UUID;
 
 public class Whiteboard {
 
+    // TODO: If the Host closes the session, do we delete the Whiteboard, or just mark it as dead?
+    // TODO: Also, if the host closes the session, do we boot all the viewers and collaborators?
+
     public final int MAX_WB_NAME_LENGTH = 32;
 
     private String wbID;
@@ -14,8 +17,12 @@ public class Whiteboard {
     private List<Edit> edits;
 
     public Whiteboard(String name) {
+        Whiteboard(UUID.randomUUID().toString(), name);
+    }
+
+    public Whiteboard(String wbID, String name) {
+        this.wbID = wbID;
         this.name = name;
-        this.wbID = UUID.randomUUID().toString();
     }
 
     public String getWbID() {

@@ -1,5 +1,5 @@
-.PHONY: package
-package:
+.PHONY: install
+install:
 	mvn package -DskipTests
 
 .PHONY: clean
@@ -8,4 +8,4 @@ clean:
 
 .PHONY: test
 test:
-	mvn package
+	mvn test

@@ -6,6 +6,7 @@ import com.model.Whiteboard;
 
 
 public class MySQL {
+    // Create Tables
     final static String CREATE_WHITEBOARDS_TABLE = "CREATE TABLE IF NOT EXISTS Whiteboards ("
         + "WhiteboardID CHAR(32) NOT NULL, "
         + "Name VARCHAR(" + Whiteboard.MAX_WB_NAME_LENGTH + "), "
@@ -16,7 +17,7 @@ public class MySQL {
         + "WhiteboardID CHAR(32) NOT NULL, "
         + "Filename VARCHAR(" + Image.MAX_IMG_NAME_LENGTH + "), "
         + "Bytes BLOB, "
-        + "Date TIMESTAMP(6) NOT NULL, "
+        + "Timestamp TIMESTAMP(6) NOT NULL, "
         + "PRIMARY KEY(ImageID))";
 
     // TODO: How do I do points?
@@ -26,7 +27,7 @@ public class MySQL {
         + "Color INT NOT NULL, "
         + "BrushSize INT NOT NULL, "
         + "Timestamp TIMESTAMP(6) NOT NULL, "
-        + "UNIQUE(WhiteboardID, Username, Date))";
+        + "UNIQUE(WhiteboardID, Username, Timestamp))";
 
     final static String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS Users ("
         + "WhiteboardID CHAR(32) NOT NULL, "
@@ -34,16 +35,23 @@ public class MySQL {
         + "Mode TINYINT NOT NULL, "
         + "UNIQUE(WhiteboardID, Username))";
 
+    // Mutations
     final static String ADD_WHITEBOARD = "INSERT INTO Whiteboards (WhiteboardID, Name) VALUES (?, ?)";
     final static String REMOVE_WHITEBOARD = "DELETE FROM Whiteboards WHERE WhiteboardID = ?";
     final static String RENAME_WHITEBOARD = "UPDATE Whiteboards SET Name = ? WHERE WhiteboardID = ?";
-    final static String ADD_IMAGE = "INSERT INTO Images (ImageID, WhiteboardID, Filename, Bytes, Date) VALUES (?, ?, ?, ?, ?)";
-    final static String ADD_EDIT = "INSERT INTO Edits (WhiteboardID, Username, Color, BrushSize, Date) VALUES (?, ?, ?, ?, ?)";
+    final static String ADD_IMAGE = "INSERT INTO Images (ImageID, WhiteboardID, Filename, Bytes, Timestamp) VALUES (?, ?, ?, ?, ?)";
+    final static String ADD_EDIT = "INSERT INTO Edits (WhiteboardID, Username, Color, BrushSize, Timestamp) VALUES (?, ?, ?, ?, ?)";
     final static String REMOVE_EDIT = "DELETE FROM Edits WHERE WhiteboardID = ? AND Username = ? AND Timestamp = ?";
     final static String ADD_USER = "INSERT INTO Users (WhiteboardID, Username, Mode) VALUES (?, ?, ?)";
     final static String REMOVE_USER = "DELETE FROM Users WHERE WhiteboardID = ? AND Username = ?";
     final static String RENAME_USER = "UPDATE Users SET Username = ? WHERE WhiteboardID = ? AND Username = ?"; // TODO: Is this legal?
     final static String SET_USER_MODE = "UPDATE Users SET Mode = ? WHERE WhiteboardID = ? AND Username = ?";
 
-    // TODO: Database queries
+    // Queries
+    final static String GET_WHITEBOARD = "SELECT WhiteboardID, Name FROM Whiteboards WHERE WhiteboardID = ?";
+    final static String GET_IMAGE = "SELECT ImageID, WhiteboardID, Filename, Bytes, Timestamp FROM Images WHERE ImageID = ?";
+    final static String GET_IMAGES = "SELECT ImageID, WhiteboardID, Filename, Bytes, Timestamp FROM Images WHERE WhiteboardID = ?";
+    final static String GET_EDITS = "SELECT WhiteboardID, Username, Color, BrushSize, Timestamp FROM Edits WHERE WhiteboardID = ?";
+    final static String GET_USER = "SELECT WhiteboardID, Username, Mode FROM Users WHERE WhiteboardID = ? AND Username = ?";
+    final static String GET_USERS = "SELECT WhiteboardID, Username, Mode FROM Users WHERE WhiteboardID = ?";
 }
