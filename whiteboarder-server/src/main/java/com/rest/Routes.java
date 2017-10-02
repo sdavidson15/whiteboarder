@@ -31,7 +31,7 @@ public class Routes {
     public Response createSession(String payload) {
         Gson gson = new GsonBuilder().create();
 
-        Image img = new Image("Blank Image", null);
+        Image img = new Image(null, "Blank Image", null);
         if (payload != null && payload.length() > 0) {
             try {
                 img = gson.fromJson(payload, new TypeToken<Image>() {}.getType());
@@ -42,9 +42,8 @@ public class Routes {
             }
         }
 
-        // TODO: SessionCreate.createSession(dbc, img);
-        
-        return Response.ok(wb.getUUID(), APPLICATION_JSON).build();
+        Whiteboard wb = SessionCreate.createSession(null, img);
+        return Response.ok(wb.getWbID(), APPLICATION_JSON).build();
     }
 
     @GET
@@ -75,7 +74,7 @@ public class Routes {
         }
         Gson gson = new GsonBuilder().create();
 
-        Image img = new Image("Blank Image", null);
+        Image img = new Image(null, "Blank Image", null);
         try {
             img = gson.fromJson(payload, new TypeToken<Image>() {}.getType());
         } catch(JsonSyntaxException e) {
@@ -84,11 +83,11 @@ public class Routes {
             return Response.serverError().entity(e.toString()).build();
         }
 
+        // TODO: Move this part out of the rest package and into the core package
         Whiteboard wb = new Whiteboard(sessionID); // FIXME: Get Whiteboard from storage by session ID
         if (wb == null) {
             return Response.status(100).entity("Invalid session ID.").build();
         }
-
         wb.addImage(img);
 
         // TODO: Store the image, even if bytes is null/empty.

@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public class Image {
 
-    public final int MAX_WB_NAME_LENGTH = 32;
+    public static final int MAX_IMG_NAME_LENGTH = 32;
     
     private String imgID;
     private String wbID;

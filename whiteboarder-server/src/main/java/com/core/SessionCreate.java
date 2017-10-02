@@ -10,7 +10,7 @@ public class SessionCreate {
         return "";
     }
 
-    public static void createSession(DatabaseConnector dbc, Image img) {
+    public static Whiteboard createSession(DatabaseConnector dbc, Image img) {
         Whiteboard wb = new Whiteboard("New Whiteboard");
 
         // For now, this is all sorts of messed up. The Whiteboard should be created before
@@ -25,5 +25,7 @@ public class SessionCreate {
         dbc.addWhiteboarderSession(wb);
         dbc.addImage(img);
         dbc.addUser(user);
+
+        return wb;
     }
 }
