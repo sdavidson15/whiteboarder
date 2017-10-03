@@ -7,7 +7,7 @@ public class Image {
 
     public static final int MAX_IMG_NAME_LENGTH = 32;
     
-    private String imgID;
+    private int imgID;
     private String wbID;
     private String filename;
     private byte[] bytes;
@@ -18,12 +18,15 @@ public class Image {
         this.filename = filename;
         this.bytes = bytes;
 
-        this.imgID = UUID.randomUUID().toString();
+        this.imgID = -1;
         this.timestamp = new Date();  
     }
 
-    public String getImgID() {
+    public int getImgID() {
         return this.imgID;
+    }
+    public void setImgID(int imgID) {
+        this.imgID = imgID;
     }
 
     public String getWbID() {

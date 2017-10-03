@@ -47,7 +47,7 @@ public class Whiteboard {
         return this.imageHistory;
     }
     public void addImage(Image img) {
-        if (img == null || img.getBytes() == null || img.getBytes().length == 0) {
+        if (img == null) {
             return;
         }
 

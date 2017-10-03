@@ -6,6 +6,7 @@ import java.util.Set;
 
 public class Edit {
 
+    private int editID;
     private String wbID;
     private String username;
     private int color;
@@ -20,7 +21,15 @@ public class Edit {
         this.brushSize = brushSize;
         this.points = points;
 
+        this.editID = -1;
         this.timestamp = new Date();
+    }
+
+    public int getEditID() {
+        return this.editID;
+    }
+    public void setEditID(int editID) {
+        this.editID = editID;
     }
 
     public String getWbID() {
