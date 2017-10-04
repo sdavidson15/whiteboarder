@@ -27,7 +27,7 @@ public class MySQL {
         + "Username VARCHAR(" + User.MAX_USER_NAME_LENGTH + ") NOT NULL, "
         + "Color INT NOT NULL, "
         + "BrushSize INT NOT NULL, "
-        + "Timestamp TIMESTAMP(6) NOT NULL)";
+        + "Timestamp TIMESTAMP(6) NOT NULL), "
         + "PRIMARY KEY(EditID))";
 
     final static String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS Users ("

@@ -15,7 +15,7 @@ public class Main {
     public static final String MYSQL_PASS = "sffwC#x#";
 
     public static void main(String[] args) throws IOException {
-        if (args[0] == "local") {
+        if (args[0] != "local") {
             DatabaseConnector dbc = new DatabaseConnector(LOCAL_MYSQL_DB, LOCAL_MYSQL_USER, null);
             final HttpServer server = Rest.startServer(true);
             System.in.read();
