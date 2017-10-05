@@ -1,5 +1,8 @@
 package com.core;
 
+import com.db.DatabaseConnector;
+import com.model.*;
+
 public class SessionCreate {
 
 	public static String createSessionsID() {

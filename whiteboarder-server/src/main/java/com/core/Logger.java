@@ -6,7 +6,7 @@ import java.util.logging.SimpleFormatter;
 public class Logger {
 	public static java.util.logging.Logger log;
 
-	public void setupLogger() {
+	public static void setupLogger() {
 		try {
 			log = java.util.logging.Logger.getLogger("WhiteboarderServer");
 			FileHandler fh = new FileHandler("whiteboarder-server.log");

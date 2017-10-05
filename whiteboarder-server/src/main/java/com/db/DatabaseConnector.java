@@ -1,5 +1,6 @@
 package com.db;
 
+import com.core.Logger;
 import com.model.*;
 import java.sql.*;
 import javax.sql.rowset.serial.SerialBlob;
