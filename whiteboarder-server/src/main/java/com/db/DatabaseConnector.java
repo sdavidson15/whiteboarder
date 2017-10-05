@@ -212,9 +212,9 @@ public class DatabaseConnector {
 		try {
 			PreparedStatement stmt = c.prepareStatement(MySQL.GET_WHITEBOARD);
 			stmt.setString(1, wbID);
-	
+
 			ResultSet rs = stmt.executeQuery();
-	
+
 			name = rs.getString("Name");
 			rs.close();
 			stmt.close();
