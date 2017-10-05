@@ -25,6 +25,8 @@ public class DatabaseConnector {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			c = DriverManager.getConnection(host, username, password);
+			if (c != null)
+				Logger.log.info("Connected to MySQL database");
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return;
@@ -212,9 +214,9 @@ public class DatabaseConnector {
 		try {
 			PreparedStatement stmt = c.prepareStatement(MySQL.GET_WHITEBOARD);
 			stmt.setString(1, wbID);
-	
+
 			ResultSet rs = stmt.executeQuery();
-	
+
 			name = rs.getString("Name");
 			rs.close();
 			stmt.close();

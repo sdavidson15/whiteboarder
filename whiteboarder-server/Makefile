@@ -9,4 +9,3 @@ clean:
 .PHONY: test
 test:
 	mvn test
-	
