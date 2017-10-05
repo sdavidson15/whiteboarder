@@ -6,30 +6,30 @@ import javax.sql.rowset.serial.SerialBlob;
 
 public class DatabaseConnector {
 
-    // TODO: Validation?
+	// TODO: Validation?
 
-    public static final String LOCAL_MYSQL_DB = "jdbc:mysql://localhost:3306/mysql";
-    public static final String LOCAL_MYSQL_USER = "root";
-    
-    public static final String MYSQL_DB = "mysql.cs.iastate.edu:3306";
-    public static final String MYSQL_USER = "dbu309ytc1";
-    public static final String MYSQL_PASS = "sffwC#x#";
+	public static final String LOCAL_MYSQL_DB = "jdbc:mysql://localhost:3306/mysql";
+	public static final String LOCAL_MYSQL_USER = "root";
+	
+	public static final String MYSQL_DB = "mysql.cs.iastate.edu:3306";
+	public static final String MYSQL_USER = "dbu309ytc1";
+	public static final String MYSQL_PASS = "sffwC#x#";
 
 	private Connection c;
 
 	public DatabaseConnector(boolean isLocal) {
-        String host = isLocal ? LOCAL_MYSQL_DB : MYSQL_DB;
-        String username = isLocal ? LOCAL_MYSQL_USER : MYSQL_USER;
-        String password = isLocal ? null : MYSQL_PASS;
+		String host = isLocal ? LOCAL_MYSQL_DB : MYSQL_DB;
+		String username = isLocal ? LOCAL_MYSQL_USER : MYSQL_USER;
+		String password = isLocal ? null : MYSQL_PASS;
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-            c = DriverManager.getConnection(host, username, password);
+			c = DriverManager.getConnection(host, username, password);
 		} catch (SQLException e) {
-            e.printStackTrace();
+			e.printStackTrace();
 			return;
 		} catch (Exception e) {
-            e.printStackTrace();
+			e.printStackTrace();
 			return;
 		}
 		initTables();
@@ -38,7 +38,7 @@ public class DatabaseConnector {
 	// Create Tables
 	private void initTables() {
 		try {
-            Statement stmt = c.createStatement();
+			Statement stmt = c.createStatement();
 			stmt.addBatch(MySQL.CREATE_WHITEBOARDS_TABLE);
 			stmt.addBatch(MySQL.CREATE_IMAGES_TABLE);
 			stmt.addBatch(MySQL.CREATE_EDITS_TABLE);
@@ -46,15 +46,15 @@ public class DatabaseConnector {
 			stmt.executeBatch();
 			stmt.close();
 		} catch (SQLException e) {
-            e.printStackTrace();
+			e.printStackTrace();
 		}
-    }
+	}
 
 	public void endConnection() {
 		try {
 			c.close();
 		} catch (SQLException e) {
-            e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 	
@@ -62,12 +62,12 @@ public class DatabaseConnector {
 	public void addWhiteboarderSession(Whiteboard wb) {
 		try {
 			PreparedStatement stmt = c.prepareStatement(MySQL.ADD_WHITEBOARD);
-            stmt.setString(1, wb.getWbID());
-            stmt.setString(2, wb.getName());
+			stmt.setString(1, wb.getWbID());
+			stmt.setString(2, wb.getName());
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (SQLException e) {
-            e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 	public void removeWhiteboarderSession(Whiteboard wb) {
@@ -77,7 +77,7 @@ public class DatabaseConnector {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (SQLException e) {
-            e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 	public void renameWhiteboarderSession(String wbID, String newName) {
@@ -88,7 +88,7 @@ public class DatabaseConnector {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (SQLException e) {
-            e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 
@@ -102,7 +102,7 @@ public class DatabaseConnector {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (SQLException e) {
-            e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 
@@ -117,7 +117,7 @@ public class DatabaseConnector {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (SQLException e) {
-            e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 	public void addBatchedEdits(Edit[] edits) {
@@ -140,7 +140,7 @@ public class DatabaseConnector {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (SQLException e) {
-            e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 	public void removeEdit(Edit edit) {
@@ -150,7 +150,7 @@ public class DatabaseConnector {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (SQLException e) {
-            e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 	public void removeBatchedEdits(Edit[] edits) {
@@ -166,7 +166,7 @@ public class DatabaseConnector {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (SQLException e) {
-            e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 
@@ -179,7 +179,7 @@ public class DatabaseConnector {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (SQLException e) {
-            e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 	public void renameUser(User user, String newName) {
@@ -190,7 +190,7 @@ public class DatabaseConnector {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (SQLException e) {
-            e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 	public void setUserMode(User user, Mode mode) {
@@ -202,7 +202,7 @@ public class DatabaseConnector {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (SQLException e) {
-            e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 
@@ -219,12 +219,12 @@ public class DatabaseConnector {
 			rs.close();
 			stmt.close();
 		} catch (SQLException e) {
-            e.printStackTrace();
+			e.printStackTrace();
 			return null;
 		}
 
 		Whiteboard wb = new Whiteboard(wbID, name);
-        // TODO: Populate wb's Edits and Images
+		// TODO: Populate wb's Edits and Images
 		return wb;
 	}
 }
