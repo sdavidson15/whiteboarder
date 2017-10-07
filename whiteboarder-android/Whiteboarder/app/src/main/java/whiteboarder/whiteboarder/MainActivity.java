@@ -29,6 +29,21 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTextMessage;
     private Camera camera;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void doPermissionsCheck() {
+        if (checkSelfPermission(Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, 0);
+        }
+
+        if (checkSelfPermission(Manifest.permission.INTERNET)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            requestPermissions(new String[]{Manifest.permission.INTERNET}, 0);
+        }
+    }
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -64,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                     camera.startPreview();
 
                     try {
-                        RESTClient.createWhiteboardSession(data);
+                        new RESTClient().createWhiteboardSession(data);
                     } catch (IOException e) {
                         // Is this not the best way to handle errors you've ever seen?
                         e.printStackTrace();
@@ -78,12 +93,7 @@ public class MainActivity extends AppCompatActivity {
         @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         public void onClick(View view) {
-            if (checkSelfPermission(Manifest.permission.CAMERA)
-                    != PackageManager.PERMISSION_GRANTED) {
-
-                requestPermissions(new String[]{Manifest.permission.CAMERA}, 0);
-                return;
-            }
+            doPermissionsCheck();
 
             if (camera != null) {
                 // camera is already open.
@@ -99,8 +109,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 camera.setPreviewDisplay(surfaceHolder);
             } catch (IOException e) {
-                System.out.println(e);
-                return;
+                e.printStackTrace();
             }
         }
     };
