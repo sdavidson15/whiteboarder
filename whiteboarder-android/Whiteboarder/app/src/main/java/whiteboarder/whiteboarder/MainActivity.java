@@ -18,7 +18,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,10 +60,15 @@ public class MainActivity extends AppCompatActivity {
 
             camera.takePicture(null, null, null, new Camera.PictureCallback() {
                 public void onPictureTaken(byte[] data, Camera camera) {
-                    System.out.println("wow it's a lot of data");
-
                     // You have to restart the preview-- otherwise the camera freezes.
                     camera.startPreview();
+
+                    try {
+                        RESTClient.createWhiteboardSession(data);
+                    } catch (IOException e) {
+                        // Is this not the best way to handle errors you've ever seen?
+                        e.printStackTrace();
+                    }
                 }
             });
         }
