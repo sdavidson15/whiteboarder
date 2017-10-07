@@ -1,5 +1,11 @@
 package whiteboarder.whiteboarder;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -8,8 +14,9 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
 
-public class RESTClient {
+class RESTClient {
     // TODO: change this to point to the permanent location of our server,
     // or at least make it configurable.
     //
@@ -24,26 +31,52 @@ public class RESTClient {
         return client;
     }
 
+    private class CreateSessionTask extends AsyncTask<byte [], Void, String> {
+        private IOException exception;
+
+        protected String doInBackground(byte []... imageData) {
+            assert imageData.length == 1;
+
+            try {
+                HttpURLConnection client = getClient(HOST + "/wb/create");
+                client.setRequestMethod("POST");
+                client.setFixedLengthStreamingMode(imageData.length);
+                OutputStream outputPost = new BufferedOutputStream(client.getOutputStream());
+                BufferedInputStream response = new BufferedInputStream(client.getInputStream());
+
+                outputPost.write(imageData[0]);
+                outputPost.flush();
+                outputPost.close();
+
+                Scanner s = new Scanner(response);
+                String sessionID = s.next();
+
+                client.disconnect();
+                return sessionID;
+            } catch (IOException e) {
+                this.exception = e;
+                return null;
+            }
+        }
+
+        protected void onPostExecute(String sessionID) {
+
+        }
+    }
+
     /*
      Return the Session ID of the new Whiteboard Session.
      */
-    public static String createWhiteboardSession(byte []imageData) throws IOException {
-        System.out.println("made it to here");
-        HttpURLConnection client = getClient(HOST + "/wb/create");
-        client.setRequestMethod("POST");
-        client.setFixedLengthStreamingMode(imageData.length);
-        OutputStream outputPost = new BufferedOutputStream(client.getOutputStream());
-        BufferedInputStream response = new BufferedInputStream(client.getInputStream());
-
-        outputPost.write(imageData);
-        outputPost.flush();
-        outputPost.close();
-
-        Scanner s = new Scanner(response);
-        String sessionID = s.next();
-
-        client.disconnect();
-
-        return sessionID;
+    String createWhiteboardSession(byte []imageData) throws IOException {
+        CreateSessionTask task = new CreateSessionTask();
+        task.execute(imageData);
+        try {
+            return task.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
