@@ -42,8 +42,9 @@ class RESTClient {
             this.activity = activity;
         }
 
-        protected String doInBackground(byte []... imageData) {
-            assert imageData.length == 1;
+        protected String doInBackground(byte []... imageDatas) {
+            assert imageDatas.length == 1;
+            byte []imageData = imageDatas[0];
             Log.d("CreateSessionTask", "beginning doInBackground");
 
             try {
@@ -57,7 +58,7 @@ class RESTClient {
                 Log.d("CreateSessionTask", "client initialized & configured");
                 OutputStream outputPost = client.getOutputStream();
                 Log.d("CreateSessionTask", "got output stream");
-                outputPost.write(imageData[0]);
+                outputPost.write(imageData);
                 outputPost.flush();
                 Log.d("CreateSessionTask", "wrote & flushed data");
                 outputPost.close();
