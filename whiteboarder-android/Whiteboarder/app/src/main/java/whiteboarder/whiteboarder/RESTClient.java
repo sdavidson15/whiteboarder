@@ -25,12 +25,11 @@ class RESTClient {
     //
     // The permanent location is probably
     //      "https://proj-309-yt-c-1.cs.iastate.edu/"
-    private static final String HOST = "http://192.168.1.58:8000";
+    private static final String HOST = "http://192.168.1.58:8080";
 
-    private static HttpURLConnection getClient(String path) throws IOException {
-        HttpURLConnection client;
+    private static HttpURLConnection getClient(final String path) throws IOException {
         final URL url = new URL(path);
-        client = (HttpURLConnection) url.openConnection();
+        final HttpURLConnection client = (HttpURLConnection) url.openConnection();
         return client;
     }
 
@@ -40,7 +39,7 @@ class RESTClient {
 
         public CreateSessionTask(Activity activity) {
             super();
-            activity = activity;
+            this.activity = activity;
         }
 
         protected String doInBackground(byte []... imageData) {
@@ -50,10 +49,11 @@ class RESTClient {
             try {
                 String url = HOST + "/image/levelheadedness";
                 Log.d("CreateSessionTask", "POST " + url);
-                HttpURLConnection client = getClient(url);
-                client.setRequestMethod("POST");
-                client.setFixedLengthStreamingMode(imageData.length);
+                final HttpURLConnection client = getClient(url);
                 client.setDoOutput(true);
+                client.setFixedLengthStreamingMode(imageData.length);
+                client.setConnectTimeout(700);
+
                 Log.d("CreateSessionTask", "client initialized & configured");
                 OutputStream outputPost = client.getOutputStream();
                 Log.d("CreateSessionTask", "got output stream");
@@ -78,8 +78,9 @@ class RESTClient {
         }
 
         protected void onPostExecute(String sessionID) {
+            Log.d("onPostExecute", "activity = " + activity.toString());
             if (this.exception != null) {
-                Toast.makeText(activity, "error creating session", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "error creating session at " + HOST, Toast.LENGTH_SHORT).show();
                 this.exception.printStackTrace();
                 return;
             }
