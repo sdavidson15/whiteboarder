@@ -11,12 +11,14 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -68,7 +70,9 @@ public class MainActivity extends AppCompatActivity {
         @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
 
-        public void onClick(View view) {
+        public void onClick(final View view) {
+            Log.d("takePhotoButton", "clicked");
+
             if (camera == null) {
                 return;
             }
@@ -77,13 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onPictureTaken(byte[] data, Camera camera) {
                     // You have to restart the preview-- otherwise the camera freezes.
                     camera.startPreview();
-
-                    try {
-                        new RESTClient().createWhiteboardSession(data);
-                    } catch (IOException e) {
-                        // Is this not the best way to handle errors you've ever seen?
-                        e.printStackTrace();
-                    }
+                    new RESTClient().createWhiteboardSession(MainActivity.this, data);
                 }
             });
         }

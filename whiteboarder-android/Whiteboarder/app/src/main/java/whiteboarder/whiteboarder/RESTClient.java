@@ -1,10 +1,13 @@
 package whiteboarder.whiteboarder;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -33,23 +36,38 @@ class RESTClient {
 
     private class CreateSessionTask extends AsyncTask<byte [], Void, String> {
         private IOException exception;
+        private Activity activity;
+
+        public CreateSessionTask(Activity activity) {
+            super();
+            activity = activity;
+        }
 
         protected String doInBackground(byte []... imageData) {
             assert imageData.length == 1;
+            Log.d("CreateSessionTask", "beginning doInBackground");
 
             try {
-                HttpURLConnection client = getClient(HOST + "/wb/create");
+                String url = HOST + "/image/levelheadedness";
+                Log.d("CreateSessionTask", "POST " + url);
+                HttpURLConnection client = getClient(url);
                 client.setRequestMethod("POST");
                 client.setFixedLengthStreamingMode(imageData.length);
-                OutputStream outputPost = new BufferedOutputStream(client.getOutputStream());
-                BufferedInputStream response = new BufferedInputStream(client.getInputStream());
-
+                client.setDoOutput(true);
+                Log.d("CreateSessionTask", "client initialized & configured");
+                OutputStream outputPost = client.getOutputStream();
+                Log.d("CreateSessionTask", "got output stream");
                 outputPost.write(imageData[0]);
                 outputPost.flush();
+                Log.d("CreateSessionTask", "wrote & flushed data");
                 outputPost.close();
+                Log.d("CreateSessionTask", "closed output");
 
+                BufferedInputStream response = new BufferedInputStream(client.getInputStream());
                 Scanner s = new Scanner(response);
                 String sessionID = s.next();
+
+                Log.d("CreateSessionTask", "read sessionID " + sessionID);
 
                 client.disconnect();
                 return sessionID;
@@ -61,24 +79,21 @@ class RESTClient {
 
         protected void onPostExecute(String sessionID) {
             if (this.exception != null) {
+                Toast.makeText(activity, "error creating session", Toast.LENGTH_SHORT).show();
                 this.exception.printStackTrace();
+                return;
             }
+
+            Toast.makeText(activity, sessionID, Toast.LENGTH_SHORT).show();
         }
     }
 
     /*
      Return the Session ID of the new Whiteboard Session.
      */
-    String createWhiteboardSession(byte []imageData) throws IOException {
-        CreateSessionTask task = new CreateSessionTask();
+    String createWhiteboardSession(Activity activity, byte []imageData) {
+        CreateSessionTask task = new CreateSessionTask(activity);
         task.execute(imageData);
-        try {
-            return task.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
         return null;
     }
 }
