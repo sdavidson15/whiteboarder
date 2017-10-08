@@ -4,6 +4,14 @@ Whiteboarder Server
 ## How To Run
 First, download and install the latest version of [Apache Maven](https://maven.apache.org/download.cgi).
 
+Then, you must build the program (this step will also fetch dependencies):
+
+    ```
+    mvn package
+    ```
+
+From now on to run, you can do:
+
 1. Navigate to the `/whiteboarder-server` directory and run:
 
     ```
