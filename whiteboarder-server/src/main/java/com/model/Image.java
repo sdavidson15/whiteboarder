@@ -6,7 +6,7 @@ import java.util.UUID;
 public class Image {
 
 	public static final int MAX_IMG_NAME_LENGTH = 32;
-	
+
 	private int imgID;
 	private String wbID;
 	private String filename;
@@ -19,7 +19,7 @@ public class Image {
 		this.bytes = bytes;
 
 		this.imgID = -1;
-		this.timestamp = new Date();  
+		this.timestamp = new Date();
 	}
 
 	public int getImgID() {

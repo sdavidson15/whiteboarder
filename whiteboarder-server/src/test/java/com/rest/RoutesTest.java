@@ -17,7 +17,7 @@ public class RoutesTest {
 
 	@Before
 	public void setUp() throws Exception {
-		server = Rest.startServer(true);
+		server = Rest.startServer(null, true);
 		Client mockClient = ClientBuilder.newClient();
 
 		target = mockClient.target(Rest.BASE_URI);

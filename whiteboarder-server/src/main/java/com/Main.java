@@ -12,12 +12,12 @@ public class Main {
 		if (args.length > 0 && args[0] == "prod") {
 			Logger.setupLogger();
 			DatabaseConnector dbc = new DatabaseConnector(false);
-			final HttpServer server = Rest.startServer(false);
+			final HttpServer server = Rest.startServer(dbc, false);
 			// TODO: Close everything at the appropriate time
 		} else {
 			Logger.setupLogger();
 			DatabaseConnector dbc = new DatabaseConnector(true);
-			final HttpServer server = Rest.startServer(true);
+			final HttpServer server = Rest.startServer(dbc, true);
 			System.in.read();
 			server.stop();
 			dbc.endConnection();

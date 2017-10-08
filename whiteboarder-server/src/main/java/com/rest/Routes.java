@@ -2,6 +2,7 @@ package com.rest;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
+import com.db.DatabaseConnector;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -23,6 +24,8 @@ import jdk.nashorn.internal.objects.annotations.Getter;
 
 @Path("/wb")
 public class Routes {
+
+	public static DatabaseConnector dbc;
 
 	@POST
 	@Path("/session")
@@ -55,12 +58,7 @@ public class Routes {
 		}
 		Gson gson = new GsonBuilder().create();
 
-		Whiteboard wb = new Whiteboard(sessionID); // FIXME: Get Whiteboard from storage by session ID
-		if (wb == null) {
-			return Response.status(100).entity("Invalid session ID.").build();
-		}
-
-		Image img = wb.getCurrentImage();
+		Image img = dbc.getImage(sessionID);
 		String resp = img != null ? gson.toJson(img) : null;
 		return Response.ok(resp, APPLICATION_JSON).build();
 	}
@@ -83,16 +81,13 @@ public class Routes {
 			return Response.serverError().entity(e.toString()).build();
 		}
 
-		// TODO: Move this part out of the rest package and into the core package
-		Whiteboard wb = new Whiteboard(sessionID); // FIXME: Get Whiteboard from storage by session ID
-		if (wb == null) {
-			return Response.status(100).entity("Invalid session ID.").build();
-		}
+		Whiteboard wb = new Whiteboard(sessionID, "wbName");
+		img.setWbID(sessionID);
 		wb.addImage(img);
 
-		// TODO: Store the image, even if bytes is null/empty.
-		// TODO: Store the whiteboard, with the new image in it's image history
-
+		dbc.addWhiteboarderSession(wb);
+		dbc.addImage(img);
+		
 		return Response.ok().build();
 	}
 }

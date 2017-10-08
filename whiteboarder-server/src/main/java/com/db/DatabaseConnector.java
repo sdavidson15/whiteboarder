@@ -4,6 +4,7 @@ import com.core.Logger;
 import com.model.*;
 import java.sql.*;
 import javax.sql.rowset.serial.SerialBlob;
+import java.util.Date;
 
 public class DatabaseConnector {
 
@@ -100,8 +101,11 @@ public class DatabaseConnector {
 			PreparedStatement stmt = c.prepareStatement(MySQL.ADD_IMAGE);
 			stmt.setString(1, img.getWbID());
 			stmt.setString(2, img.getFilename());
-			stmt.setBlob(3, (Blob) new SerialBlob(img.getBytes()));
-			stmt.setTimestamp(4, new Timestamp(img.getTimestamp().getTime()));
+			stmt.setTimestamp(4, new Timestamp(new Date().getTime()));
+			if (img.getBytes() != null)
+				stmt.setBlob(3, (Blob) new SerialBlob(img.getBytes()));
+			else
+				stmt.setNull(3, java.sql.Types.BLOB);
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (SQLException e) {
