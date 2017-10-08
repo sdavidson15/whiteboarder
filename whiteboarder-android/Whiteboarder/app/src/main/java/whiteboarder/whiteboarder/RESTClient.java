@@ -60,7 +60,9 @@ class RESTClient {
         }
 
         protected void onPostExecute(String sessionID) {
-
+            if (this.exception != null) {
+                this.exception.printStackTrace();
+            }
         }
     }
 
