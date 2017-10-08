@@ -11,6 +11,7 @@ import com.core.SessionCreate;
 import com.model.Image;
 import com.model.Whiteboard;
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.ws.rs.Consumes;
@@ -75,6 +76,7 @@ public class Routes {
 		Image img = new Image(null, "Blank Image", null);
 		try {
 			img = gson.fromJson(payload, new TypeToken<Image>() {}.getType());
+			img.setTimestamp(new Date());
 		} catch(JsonSyntaxException e) {
 			return Response.status(400).entity("Incorrect JSON format for the image payload.").build();
 		} catch(Exception e) {

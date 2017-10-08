@@ -56,7 +56,7 @@ public class MySQL {
 	// 5. Get a specific User on a Whiteboard by username
 	// 6. Get all the Users on a Whiteboard
 	final static String GET_WHITEBOARD = "SELECT WhiteboardID, Name FROM Whiteboards WHERE WhiteboardID = ?;";
-	final static String GET_IMAGE = "SELECT ImageID, WhiteboardID, Filename, Bytes, Timestamp FROM Images WHERE WhiteboardID = ? ORDER BY ImageID DESC LIMTI 1;";
+	final static String GET_IMAGE = "SELECT ImageID, WhiteboardID, Filename, Bytes, Timestamp FROM Images WHERE WhiteboardID = ? ORDER BY ImageID DESC LIMIT 1;";
 	final static String GET_IMAGES = "SELECT ImageID, WhiteboardID, Filename, Bytes, Timestamp FROM Images WHERE WhiteboardID = ?;";
 	final static String GET_EDITS = "SELECT WhiteboardID, Username, Color, BrushSize, Timestamp FROM Edits WHERE WhiteboardID = ?;";
 	final static String GET_USER = "SELECT WhiteboardID, Username, Mode FROM Users WHERE WhiteboardID = ? AND Username = ?;";

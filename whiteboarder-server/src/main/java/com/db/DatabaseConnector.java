@@ -101,7 +101,7 @@ public class DatabaseConnector {
 			PreparedStatement stmt = c.prepareStatement(MySQL.ADD_IMAGE);
 			stmt.setString(1, img.getWbID());
 			stmt.setString(2, img.getFilename());
-			stmt.setTimestamp(4, new Timestamp(new Date().getTime()));
+			stmt.setTimestamp(4, img.getTimestamp().getTime());
 			if (img.getBytes() != null)
 				stmt.setBlob(3, (Blob) new SerialBlob(img.getBytes()));
 			else
@@ -215,14 +215,14 @@ public class DatabaseConnector {
 
 	// Queries
 	public Whiteboard getWhiteboard(String wbID) {
-		String name;
+		String name = null;
 		try {
 			PreparedStatement stmt = c.prepareStatement(MySQL.GET_WHITEBOARD);
 			stmt.setString(1, wbID);
 
 			ResultSet rs = stmt.executeQuery();
-
-			name = rs.getString("Name");
+			if (rs.next())
+				name = rs.getString("Name");
 			rs.close();
 			stmt.close();
 		} catch (SQLException e) {
@@ -236,20 +236,27 @@ public class DatabaseConnector {
 	}
 
 	public Image getImage(String wbID) {
-		String filename;
-		byte[] bytes;
+		String filename = null;
+		byte[] bytes = null;
 		try {
 			PreparedStatement stmt = c.prepareStatement(MySQL.GET_IMAGE);
 			stmt.setString(1, wbID);
 
 			ResultSet rs = stmt.executeQuery();
-
-			filename = rs.getString("Filename");
-			Blob blob = rs.getBlob("Bytes");
-			bytes = blob.getBytes(1, (int) blob.length());
+			if (rs.next()) {
+				filename = rs.getString("Filename");
+				Blob blob = rs.getBlob("Bytes");
+				if (blob == null)
+					bytes = null;
+				else
+					bytes = blob.getBytes(1, (int) blob.length());
+			}
 			rs.close();
 			stmt.close();
 		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
