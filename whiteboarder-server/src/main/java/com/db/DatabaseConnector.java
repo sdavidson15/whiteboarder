@@ -230,4 +230,26 @@ public class DatabaseConnector {
 		// TODO: Populate wb's Edits and Images
 		return wb;
 	}
+
+	public Image getImage(String wbID) {
+		String filename;
+		byte[] bytes;
+		try {
+			PreparedStatement stmt = c.prepareStatement(MySQL.GET_IMAGE);
+			stmt.setString(1, wbID);
+
+			ResultSet rs = stmt.executeQuery();
+
+			filename = rs.getString("Filename");
+			Blob blob = rs.getBlob("Bytes");
+			bytes = blob.getBytes(1, (int) blob.length());
+			rs.close();
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		return new Image(wbID, filename, bytes);
+	}
 }
