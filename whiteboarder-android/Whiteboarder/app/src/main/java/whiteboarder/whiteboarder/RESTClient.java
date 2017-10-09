@@ -19,13 +19,17 @@ import java.net.URL;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
+import com.google.gson.Gson;
+
 class RESTClient {
     // TODO: change this to point to the permanent location of our server,
     // or at least make it configurable.
     //
     // The permanent location is probably
     //      "https://proj-309-yt-c-1.cs.iastate.edu/"
-    private static final String HOST = "http://192.168.1.58:8080";
+    private static final String HOST = "http://79814b7d.ngrok.io:80";
+    private static final String SESSION_ID = "levelheadedness2";
+    private static final String WB_ID = "whiteboard_id";
 
     private static HttpURLConnection getClient(final String path) throws IOException {
         final URL url = new URL(path);
@@ -34,10 +38,22 @@ class RESTClient {
     }
 
     private class CreateSessionTask extends AsyncTask<byte [], Void, String> {
+        private class SessionPOSTRequest {
+            byte []bytes;
+            String wbID;
+            String filename;
+
+            SessionPOSTRequest(byte []imageData, String wbID, String filename) {
+                this.bytes = imageData;
+                this.wbID = wbID;
+                this.filename = filename;
+            }
+        }
+
         private IOException exception;
         private Activity activity;
 
-        public CreateSessionTask(Activity activity) {
+        CreateSessionTask(Activity activity) {
             super();
             this.activity = activity;
         }
@@ -47,31 +63,29 @@ class RESTClient {
             byte []imageData = imageDatas[0];
             Log.d("CreateSessionTask", "beginning doInBackground");
 
+            SessionPOSTRequest request = new SessionPOSTRequest(imageData, WB_ID, "filename.jpg");
+            String serialized = new Gson().toJson(request);
+            Log.d("CreateSessionTask", "serialized: " + serialized);
+
             try {
-                String url = HOST + "/image/levelheadedness";
+                String url = HOST + "/whiteboarder/wb/image/" + SESSION_ID;
                 Log.d("CreateSessionTask", "POST " + url);
                 final HttpURLConnection client = getClient(url);
                 client.setDoOutput(true);
-                client.setFixedLengthStreamingMode(imageData.length);
+                client.setFixedLengthStreamingMode(serialized.length());
                 client.setConnectTimeout(700);
 
                 Log.d("CreateSessionTask", "client initialized & configured");
                 OutputStream outputPost = client.getOutputStream();
                 Log.d("CreateSessionTask", "got output stream");
-                outputPost.write(imageData);
+                outputPost.write(serialized.getBytes());
                 outputPost.flush();
                 Log.d("CreateSessionTask", "wrote & flushed data");
                 outputPost.close();
                 Log.d("CreateSessionTask", "closed output");
 
-                BufferedInputStream response = new BufferedInputStream(client.getInputStream());
-                Scanner s = new Scanner(response);
-                String sessionID = s.next();
-
-                Log.d("CreateSessionTask", "read sessionID " + sessionID);
-
                 client.disconnect();
-                return sessionID;
+                return SESSION_ID;
             } catch (IOException e) {
                 this.exception = e;
                 return null;
