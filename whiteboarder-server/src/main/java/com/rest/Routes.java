@@ -1,6 +1,8 @@
 package com.rest;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM;
+import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 
 import com.db.DatabaseConnector;
 import com.google.gson.Gson;
@@ -51,8 +53,8 @@ public class Routes {
 	}
 
 	@GET
-	@Path("/image/{sessionID}")
-	@Produces(APPLICATION_JSON)
+	@Path("/image/{sessionID}.jpg")
+	@Produces(APPLICATION_OCTET_STREAM) // @Produces(APPLICATION_JSON)
 	public Response getImage(@PathParam("sessionID") String sessionID) {
 		if (sessionID == null || sessionID.trim().length() == 0) {
 			return Response.serverError().entity("Session ID cannot be empty.").build();
@@ -60,8 +62,21 @@ public class Routes {
 		Gson gson = new GsonBuilder().create();
 
 		Image img = dbc.getImage(sessionID);
-		String resp = img != null ? gson.toJson(img) : null;
-		return Response.ok(resp, APPLICATION_JSON).build();
+		byte[] data = img.getBytes();
+		//String resp = img != null ? gson.toJson(img) : null;
+		//return Response.ok(resp, APPLICATION_JSON).build();
+		return Response.ok(data, APPLICATION_OCTET_STREAM).build();
+	}
+
+	@GET
+    @Path("/image/{sessionID}")
+	@Produces(TEXT_PLAIN)
+	public Response getImageHTML(@PathParam("sessionID") String sessionID) {
+		if (sessionID == null || sessionID.trim().length() == 0) {
+            return Response.serverError().entity("Session ID cannot be empty.").build();
+		}
+		
+		return Response.ok("<img src=\""+sessionID+".jpg\" />", TEXT_PLAIN).build();
 	}
 
 	@POST
