@@ -89,11 +89,7 @@ public class Routes {
 
 		dbc.addWhiteboarderSession(wb);
 		dbc.addImage(img);
-
-		byte[] data = {-70, 40, 20, 12};
-		Image i = new Image("exampleID", "exampleName", data);
-		return Response.ok(gson.toJson(i), APPLICATION_JSON).build();
 		
-		// return Response.ok().build();
+		return Response.ok().build();
 	}
 }
