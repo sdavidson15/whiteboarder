@@ -101,7 +101,7 @@ public class DatabaseConnector {
 			PreparedStatement stmt = c.prepareStatement(MySQL.ADD_IMAGE);
 			stmt.setString(1, img.getWbID());
 			stmt.setString(2, img.getFilename());
-			stmt.setTimestamp(4, img.getTimestamp().getTime());
+			stmt.setTimestamp(4, new Timestamp(img.getTimestamp().getTime()));
 			if (img.getBytes() != null)
 				stmt.setBlob(3, (Blob) new SerialBlob(img.getBytes()));
 			else

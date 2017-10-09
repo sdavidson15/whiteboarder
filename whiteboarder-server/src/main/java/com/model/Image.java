@@ -49,6 +49,6 @@ public class Image {
 		return this.timestamp;
 	}
 	public void setTimestamp(Date timestamp) {
-		this.timestamp = date;
+		this.timestamp = timestamp;
 	}
 }
