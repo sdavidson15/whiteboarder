@@ -2,7 +2,7 @@ package com.rest;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM;
-import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import static javax.ws.rs.core.MediaType.TEXT_HTML;
 
 import com.db.DatabaseConnector;
 import com.google.gson.Gson;
@@ -70,13 +70,13 @@ public class Routes {
 
 	@GET
     @Path("/image/{sessionID}")
-	@Produces(TEXT_PLAIN)
+	@Produces(TEXT_HTML)
 	public Response getImageHTML(@PathParam("sessionID") String sessionID) {
 		if (sessionID == null || sessionID.trim().length() == 0) {
             return Response.serverError().entity("Session ID cannot be empty.").build();
 		}
 		
-		return Response.ok("<img src=\""+sessionID+".jpg\" />", TEXT_PLAIN).build();
+		return Response.ok("<img src=\""+sessionID+".jpg\" />", TEXT_HTML).build();
 	}
 
 	@POST
