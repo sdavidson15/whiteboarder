@@ -2,7 +2,9 @@ package whiteboarder.whiteboarder;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -100,7 +102,11 @@ class RESTClient {
                 return;
             }
 
-            Toast.makeText(activity, sessionID, Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "created session " + sessionID, Toast.LENGTH_SHORT).show();
+            String url = HOST + "/whiteboarder/wb/image/" + SESSION_ID;
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            activity.startActivity(i);
         }
     }
 
