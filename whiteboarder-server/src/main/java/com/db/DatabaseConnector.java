@@ -236,31 +236,36 @@ public class DatabaseConnector {
 	}
 
 	public Image getImage(String wbID) {
+		int imgID = -1;
 		String filename = null;
 		byte[] bytes = null;
+		// TODO: Retrieve the Timestamp from the db as well
+
 		try {
 			PreparedStatement stmt = c.prepareStatement(MySQL.GET_IMAGE);
 			stmt.setString(1, wbID);
 
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
+				imgID = rs.getInt("ImageID");
 				filename = rs.getString("Filename");
+
 				Blob blob = rs.getBlob("Bytes");
-				if (blob == null)
-					bytes = null;
-				else
+				if (blob != null)
 					bytes = blob.getBytes(1, (int) blob.length());
 			}
 			rs.close();
 			stmt.close();
 		} catch (SQLException e) {
+			Logger.log.severe("SQL error while retrieving Image");
 			e.printStackTrace();
 			return null;
 		} catch (Exception e) {
+			Logger.log.severe("Non-SQL error while retrieving Image");
 			e.printStackTrace();
 			return null;
 		}
 
-		return new Image(wbID, filename, bytes);
+		return new Image(imgID, wbID, filename, bytes, new Date());
 	}
 }

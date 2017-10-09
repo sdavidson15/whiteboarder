@@ -13,6 +13,7 @@ public class Image {
 	private byte[] bytes;
 	private Date timestamp;
 
+	// General purpose Image constructor
 	public Image(String wbID, String filename, byte[] bytes) {
 		this.wbID = wbID;
 		this.filename = filename;
@@ -20,6 +21,15 @@ public class Image {
 
 		this.imgID = -1;
 		this.timestamp = new Date();
+	}
+
+	// Constructor used only for loading an existing Image from the database
+	public Image(int imgID, String wbID, String filename, byte[] bytes, Date timestamp) {
+		this.imgID = imgID;
+		this.wbID = wbID;
+		this.filename = filename;
+		this.bytes = bytes;
+		this.timestamp = timestamp;
 	}
 
 	public int getImgID() {
