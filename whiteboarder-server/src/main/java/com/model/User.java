@@ -20,6 +20,7 @@ public class User {
 	public String getUsername() {
 		return this.username;
 	}
+
 	public void setName(String newName) {
 		this.username = newName;
 	}
@@ -27,6 +28,7 @@ public class User {
 	public Mode getMode() {
 		return this.mode;
 	}
+
 	public void setMode(Mode newMode) {
 		this.mode = newMode;
 	}

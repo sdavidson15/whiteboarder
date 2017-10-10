@@ -13,7 +13,9 @@ public class Image {
 	private byte[] bytes;
 	private Date timestamp;
 
-	// General purpose Image constructor
+	/**
+	 *  General purpose Image constructor
+	 **/
 	public Image(String wbID, String filename, byte[] bytes) {
 		this.wbID = wbID;
 		this.filename = filename;
@@ -23,7 +25,9 @@ public class Image {
 		this.timestamp = new Date();
 	}
 
-	// Constructor used only for loading an existing Image from the database
+	/** 
+	 * Constructor used only for loading an existing Image from the database
+	 **/
 	public Image(int imgID, String wbID, String filename, byte[] bytes, Date timestamp) {
 		this.imgID = imgID;
 		this.wbID = wbID;
@@ -35,6 +39,7 @@ public class Image {
 	public int getImgID() {
 		return this.imgID;
 	}
+
 	public void setImgID(int imgID) {
 		this.imgID = imgID;
 	}
@@ -42,6 +47,7 @@ public class Image {
 	public String getWbID() {
 		return this.wbID;
 	}
+
 	// Remove this after Demo 2
 	public void setWbID(String wbID) {
 		this.wbID = wbID;
@@ -58,6 +64,7 @@ public class Image {
 	public Date getTimestamp() {
 		return this.timestamp;
 	}
+
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}

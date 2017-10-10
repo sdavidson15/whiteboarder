@@ -7,33 +7,22 @@ import com.model.Whiteboard;
 public class MySQL {
 	// Create Tables
 	final static String CREATE_WHITEBOARDS_TABLE = "CREATE TABLE IF NOT EXISTS Whiteboards ("
-		+ "WhiteboardID CHAR(36) NOT NULL, "
-		+ "Name VARCHAR(" + Whiteboard.MAX_WB_NAME_LENGTH + "), "
-		+ "PRIMARY KEY(WhiteboardID));";
+			+ "WhiteboardID CHAR(36) NOT NULL, " + "Name VARCHAR(" + Whiteboard.MAX_WB_NAME_LENGTH + "), "
+			+ "PRIMARY KEY(WhiteboardID));";
 
-	final static String CREATE_IMAGES_TABLE = "CREATE TABLE IF NOT EXISTS Images ("
-		+ "ImageID INT AUTO_INCREMENT, "
-		+ "WhiteboardID CHAR(36) NOT NULL, "
-		+ "Filename VARCHAR(" + Image.MAX_IMG_NAME_LENGTH + "), "
-		+ "Bytes BLOB, "
-		+ "Timestamp TIMESTAMP(6) NOT NULL, "
-		+ "PRIMARY KEY(ImageID));";
+	final static String CREATE_IMAGES_TABLE = "CREATE TABLE IF NOT EXISTS Images (" + "ImageID INT AUTO_INCREMENT, "
+			+ "WhiteboardID CHAR(36) NOT NULL, " + "Filename VARCHAR(" + Image.MAX_IMG_NAME_LENGTH + "), "
+			+ "Bytes BLOB, " + "Timestamp TIMESTAMP NOT NULL, " + "PRIMARY KEY(ImageID));";
 
 	// TODO: How do I do points?
-	final static String CREATE_EDITS_TABLE = "CREATE TABLE IF NOT EXISTS Edits ("
-		+ "EditID INT AUTO_INCREMENT, "
-		+ "WhiteboardID CHAR(36) NOT NULL, "
-		+ "Username VARCHAR(" + User.MAX_USER_NAME_LENGTH + "), "
-		+ "Color INT NOT NULL, "
-		+ "BrushSize INT NOT NULL, "
-		+ "Timestamp TIMESTAMP(6) NOT NULL, "
-		+ "PRIMARY KEY (EditID));";
+	final static String CREATE_EDITS_TABLE = "CREATE TABLE IF NOT EXISTS Edits (" + "EditID INT AUTO_INCREMENT, "
+			+ "WhiteboardID CHAR(36) NOT NULL, " + "Username VARCHAR(" + User.MAX_USER_NAME_LENGTH + "), "
+			+ "Color INT NOT NULL, " + "BrushSize INT NOT NULL, " + "Timestamp TIMESTAMP NOT NULL, "
+			+ "PRIMARY KEY (EditID));";
 
-	final static String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS Users ("
-		+ "WhiteboardID CHAR(36) NOT NULL, "
-		+ "Username VARCHAR(" + User.MAX_USER_NAME_LENGTH + ") NOT NULL,"
-		+ "Mode TINYINT NOT NULL, "
-		+ "PRIMARY KEY (WhiteboardID,Username));";
+	final static String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS Users (" + "WhiteboardID CHAR(36) NOT NULL, "
+			+ "Username VARCHAR(" + User.MAX_USER_NAME_LENGTH + ") NOT NULL," + "Mode TINYINT NOT NULL, "
+			+ "PRIMARY KEY (WhiteboardID,Username));";
 
 	// Mutations
 	final static String ADD_WHITEBOARD = "INSERT INTO Whiteboards (WhiteboardID, Name) VALUES (?, ?);";

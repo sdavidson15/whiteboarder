@@ -28,6 +28,7 @@ public class Edit {
 	public int getEditID() {
 		return this.editID;
 	}
+
 	public void setEditID(int editID) {
 		this.editID = editID;
 	}
@@ -62,9 +63,12 @@ public class Edit {
 			return false;
 		}
 
-		Edit other = (Edit)o;
-		return (this.timestamp == null && other.getTimestamp() == null) || (this.timestamp != null && this.timestamp.equals((other.getTimestamp())))
-			&& (this.username == null && other.getUsername() == null) || (this.username != null && this.username.equals((other.getUsername())))
-			&& (this.wbID == null && other.getWbID() == null) || (this.wbID != null && this.wbID.equals((other.getWbID())));
+		Edit other = (Edit) o;
+		return (this.timestamp == null && other.getTimestamp() == null)
+				|| (this.timestamp != null && this.timestamp.equals((other.getTimestamp())))
+						&& (this.username == null && other.getUsername() == null)
+				|| (this.username != null && this.username.equals((other.getUsername())))
+						&& (this.wbID == null && other.getWbID() == null)
+				|| (this.wbID != null && this.wbID.equals((other.getWbID())));
 	}
 }

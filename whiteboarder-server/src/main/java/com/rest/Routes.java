@@ -4,12 +4,12 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM;
 import static javax.ws.rs.core.MediaType.TEXT_HTML;
 
-import com.db.DatabaseConnector;
+import com.core.Context;
+import com.core.Manager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.core.SessionCreate;
 import com.model.Image;
 import com.model.Whiteboard;
 import java.lang.reflect.Type;
@@ -25,58 +25,37 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import jdk.nashorn.internal.objects.annotations.Getter;
 
-@Path("/wb")
+@Path("/whiteboarder")
 public class Routes {
 
-	public static DatabaseConnector dbc;
+	public static Context ctx;
 
 	@POST
 	@Path("/session")
 	@Consumes(APPLICATION_JSON)
 	@Produces(APPLICATION_JSON)
 	public Response createSession(String payload) {
-		Gson gson = new GsonBuilder().create();
-
-		Image img = new Image(null, "Blank Image", null);
-		if (payload != null && payload.length() > 0) {
-			try {
-				img = gson.fromJson(payload, new TypeToken<Image>() {}.getType());
-			} catch(JsonSyntaxException e) {
-				return Response.status(400).entity("Incorrect JSON format for the image payload.").build();
-			} catch(Exception e) {
-				return Response.serverError().entity(e.toString()).build();
-			}
-		}
-
-		Whiteboard wb = SessionCreate.createSession(null, img);
+		// TODO: Collect user information from this request to form ctx
+		// Username from the payload?
+		Context userCtx = new Context(user, ctx.dbc(), ctx.isLocal());
+		Whiteboard wb = Manager.createSession(userCtx);
+		// TODO: Handle error
 		return Response.ok(wb.getWbID(), APPLICATION_JSON).build();
 	}
 
 	@GET
-	@Path("/image/{sessionID}.jpg")
-	@Produces(APPLICATION_OCTET_STREAM) // @Produces(APPLICATION_JSON)
+	@Path("/image/{sessionID}")
+	@Produces(APPLICATION_JSON)
 	public Response getImage(@PathParam("sessionID") String sessionID) {
 		if (sessionID == null || sessionID.trim().length() == 0) {
 			return Response.serverError().entity("Session ID cannot be empty.").build();
 		}
+
 		Gson gson = new GsonBuilder().create();
-
-		Image img = dbc.getImage(sessionID);
-		byte[] data = img.getBytes();
-		//String resp = img != null ? gson.toJson(img) : null;
-		//return Response.ok(resp, APPLICATION_JSON).build();
-		return Response.ok(data, APPLICATION_OCTET_STREAM).build();
-	}
-
-	@GET
-    @Path("/image/{sessionID}")
-	@Produces(TEXT_HTML)
-	public Response getImageHTML(@PathParam("sessionID") String sessionID) {
-		if (sessionID == null || sessionID.trim().length() == 0) {
-            return Response.serverError().entity("Session ID cannot be empty.").build();
-		}
-		
-		return Response.ok("<img src=\""+sessionID+".jpg\" />", TEXT_HTML).build();
+		Image img = Manger.getImage(ctx, sessionID);
+		// TODO: Handle error
+		String resp = img != null ? gson.toJson(img) : null;
+		return Response.ok(resp, APPLICATION_JSON).build();
 	}
 
 	@POST
@@ -86,25 +65,23 @@ public class Routes {
 		if (sessionID == null || sessionID.trim().length() == 0) {
 			return Response.status(400).entity("Session ID cannot be empty.").build();
 		}
-		Gson gson = new GsonBuilder().create();
 
-		Image img = new Image(null, "Blank Image", null);
+		Image img;
 		try {
-			img = gson.fromJson(payload, new TypeToken<Image>() {}.getType());
+			Gson gson = new GsonBuilder().create();
+			img = gson.fromJson(payload, new TypeToken<Image>() {
+			}.getType());
 			img.setTimestamp(new Date());
-		} catch(JsonSyntaxException e) {
+			img.setImgID(-1);
+		} catch (JsonSyntaxException e) {
 			return Response.status(400).entity("Incorrect JSON format for the image payload.").build();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			return Response.serverError().entity(e.toString()).build();
 		}
 
-		Whiteboard wb = new Whiteboard(sessionID, "wbName");
-		img.setWbID(sessionID);
-		wb.addImage(img);
+		Manager.uploadImage(ctx, sessionID, img);
+		// TODO: Handle error
 
-		dbc.addWhiteboarderSession(wb);
-		dbc.addImage(img);
-		
 		return Response.ok().build();
 	}
 }
