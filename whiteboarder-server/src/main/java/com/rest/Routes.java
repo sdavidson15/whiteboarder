@@ -6,12 +6,12 @@ import static javax.ws.rs.core.MediaType.TEXT_HTML;
 
 import com.core.Context;
 import com.core.Manager;
+import com.core.WbException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.model.Image;
-import com.model.Whiteboard;
+import com.model.*;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.UUID;
@@ -37,9 +37,16 @@ public class Routes {
 	public Response createSession(String payload) {
 		// TODO: Collect user information from this request to form ctx
 		// Username from the payload?
+		User user = null;
 		Context userCtx = new Context(user, ctx.dbc(), ctx.isLocal());
-		Whiteboard wb = Manager.createSession(userCtx);
-		// TODO: Handle error
+
+		Whiteboard wb;
+		try {
+			wb = Manager.createSession(userCtx);
+		} catch (WbException e) {
+			return Response.serverError().entity(e.getMessage()).build();
+		}
+
 		return Response.ok(wb.getWbID(), APPLICATION_JSON).build();
 	}
 
@@ -51,9 +58,14 @@ public class Routes {
 			return Response.serverError().entity("Session ID cannot be empty.").build();
 		}
 
+		Image img;
+		try {
+			img = Manager.getImage(ctx, sessionID);
+		} catch (WbException e) {
+			return Response.serverError().entity(e.getMessage()).build();
+		}
+
 		Gson gson = new GsonBuilder().create();
-		Image img = Manger.getImage(ctx, sessionID);
-		// TODO: Handle error
 		String resp = img != null ? gson.toJson(img) : null;
 		return Response.ok(resp, APPLICATION_JSON).build();
 	}
@@ -79,8 +91,11 @@ public class Routes {
 			return Response.serverError().entity(e.toString()).build();
 		}
 
-		Manager.uploadImage(ctx, sessionID, img);
-		// TODO: Handle error
+		try {
+			Manager.uploadImage(ctx, sessionID, img);
+		} catch (WbException e) {
+			return Response.serverError().entity(e.getMessage()).build();
+		}
 
 		return Response.ok().build();
 	}

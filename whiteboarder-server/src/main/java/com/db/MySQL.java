@@ -24,6 +24,12 @@ public class MySQL {
 			+ "Username VARCHAR(" + User.MAX_USER_NAME_LENGTH + ") NOT NULL," + "Mode TINYINT NOT NULL, "
 			+ "PRIMARY KEY (WhiteboardID,Username));";
 
+	// Remove Tables
+	final static String REMOVE_WHITEBOARDS_TABLE = "DROP TABLE IF EXISTS Whiteboards;";
+	final static String REMOVE_IMAGES_TABLE = "DROP TABLE IF EXISTS Images;";
+	final static String REMOVE_EDITS_TABLE = "DROP TABLE IF EXISTS Edits;";
+	final static String REMOVE_USERS_TABLE = "DROP TABLE IF EXISTS Users;";
+
 	// Mutations
 	final static String ADD_WHITEBOARD = "INSERT INTO Whiteboards (WhiteboardID, Name) VALUES (?, ?);";
 	final static String REMOVE_WHITEBOARD = "DELETE FROM Whiteboards WHERE WhiteboardID = ?;";
@@ -31,7 +37,6 @@ public class MySQL {
 	final static String ADD_IMAGE = "INSERT INTO Images (WhiteboardID, Filename, Bytes, Timestamp) VALUES (?, ?, ?, ?);";
 	final static String ADD_EDIT = "INSERT INTO Edits (WhiteboardID, Username, Color, BrushSize, Timestamp) VALUES (?, ?, ?, ?, ?);";
 	final static String REMOVE_EDIT = "DELETE FROM Edits WHERE EditID = ?;";
-	final static String REMOVE_BATCHED_EDITS = "DELETE FROM Edits WHERE EditID IN;"; // I don't feel too good about this one
 	final static String ADD_USER = "INSERT INTO Users (WhiteboardID, Username, Mode) VALUES (?, ?, ?);";
 	final static String REMOVE_USER = "DELETE FROM Users WHERE WhiteboardID = ? AND Username = ?;";
 	final static String RENAME_USER = "UPDATE Users SET Username = ? WHERE WhiteboardID = ? AND Username = ?;";

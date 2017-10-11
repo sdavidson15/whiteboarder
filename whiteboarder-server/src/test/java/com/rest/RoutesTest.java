@@ -2,6 +2,7 @@ package com.rest;
 
 import static org.junit.Assert.assertEquals;
 
+import com.core.Context;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -17,7 +18,7 @@ public class RoutesTest {
 
 	@Before
 	public void setUp() throws Exception {
-		server = Rest.startServer(null, true);
+		server = Rest.startServer(new Context(null, null, true));
 		Client mockClient = ClientBuilder.newClient();
 
 		target = mockClient.target(Rest.BASE_URI);

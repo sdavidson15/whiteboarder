@@ -6,7 +6,7 @@ import com.model.*;
 // TODO: Rename this class
 public class Manager {
 
-	public static Whiteboard createSession(Context ctx) {
+	public static Whiteboard createSession(Context ctx) throws WbException {
 		if (ctx == null || ctx.user() == null || ctx.dbc() == null) {
 			// TODO: Throw error "Invalid context" and print ctx
 		}
@@ -18,7 +18,7 @@ public class Manager {
 		return wb;
 	}
 
-	public static Whiteboard uploadImg(Context ctx, String wbID, Image img) {
+	public static Whiteboard uploadImage(Context ctx, String wbID, Image img) throws WbException {
 		if (ctx == null || ctx.user() == null || ctx.dbc() == null) {
 			// TODO: Throw error "Invalid context" and print ctx
 		}
@@ -32,6 +32,14 @@ public class Manager {
 		img = ctx.dbc().addImage(img);
 		wb.addImage(img);
 		return wb;
+	}
+
+	public static Image getImage(Context ctx, String wbID) throws WbException {
+		if (ctx == null || ctx.user() == null || ctx.dbc() == null) {
+			// TODO: Throw error "Invalid context" and print ctx
+		}
+
+		return ctx.dbc().getImage(wbID);
 	}
 
 }

@@ -8,9 +8,10 @@ public class Context {
     private DatabaseConnector dbc;
     private boolean isLocal;
 
-    public Context(User user, DatabaseConnector dbc) {
+    public Context(User user, DatabaseConnector dbc, boolean isLocal) {
         this.user = user;
         this.dbc = dbc;
+        this.isLocal = isLocal;
     }
 
     public User user() {
