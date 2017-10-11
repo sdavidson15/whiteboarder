@@ -1,4 +1,7 @@
 
 $(function() {
-        alert("what's up");
+        $("#wb-join-session").click(function() {
+                alert("what's up");
+                $.post("")
+        });
 });
