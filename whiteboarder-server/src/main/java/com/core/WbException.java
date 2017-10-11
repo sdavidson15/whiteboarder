@@ -1,6 +1,10 @@
 package com.core;
 
 public class WbException extends Exception {
+    public WbException(String msg) {
+        super(msg);
+    }
+
     public WbException(String msg, Exception e) {
         super(msg, e);
     }

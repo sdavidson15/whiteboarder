@@ -30,7 +30,6 @@ public class Main {
 				System.in.read();
 				server.stop();
 				endDatabaseConnection(dbc);
-				// TODO: Handle failure to end connection
 			}
 		}
 	}

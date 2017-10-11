@@ -35,9 +35,7 @@ public class Routes {
 	@Consumes(APPLICATION_JSON)
 	@Produces(APPLICATION_JSON)
 	public Response createSession(String payload) {
-		// TODO: Collect user information from this request to form ctx
-		// Username from the payload?
-		User user = null;
+		User user = new User("", "", Mode.HOST);
 		Context userCtx = new Context(user, ctx.dbc(), ctx.isLocal());
 
 		Whiteboard wb;
@@ -52,7 +50,7 @@ public class Routes {
 
 	@GET
 	@Path("/image/{sessionID}")
-	@Produces(APPLICATION_JSON)
+	@Produces(APPLICATION_OCTET_STREAM)
 	public Response getImage(@PathParam("sessionID") String sessionID) {
 		if (sessionID == null || sessionID.trim().length() == 0) {
 			return Response.serverError().entity("Session ID cannot be empty.").build();
@@ -65,9 +63,7 @@ public class Routes {
 			return Response.serverError().entity(e.getMessage()).build();
 		}
 
-		Gson gson = new GsonBuilder().create();
-		String resp = img != null ? gson.toJson(img) : null;
-		return Response.ok(resp, APPLICATION_JSON).build();
+		return Response.ok(img.getBytes(), APPLICATION_OCTET_STREAM).build();
 	}
 
 	@POST
