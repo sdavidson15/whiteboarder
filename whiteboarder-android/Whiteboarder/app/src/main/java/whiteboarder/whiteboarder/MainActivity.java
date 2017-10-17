@@ -11,18 +11,40 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
+    private Camera camera;
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void doPermissionsCheck() {
+        if (checkSelfPermission(Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, 0);
+        }
+
+        if (checkSelfPermission(Manifest.permission.INTERNET)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            requestPermissions(new String[]{Manifest.permission.INTERNET}, 0);
+        }
+    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -44,30 +66,49 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private final View.OnClickListener takePhotoButtonOnClickListener = new View.OnClickListener() {
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        @Override
+
+        public void onClick(final View view) {
+            Log.d("takePhotoButton", "clicked");
+
+            if (camera == null) {
+                return;
+            }
+
+            camera.takePicture(null, null, null, new Camera.PictureCallback() {
+                public void onPictureTaken(byte[] data, Camera camera) {
+                    // You have to restart the preview-- otherwise the camera freezes.
+                    camera.startPreview();
+                    new RESTClient().createWhiteboardSession(MainActivity.this, data);
+                }
+            });
+        }
+    };
+
     private final View.OnClickListener cameraButtonOnClickListener =  new View.OnClickListener() {
         @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         public void onClick(View view) {
-            if (checkSelfPermission(Manifest.permission.CAMERA)
-                    != PackageManager.PERMISSION_GRANTED) {
+            doPermissionsCheck();
 
-                requestPermissions(new String[]{Manifest.permission.CAMERA}, 0);
+            if (camera != null) {
+                // camera is already open.
                 return;
             }
 
-            Camera c = Camera.open(0);
-            c.setDisplayOrientation(90);
-            c.startPreview();
+            camera = Camera.open(0);
+            camera.setDisplayOrientation(90);
+            camera.startPreview();
 
             SurfaceView surfaceView = (SurfaceView) findViewById(R.id.cameraPreviewSurface);
             SurfaceHolder surfaceHolder = surfaceView.getHolder();
             try {
-                c.setPreviewDisplay(surfaceHolder);
+                camera.setPreviewDisplay(surfaceHolder);
             } catch (IOException e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
-
-            System.out.println(view);
         }
     };
 
@@ -76,10 +117,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         Button openCameraButton = (Button) findViewById(R.id.cameraButton);
         openCameraButton.setOnClickListener(cameraButtonOnClickListener);
+        Button takePhotoButton = (Button) findViewById(R.id.takePhotoButton);
+        takePhotoButton.setOnClickListener(takePhotoButtonOnClickListener);
     }
 }
