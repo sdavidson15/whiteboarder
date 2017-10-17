@@ -1,0 +1,63 @@
+<h1></h1><h1></h1><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">
+<head>
+<title>Whiteboarder QRCode Generator</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="qrcode.js"></script>
+</head>
+<body>
+
+<div id="qrcode" style="margin:auto; width:500px; height:500px; margin-top:100px; margin-bottom:100px;"></div>
+
+<script type="text/javascript">
+var qrcode = new QRCode(document.getElementById("qrcode"), {
+	width : 500,
+	height : 500
+});
+
+
+/*var sessionID = parseUrl(document.location.href).search;
+
+document.getElementById("URL").innerHTML = "stuff " + window.location.href;
+
+var partsURL = document.location.search.split("?");
+var lastPartURL = partsURL[partsURL.length - 1];*/
+
+
+
+var parts = document.location.href.split("?");
+// parts will be like
+// 0 - https://whiteboarder/session
+// 1 - x=y&sessionID=hello
+if (parts.length > 1) {
+        var lastPart = parts[parts.length - 1];
+        // params will be like
+        // 0 - x=y
+        // 1 - sessionID=hello
+        var params = lastPart.split("&");
+        var keyToPairsMap = [];
+        for (var i = 0; i < params.length; i++) {
+                var paramParts = params[i].split("=", 2);
+                var key = paramParts[0];
+                var value = "";
+                if (paramParts.length > 1) {
+                        value = paramParts[1];
+                }
+                keyToPairsMap[key] = value;
+        }
+        var id = String(keyToPairsMap["sessionID"]);
+}
+
+qrcode.makeCode(id);
+
+</script>
+
+<h1 id="demo" align="center"></h1>
+<script>
+/*document.getElementById("demo").innerHTML = keyToPairsMap["index"];*/
+</script>
+
+
+</body>

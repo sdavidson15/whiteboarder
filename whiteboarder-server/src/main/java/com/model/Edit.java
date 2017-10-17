@@ -1,54 +1,74 @@
 package com.model;
 
-import java.util.Set;
-import java.util.Date;
 import java.awt.Point;
+import java.util.Date;
+import java.util.Set;
 
 public class Edit {
 
-    private int color;
-    private Set<Point> points;
-    private int brushSize;
-    private int userID;
-    private Date date;
+	private int editID;
+	private String wbID;
+	private String username;
+	private int color;
+	private int brushSize;
+	private Set<Point> points;
+	private Date timestamp;
 
-    public Edit(int color, Set<Point> points, int brushSize, int userID) {
-        this.color = color;
-        this.brushSize = brushSize;
-        this.userID = userID;
-        this.points = points;
+	public Edit(String wbID, String username, int color, int brushSize, Set<Point> points) {
+		this.wbID = wbID;
+		this.username = username;
+		this.color = color;
+		this.brushSize = brushSize;
+		this.points = points;
 
-        this.date = new Date();
-    }
+		this.editID = -1;
+		this.timestamp = new Date();
+	}
 
-    public int getColor() {
-        return this.color;
-    }
+	public int getEditID() {
+		return this.editID;
+	}
 
-    public Set<Point> getPoints() {
-        return this.points;
-    }
+	public void setEditID(int editID) {
+		this.editID = editID;
+	}
 
-    public int getBrushSize() {
-        return this.brushSize;
-    }
+	public String getWbID() {
+		return this.wbID;
+	}
 
-    public int getUserID() {
-        return this.userID;
-    }
+	public String getUsername() {
+		return this.username;
+	}
 
-    public Date getDate() {
-        return this.date;
-    }
+	public int getColor() {
+		return this.color;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || o.getClass() != this.getClass()) {
-            return false;
-        }
+	public int getBrushSize() {
+		return this.brushSize;
+	}
 
-        Edit other = (Edit)o;
-        boolean datesMatch = (this.date == null && other.getDate() == null) || (this.date != null && this.date.equals((other.date)));
-        return datesMatch && other.userID == this.userID;
-    }
+	public Set<Point> getPoints() {
+		return this.points;
+	}
+
+	public Date getTimestamp() {
+		return this.timestamp;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || o.getClass() != this.getClass()) {
+			return false;
+		}
+
+		Edit other = (Edit) o;
+		return (this.timestamp == null && other.getTimestamp() == null)
+				|| (this.timestamp != null && this.timestamp.equals((other.getTimestamp())))
+						&& (this.username == null && other.getUsername() == null)
+				|| (this.username != null && this.username.equals((other.getUsername())))
+						&& (this.wbID == null && other.getWbID() == null)
+				|| (this.wbID != null && this.wbID.equals((other.getWbID())));
+	}
 }

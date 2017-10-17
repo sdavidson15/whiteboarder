@@ -1,35 +1,71 @@
 package com.model;
 
 import java.util.Date;
+import java.util.UUID;
 
 public class Image {
-    
-    private String id;
-    private String filename;
-    private byte[] bytes;
-    private Date date;
 
-    public Image(String id, String filename, byte[] bytes) {
-        this.id = id;
-        this.filename = filename;
-        this.bytes = bytes;
+	public static final int MAX_IMG_NAME_LENGTH = 32;
 
-        this.date = new Date();  
-    }
+	private int imgID;
+	private String wbID;
+	private String filename;
+	private byte[] bytes;
+	private Date timestamp;
 
-    public String getId() {
-        return this.id;
-    }
+	/**
+	 *  General purpose Image constructor
+	 **/
+	public Image(String wbID, String filename, byte[] bytes) {
+		this.wbID = wbID;
+		this.filename = filename;
+		this.bytes = bytes;
 
-    public String getFilename() {
-        return this.filename;
-    }
+		this.imgID = -1;
+		this.timestamp = new Date();
+	}
 
-    public byte[] getBytes() {
-        return this.bytes;
-    }
+	/** 
+	 * Constructor used only for loading an existing Image from the database
+	 **/
+	public Image(int imgID, String wbID, String filename, byte[] bytes, Date timestamp) {
+		this.imgID = imgID;
+		this.wbID = wbID;
+		this.filename = filename;
+		this.bytes = bytes;
+		this.timestamp = timestamp;
+	}
 
-    public Date getDate() {
-        return this.date;
-    }
+	public int getImgID() {
+		return this.imgID;
+	}
+
+	public void setImgID(int imgID) {
+		this.imgID = imgID;
+	}
+
+	public String getWbID() {
+		return this.wbID;
+	}
+
+	// Remove this after Demo 2
+	public void setWbID(String wbID) {
+		this.wbID = wbID;
+	}
+
+	public String getFilename() {
+		return this.filename;
+	}
+
+	public byte[] getBytes() {
+		return this.bytes;
+	}
+
+	public Date getTimestamp() {
+		return this.timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
+	}
 }

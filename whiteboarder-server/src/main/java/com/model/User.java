@@ -1,32 +1,35 @@
 package com.model;
 
 public class User {
+	public static final int MAX_USER_NAME_LENGTH = 32;
 
-    private String name;
-    private int id;
-    private Mode mode;
+	private String wbID;
+	private String username;
+	private Mode mode;
 
-    public User(String name, int id, Mode mode) {
-        this.name = name;
-        this.id = id;
-        this.mode = mode;
-    }
+	public User(String wbID, String username, Mode mode) {
+		this.wbID = wbID;
+		this.username = username;
+		this.mode = mode;
+	}
 
-    public String getName() {
-        return this.name;
-    }
-    public void setName(String newName) {
-        this.name = newName;
-    }
+	public String getWbID() {
+		return this.wbID;
+	}
 
-    public int getID() {
-        return this.id;
-    }
+	public String getUsername() {
+		return this.username;
+	}
 
-    public Mode getMode() {
-        return this.mode;
-    }
-    public void setMode(Mode newMode) {
-        this.mode = newMode;
-    }
+	public void setName(String newName) {
+		this.username = newName;
+	}
+
+	public Mode getMode() {
+		return this.mode;
+	}
+
+	public void setMode(Mode newMode) {
+		this.mode = newMode;
+	}
 }
