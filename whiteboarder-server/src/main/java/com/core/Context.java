@@ -14,15 +14,19 @@ public class Context {
         this.isLocal = isLocal;
     }
 
-    public User user() {
+    public User getUser() {
         return this.user;
     }
 
-    public DatabaseConnector dbc() {
+    public DatabaseConnector getDbc() {
         return this.dbc;
     }
 
     public boolean isLocal() {
         return this.isLocal;
+    }
+
+    public boolean isValid() {
+        return this.dbc != null;
     }
 }

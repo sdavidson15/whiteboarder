@@ -18,24 +18,39 @@ public class DatabaseConnector {
 	public static final String MYSQL_USER = "dbu309ytc1";
 	public static final String MYSQL_PASS = "sffwC#x#";
 
+	private String host;
+	private String username;
+	private String password;
+	private boolean isLocal;
+
 	private Connection c;
 
-	public DatabaseConnector(boolean isLocal) throws WbException {
-		String host = isLocal ? LOCAL_MYSQL_DB : MYSQL_DB;
-		String username = isLocal ? LOCAL_MYSQL_USER : MYSQL_USER;
-		String password = isLocal ? LOCAL_MYSQL_PASS : MYSQL_PASS;
+	public DatabaseConnector(boolean isLocal) {
+		this.host = isLocal ? LOCAL_MYSQL_DB : MYSQL_DB;
+		this.username = isLocal ? LOCAL_MYSQL_USER : MYSQL_USER;
+		this.password = isLocal ? LOCAL_MYSQL_PASS : MYSQL_PASS;
+		this.isLocal = isLocal;
+	}
 
+	public void startConnection() throws WbException {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			c = DriverManager.getConnection(host, username, password);
-			if (c != null)
-				Logger.log.info("Connected to MySQL database.");
+			c = DriverManager.getConnection(this.host, this.username, this.password);
 		} catch (Exception e) {
-			WbException wbe = new WbException(WbException.DB_START_CONNECTION, e);
-			Logger.log.severe(wbe.getMessage());
-			throw wbe;
+			throw new WbException(WbException.DB_START_CONNECTION, e);
 		}
-		initTables(isLocal);
+		if (c != null) {
+			Logger.log.info("Connected to MySQL database.");
+			initTables(this.isLocal);
+		}
+	}
+
+	public void endConnection() throws WbException {
+		try {
+			c.close();
+		} catch (Exception e) {
+			throw new WbException(WbException.DB_END_CONNECTION, e);
+		}
 	}
 
 	// Create Tables
@@ -50,9 +65,7 @@ public class DatabaseConnector {
 				stmt.executeBatch();
 				stmt.close();
 			} catch (Exception e) {
-				WbException wbe = new WbException(WbException.DB_CLEAR_TABLES, e);
-				Logger.log.severe(wbe.getMessage());
-				throw wbe;
+				throw new WbException(WbException.DB_CLEAR_TABLES, e);
 			}
 		}
 
@@ -65,19 +78,7 @@ public class DatabaseConnector {
 			stmt.executeBatch();
 			stmt.close();
 		} catch (Exception e) {
-			WbException wbe = new WbException(WbException.DB_INIT_TABLES, e);
-			Logger.log.severe(wbe.getMessage());
-			throw wbe;
-		}
-	}
-
-	public void endConnection() throws WbException {
-		try {
-			c.close();
-		} catch (Exception e) {
-			WbException wbe = new WbException(WbException.DB_END_CONNECTION, e);
-			Logger.log.severe(wbe.getMessage());
-			throw wbe;
+			throw new WbException(WbException.DB_INIT_TABLES, e);
 		}
 	}
 
@@ -90,9 +91,7 @@ public class DatabaseConnector {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (Exception e) {
-			WbException wbe = new WbException(WbException.DB_ADD_WB, e);
-			Logger.log.severe(wbe.getMessage());
-			throw wbe;
+			throw new WbException(WbException.DB_ADD_WB, e);
 		}
 	}
 
@@ -104,9 +103,7 @@ public class DatabaseConnector {
 			stmt.close();
 		} catch (Exception e) {
 			// TODO: Check for Whiteboard does not exist
-			WbException wbe = new WbException(WbException.DB_REMOVE_WB, e);
-			Logger.log.severe(wbe.getMessage());
-			throw wbe;
+			throw new WbException(WbException.DB_REMOVE_WB, e);
 		}
 	}
 
@@ -119,9 +116,7 @@ public class DatabaseConnector {
 			stmt.close();
 		} catch (Exception e) {
 			// TODO: Check for Whiteboard does not exist
-			WbException wbe = new WbException(WbException.DB_RENAME_WB, e);
-			Logger.log.severe(wbe.getMessage());
-			throw wbe;
+			throw new WbException(WbException.DB_RENAME_WB, e);
 		}
 	}
 
@@ -139,9 +134,7 @@ public class DatabaseConnector {
 			stmt.close();
 		} catch (Exception e) {
 			// TODO: Check for Whiteboard does not exist
-			WbException wbe = new WbException(WbException.DB_ADD_IMG, e);
-			Logger.log.severe(wbe.getMessage());
-			throw wbe;
+			throw new WbException(WbException.DB_ADD_IMG, e);
 		}
 
 		// TODO: Retrieve the image ID
@@ -160,9 +153,7 @@ public class DatabaseConnector {
 			stmt.close();
 		} catch (Exception e) {
 			// TODO: Check for Whiteboard does not exist
-			WbException wbe = new WbException(WbException.DB_ADD_EDIT, e);
-			Logger.log.severe(wbe.getMessage());
-			throw wbe;
+			throw new WbException(WbException.DB_ADD_EDIT, e);
 		}
 
 		// TODO: Retrieve the edit ID
@@ -177,9 +168,7 @@ public class DatabaseConnector {
 			stmt.close();
 		} catch (Exception e) {
 			// TODO: Check for Whiteboard does not exist
-			WbException wbe = new WbException(WbException.DB_REMOVE_EDIT, e);
-			Logger.log.severe(wbe.getMessage());
-			throw wbe;
+			throw new WbException(WbException.DB_REMOVE_EDIT, e);
 		}
 	}
 
@@ -192,9 +181,7 @@ public class DatabaseConnector {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (Exception e) {
-			WbException wbe = new WbException(WbException.DB_ADD_USER, e);
-			Logger.log.severe(wbe.getMessage());
-			throw wbe;
+			throw new WbException(WbException.DB_ADD_USER, e);
 		}
 	}
 
@@ -207,9 +194,7 @@ public class DatabaseConnector {
 			stmt.close();
 		} catch (Exception e) {
 			// TODO: Check for User does not exist
-			WbException wbe = new WbException(WbException.DB_RENAME_USER, e);
-			Logger.log.severe(wbe.getMessage());
-			throw wbe;
+			throw new WbException(WbException.DB_RENAME_USER, e);
 		}
 	}
 
@@ -223,9 +208,7 @@ public class DatabaseConnector {
 			stmt.close();
 		} catch (Exception e) {
 			// TODO: Check for User does not exist
-			WbException wbe = new WbException(WbException.DB_SET_USER_MODE, e);
-			Logger.log.severe(wbe.getMessage());
-			throw wbe;
+			throw new WbException(WbException.DB_SET_USER_MODE, e);
 		}
 	}
 
@@ -242,9 +225,7 @@ public class DatabaseConnector {
 			rs.close();
 			stmt.close();
 		} catch (Exception e) {
-			WbException wbe = new WbException(WbException.DB_GET_WB, e);
-			Logger.log.severe(wbe.getMessage());
-			throw wbe;
+			throw new WbException(WbException.DB_GET_WB, e);
 		}
 		// TODO: Populate wb's Edits and Images
 		Whiteboard wb = new Whiteboard(wbID, name, null, null);
@@ -274,9 +255,7 @@ public class DatabaseConnector {
 			rs.close();
 			stmt.close();
 		} catch (Exception e) {
-			WbException wbe = new WbException(WbException.DB_GET_IMG, e);
-			Logger.log.severe(wbe.getMessage());
-			throw wbe;
+			throw new WbException(WbException.DB_GET_IMG, e);
 		}
 
 		return new Image(imgID, wbID, filename, bytes, timestamp);
