@@ -3,6 +3,7 @@ package com.rest;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_OCTET_STREAM;
 import static javax.ws.rs.core.MediaType.MULTIPART_FORM_DATA;
+import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 
 import com.core.Context;
 import com.core.Manager;
@@ -36,10 +37,10 @@ public class Routes {
 	@POST
 	@Path("/session")
 	@Consumes(APPLICATION_JSON)
-	@Produces(APPLICATION_JSON)
+	@Produces(TEXT_PLAIN)
 	public Response createSession(String payload) {
 		User user = new User("", "", Mode.HOST);
-		Context userCtx = new Context(user, ctx.dbc(), ctx.isLocal());
+		Context userCtx = new Context(user, ctx.getDbc(), ctx.isLocal());
 
 		Whiteboard wb;
 		try {
@@ -48,7 +49,7 @@ public class Routes {
 			return Response.serverError().entity(e.getMessage()).build();
 		}
 
-		return Response.ok(wb.getWbID(), APPLICATION_JSON).build();
+		return Response.ok(wb.getWbID(), TEXT_PLAIN).build();
 	}
 
 	@GET

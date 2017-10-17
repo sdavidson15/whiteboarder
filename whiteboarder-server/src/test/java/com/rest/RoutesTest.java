@@ -21,7 +21,7 @@ public class RoutesTest {
 		server = Rest.startServer(new Context(null, null, true));
 		Client mockClient = ClientBuilder.newClient();
 
-		target = mockClient.target(Rest.BASE_URI);
+		target = mockClient.target(Rest.LOCAL_BASE_URI);
 	}
 
 	@After
@@ -41,7 +41,7 @@ public class RoutesTest {
 
 	@Test
 	public void testGetImage() {
-		String resp = target.path("wb/image/sessionID").request().get(String.class);
+		String resp = target.path("whiteboarder/image/sessionID").request().get(String.class);
 		// TODO: Deserialize response
 		assertEquals("This should be JSON", resp);
 	}

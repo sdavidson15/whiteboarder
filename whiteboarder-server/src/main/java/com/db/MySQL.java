@@ -14,7 +14,6 @@ public class MySQL {
 			+ "WhiteboardID CHAR(36) NOT NULL, " + "Filename VARCHAR(" + Image.MAX_IMG_NAME_LENGTH + "), "
 			+ "Bytes BLOB, " + "Timestamp TIMESTAMP NOT NULL, " + "PRIMARY KEY(ImageID));";
 
-	// TODO: How do I do points?
 	final static String CREATE_EDITS_TABLE = "CREATE TABLE IF NOT EXISTS Edits (" + "EditID INT AUTO_INCREMENT, "
 			+ "WhiteboardID CHAR(36) NOT NULL, " + "Username VARCHAR(" + User.MAX_USER_NAME_LENGTH + "), "
 			+ "Color INT NOT NULL, " + "BrushSize INT NOT NULL, " + "Timestamp TIMESTAMP NOT NULL, "
@@ -43,12 +42,6 @@ public class MySQL {
 	final static String SET_USER_MODE = "UPDATE Users SET Mode = ? WHERE WhiteboardID = ? AND Username = ?;";
 
 	// Queries
-	// 1. Get a particular Whiteboard by wbID
-	// 2. Get the most recent Image of a Whiteboard
-	// 3. Get all the Images of a Whiteboard
-	// 4. Get all the Edits on a Whiteboard 
-	// 5. Get a specific User on a Whiteboard by username
-	// 6. Get all the Users on a Whiteboard
 	final static String GET_WHITEBOARD = "SELECT WhiteboardID, Name FROM Whiteboards WHERE WhiteboardID = ?;";
 	final static String GET_IMAGE = "SELECT ImageID, WhiteboardID, Filename, Bytes, Timestamp FROM Images WHERE WhiteboardID = ? ORDER BY ImageID DESC LIMIT 1;";
 	final static String GET_IMAGES = "SELECT ImageID, WhiteboardID, Filename, Bytes, Timestamp FROM Images WHERE WhiteboardID = ?;";

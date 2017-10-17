@@ -10,7 +10,7 @@ import org.glassfish.grizzly.http.server.HttpServer;
 
 public class Main {
 
-	public static final int DB_CONNECTION_RETRY = 5;
+	public static final int DB_CONNECTION_NUM_RETRIES = 5;
 
 	public static void main(String[] args) throws IOException {
 		if (args.length > 0 && args[0] == "prod") {
@@ -35,10 +35,12 @@ public class Main {
 	}
 
 	public static DatabaseConnector startDatabaseConnection(boolean isLocal) {
+		DatabaseConnector dbc = new DatabaseConnector(isLocal);
+
 		int retry = 0;
-		while (retry < DB_CONNECTION_RETRY) {
+		while (retry < DB_CONNECTION_NUM_RETRIES) {
 			try {
-				DatabaseConnector dbc = new DatabaseConnector(isLocal);
+				dbc.startConnection();
 				if (dbc != null)
 					return dbc;
 			} catch (WbException e) {
@@ -50,7 +52,7 @@ public class Main {
 
 	public static boolean endDatabaseConnection(DatabaseConnector dbc) {
 		int retry = 0;
-		while (retry < DB_CONNECTION_RETRY) {
+		while (retry < DB_CONNECTION_NUM_RETRIES) {
 			try {
 				dbc.endConnection();
 				return true;
