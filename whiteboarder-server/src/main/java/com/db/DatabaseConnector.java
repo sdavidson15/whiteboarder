@@ -122,7 +122,7 @@ public class DatabaseConnector {
 
 	public Image addImage(Image img) throws WbException {
 		try {
-			PreparedStatement stmt = c.prepareStatement(MySQL.ADD_IMAGE);
+			PreparedStatement stmt = c.prepareStatement(MySQL.ADD_IMAGE, Statement.RETURN_GENERATED_KEYS);
 			stmt.setString(1, img.getWbID());
 			stmt.setString(2, img.getFilename());
 			stmt.setTimestamp(4, new Timestamp(img.getTimestamp().getTime()));
@@ -130,14 +130,17 @@ public class DatabaseConnector {
 				stmt.setBlob(3, (Blob) new SerialBlob(img.getBytes()));
 			else
 				stmt.setNull(3, java.sql.Types.BLOB);
+
 			stmt.executeUpdate();
+			ResultSet rs = stmt.getGeneratedKeys();
+			rs.next();
+			img.setImgID(rs.getInt(1));
 			stmt.close();
 		} catch (Exception e) {
 			// TODO: Check for Whiteboard does not exist
 			throw new WbException(WbException.DB_ADD_IMG, e);
 		}
 
-		// TODO: Retrieve the image ID
 		return img;
 	}
 
