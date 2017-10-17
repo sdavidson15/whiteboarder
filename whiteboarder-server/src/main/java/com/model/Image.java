@@ -1,5 +1,6 @@
 package com.model;
 
+import com.core.Logger;
 import java.util.Date;
 import java.util.UUID;
 
@@ -17,12 +18,7 @@ public class Image {
 	 *  General purpose Image constructor
 	 **/
 	public Image(String wbID, String filename, byte[] bytes) {
-		this.wbID = wbID;
-		this.filename = filename;
-		this.bytes = bytes;
-
-		this.imgID = -1;
-		this.timestamp = new Date();
+		this(-1, wbID, filename, bytes, new Date());
 	}
 
 	/** 
@@ -41,16 +37,15 @@ public class Image {
 	}
 
 	public void setImgID(int imgID) {
+		if (this.imgID > 0) {
+			Logger.log.warning("Cannot change the imgID on a persisted Image.");
+			return;
+		}
 		this.imgID = imgID;
 	}
 
 	public String getWbID() {
 		return this.wbID;
-	}
-
-	// Remove this after Demo 2
-	public void setWbID(String wbID) {
-		this.wbID = wbID;
 	}
 
 	public String getFilename() {
@@ -61,11 +56,23 @@ public class Image {
 		return this.bytes;
 	}
 
+	public void setBytes(byte[] bytes) {
+		if (this.imgID > 0) {
+			Logger.log.warning("Cannot set the bytes on a persisted Image.");
+			return;
+		}
+		this.bytes = bytes;
+	}
+
 	public Date getTimestamp() {
 		return this.timestamp;
 	}
 
 	public void setTimestamp(Date timestamp) {
+		if (this.imgID > 0) {
+			Logger.log.warning("Cannot change the timestamp on a persisted Image.");
+			return;
+		}
 		this.timestamp = timestamp;
 	}
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URI;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 public class Rest {
@@ -14,7 +15,10 @@ public class Rest {
 	public static HttpServer startServer(Context ctx) {
 		Routes.ctx = ctx;
 
-		final ResourceConfig rc = new ResourceConfig().packages("com.rest");
+		ResourceConfig rc = new ResourceConfig();
+		rc.register(MultiPartFeature.class);
+		rc = rc.packages("com.rest");
+
 		String uri = ctx.isLocal() ? LOCAL_BASE_URI : BASE_URI;
 		return GrizzlyHttpServerFactory.createHttpServer(URI.create(uri), rc);
 	}

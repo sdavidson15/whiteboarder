@@ -55,4 +55,6 @@ public class MySQL {
 	final static String GET_EDITS = "SELECT WhiteboardID, Username, Color, BrushSize, Timestamp FROM Edits WHERE WhiteboardID = ?;";
 	final static String GET_USER = "SELECT WhiteboardID, Username, Mode FROM Users WHERE WhiteboardID = ? AND Username = ?;";
 	final static String GET_USERS = "SELECT WhiteboardID, Username, Mode FROM Users WHERE WhiteboardID = ?;";
+
+	final static String GET_LAST_ID = "SELECT LAST_INSERT_ID()";
 }
