@@ -130,7 +130,6 @@ public class DatabaseConnector {
 				stmt.setBlob(3, (Blob) new SerialBlob(img.getBytes()));
 			else
 				stmt.setNull(3, java.sql.Types.BLOB);
-
 			stmt.executeUpdate();
 			ResultSet rs = stmt.getGeneratedKeys();
 			rs.next();
