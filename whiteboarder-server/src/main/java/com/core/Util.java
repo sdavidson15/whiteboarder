@@ -1,25 +1,21 @@
 package com.core;
 
-import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class Util {
 
-    public static byte[] inputToByteArr(InputStream input) throws WbException {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        byte[] buffer = new byte[8192];
+    public static byte[] fileToByteArr(File file) throws WbException {
+        byte[] output = new byte[(int) file.length()];
 
         try {
-            int numBytes = input.read(buffer);
-            while ((numBytes = input.read(buffer)) != -1)
-                output.write(buffer, 0, numBytes);
+            FileInputStream stream = new FileInputStream(file);
+            stream.read(output);
+            stream.close();
         } catch (IOException e) {
-            WbException wbe = new WbException("Failed to convert input stream to byte array.", e);
-            Logger.log.severe(wbe.getMessage());
-            throw wbe;
+            throw new WbException("Failed to convert file to byte array.", e);
         }
-
-        return output.toByteArray();
+        return output;
     }
 }

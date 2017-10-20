@@ -15,7 +15,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.model.*;
-import java.io.InputStream;
+import java.io.File;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.UUID;
@@ -74,7 +74,7 @@ public class Routes {
 	@POST
 	@Path("/image/{sessionID}")
 	@Consumes(MULTIPART_FORM_DATA)
-	public Response uploadImage(@FormDataParam("file") InputStream file,
+	public Response uploadImage(@FormDataParam("file") File file,
 			@FormDataParam("file") FormDataContentDisposition fileDetail, @PathParam("sessionID") String sessionID) {
 
 		if (sessionID == null || sessionID.trim().length() == 0) {
@@ -84,7 +84,7 @@ public class Routes {
 		try {
 			Image img = null;
 			if (file != null && fileDetail != null) {
-				byte[] data = Util.inputToByteArr(file);
+				byte[] data = Util.fileToByteArr(file);
 				img = new Image(sessionID, fileDetail.getFileName(), data);
 			}
 			Manager.uploadImage(ctx, sessionID, img);
