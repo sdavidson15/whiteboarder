@@ -126,7 +126,7 @@ public class DatabaseConnector {
 			stmt.setString(1, img.getWbID());
 			stmt.setString(2, img.getFilename());
 			stmt.setTimestamp(4, new Timestamp(img.getTimestamp().getTime()));
-			if (img.getBytes() != null)
+			if (img.getBytes() != null && img.getBytes().length > 0)
 				stmt.setBlob(3, (Blob) new SerialBlob(img.getBytes()));
 			else
 				stmt.setNull(3, java.sql.Types.BLOB);
