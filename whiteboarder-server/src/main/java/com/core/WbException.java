@@ -26,7 +26,6 @@ public class WbException extends Exception {
     public static final String DB_SET_USER_MODE = "Failed to change a User's mode in the database.";
     public static final String DB_GET_WB = "Failed to retrieve a Whiteboard from the database.";
     public static final String DB_GET_IMG = "Failed to retrieve an Image from the database.";
-    public static final String DB_GET_LAST_ID = "Failed to retrieve the last autoincremented ID from the database.";
 
     public static final String WHITEBOARD_DNE = "Whiteboard does not exist.";
     public static final String USER_DNE = "User does not exist.";
