@@ -8,6 +8,8 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
+// RESTClient2 is a replacement for RESTClient that makes use of the Retrofit library. Eventually,
+// we will be able to swap this class in and delete RESTClient.
 public class RESTClient2 {
     // TODO: change this to point to the permanent location of our server,
     // or at least make it configurable.
