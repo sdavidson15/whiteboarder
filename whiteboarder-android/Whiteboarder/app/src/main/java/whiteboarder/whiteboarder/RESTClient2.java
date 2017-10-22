@@ -7,6 +7,7 @@ import retrofit2.Retrofit;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 // RESTClient2 is a replacement for RESTClient that makes use of the Retrofit library. Eventually,
 // we will be able to swap this class in and delete RESTClient.
@@ -23,7 +24,7 @@ public class RESTClient2 {
     public interface WhiteboarderServer {
         @FormUrlEncoded
         @POST("/image/{sessionID}")
-        Call<Integer> submitImage(String sessionID);
+        Call<Integer> submitImage(@Path("sessionID") String sessionID);
     }
 
     static final Retrofit retrofit = new Retrofit.Builder().baseUrl(HOST).build();
