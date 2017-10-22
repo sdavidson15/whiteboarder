@@ -11,6 +11,8 @@ import retrofit2.http.Path;
 
 // RESTClient2 is a replacement for RESTClient that makes use of the Retrofit library. Eventually,
 // we will be able to swap this class in and delete RESTClient.
+//
+// See https://square.github.io/retrofit/ for information on the library in use.
 public class RESTClient2 {
     // TODO: change this to point to the permanent location of our server,
     // or at least make it configurable.
@@ -22,8 +24,11 @@ public class RESTClient2 {
     private static final String WB_ID = "whiteboard_id";
 
     public interface WhiteboarderServer {
+        @POST("/whiteboarder/session")
+        Call<String> createSesssion();
+
         @FormUrlEncoded
-        @POST("/image/{sessionID}")
+        @POST("/whiteboarder/image/{sessionID}")
         Call<Integer> submitImage(@Path("sessionID") String sessionID);
     }
 
