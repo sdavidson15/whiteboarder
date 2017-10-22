@@ -2,11 +2,14 @@ package whiteboarder.whiteboarder;
 
 import java.util.List;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 // RESTClient2 is a replacement for RESTClient that makes use of the Retrofit library. Eventually,
@@ -23,14 +26,25 @@ public class RESTClient2 {
     private static final String SESSION_ID = "levelheadedness2";
     private static final String WB_ID = "whiteboard_id";
 
-    public interface WhiteboarderServer {
+    private interface WhiteboarderServer {
         @POST("/whiteboarder/session")
         Call<String> createSesssion();
 
         @FormUrlEncoded
         @POST("/whiteboarder/image/{sessionID}")
-        Call<Integer> submitImage(@Path("sessionID") String sessionID);
+        Call<Void> submitImage(@Path("sessionID") String sessionID, @Part("photo") RequestBody requestBody);
     }
 
-    static final Retrofit retrofit = new Retrofit.Builder().baseUrl(HOST).build();
+    private static final Retrofit retrofit = new Retrofit.Builder().baseUrl(HOST).build();
+    private final WhiteboarderServer service = retrofit.create(WhiteboarderServer.class);
+
+    public void createSession(Callback<String> callback) {
+        Call<String> call = service.createSesssion();
+        call.enqueue(callback);
+    }
+
+    public void postImage(String sessionID, RequestBody requestBody, Callback<Void> callback) {
+        Call<Void> call = service.submitImage(sessionID, requestBody);
+        call.enqueue(callback);
+    }
 }
