@@ -134,6 +134,7 @@ public class ReadQR extends AppCompatActivity implements ZXingScannerView.Result
         builder.setNeutralButton("Visit", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                // TODO start session??
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result));
                 startActivity(browserIntent);
             }

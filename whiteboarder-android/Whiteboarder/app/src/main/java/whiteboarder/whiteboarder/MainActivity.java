@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.Intent;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -112,6 +113,16 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private final View.OnClickListener scanQRButtonOnClicklistener = new View.OnClickListener() {
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        @Override
+        public void onClick(View view) {
+            doPermissionsCheck();
+            Intent i = new Intent(MainActivity.this, ReadQR.class);
+            startActivity(i);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,5 +132,7 @@ public class MainActivity extends AppCompatActivity {
         openCameraButton.setOnClickListener(cameraButtonOnClickListener);
         Button takePhotoButton = (Button) findViewById(R.id.takePhotoButton);
         takePhotoButton.setOnClickListener(takePhotoButtonOnClickListener);
+        Button scanQR = (Button) findViewById(R.id.scanQRButton);
+        scanQR.setOnClickListener(scanQRButtonOnClicklistener);
     }
 }
