@@ -27,6 +27,12 @@
                 android:text="Open Camera" />
 
             <Button
+                android:id="@+id/backstageButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Backstage" />
+
+            <Button
                 android:id="@+id/takePhotoButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
