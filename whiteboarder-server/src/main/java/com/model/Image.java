@@ -76,7 +76,7 @@ public class Image {
 		this.timestamp = timestamp;
 	}
 
-	private bool isPersisted() {
+	private boolean isPersisted() {
 		return this.imgID > 0;
 	}
 }
