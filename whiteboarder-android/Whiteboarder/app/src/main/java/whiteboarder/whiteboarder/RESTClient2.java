@@ -27,7 +27,7 @@ public class RESTClient2 {
     private static final String SESSION_ID = "levelheadedness2";
     private static final String WB_ID = "whiteboard_id";
 
-    public abstract class Callback {
+    public abstract static class Callback {
         abstract void success();
         abstract void fail();
     }

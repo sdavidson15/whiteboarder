@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class Backstage extends AppCompatActivity {
+    String sessionID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,10 +23,21 @@ public class Backstage extends AppCompatActivity {
         Button b = (Button) findViewById(R.id.createSessionButton);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 RESTClient2 restClient2 = new RESTClient2();
-                Snackbar.make(view, "wow", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                restClient2.createSession(new RESTClient2.Callback() {
+                    @Override
+                    public void success() {
+                        Snackbar.make(view, "session created successfully", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
+
+                    @Override
+                    public void fail() {
+                        Snackbar.make(view, "error creating session", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
+                });
             }
         });
     }
