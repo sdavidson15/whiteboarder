@@ -5,6 +5,7 @@ import java.util.List;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -26,6 +27,11 @@ public class RESTClient2 {
     private static final String SESSION_ID = "levelheadedness2";
     private static final String WB_ID = "whiteboard_id";
 
+    public abstract class Callback {
+        abstract void success();
+        abstract void fail();
+    }
+
     private interface WhiteboarderServer {
         @POST("/whiteboarder/session")
         Call<String> createSesssion();
@@ -38,13 +44,34 @@ public class RESTClient2 {
     private static final Retrofit retrofit = new Retrofit.Builder().baseUrl(HOST).build();
     private final WhiteboarderServer service = retrofit.create(WhiteboarderServer.class);
 
-    public void createSession(Callback<String> callback) {
+    public void createSession(final Callback callback) {
         Call<String> call = service.createSesssion();
-        call.enqueue(callback);
+
+        call.enqueue(new retrofit2.Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                callback.success();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                callback.fail();
+            }
+        });
     }
 
-    public void postImage(String sessionID, RequestBody requestBody, Callback<Void> callback) {
+    public void postImage(String sessionID, RequestBody requestBody, final Callback callback) {
         Call<Void> call = service.submitImage(sessionID, requestBody);
-        call.enqueue(callback);
+        call.enqueue(new retrofit2.Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                callback.success();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                callback.fail();
+            }
+        });
     }
 }

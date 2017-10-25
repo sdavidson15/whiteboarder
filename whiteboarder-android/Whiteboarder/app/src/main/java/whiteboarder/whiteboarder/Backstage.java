@@ -23,6 +23,7 @@ public class Backstage extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                RESTClient2 restClient2 = new RESTClient2();
                 Snackbar.make(view, "wow", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
