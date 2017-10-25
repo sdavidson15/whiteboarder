@@ -34,7 +34,7 @@ public class RESTClient2 {
 
     private interface WhiteboarderServer {
         @POST("/whiteboarder/session")
-        Call<String> createSesssion();
+        Call<Void> createSesssion();
 
         @FormUrlEncoded
         @POST("/whiteboarder/image/{sessionID}")
@@ -45,16 +45,20 @@ public class RESTClient2 {
     private final WhiteboarderServer service = retrofit.create(WhiteboarderServer.class);
 
     public void createSession(final Callback callback) {
-        Call<String> call = service.createSesssion();
+        Call<Void> call = service.createSesssion();
 
-        call.enqueue(new retrofit2.Callback<String>() {
+        call.enqueue(new retrofit2.Callback<Void>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                callback.success();
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.code() >= 200 && response.code() < 300) {
+                    callback.success();
+                } else {
+                    callback.fail();
+                }
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 callback.fail();
             }
         });
