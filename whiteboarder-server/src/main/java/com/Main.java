@@ -41,8 +41,7 @@ public class Main {
 		while (retry < DB_CONNECTION_NUM_RETRIES) {
 			try {
 				dbc.startConnection();
-				if (dbc != null)
-					return dbc;
+				return dbc;
 			} catch (WbException e) {
 				retry++;
 			}
