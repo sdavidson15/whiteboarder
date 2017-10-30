@@ -40,6 +40,13 @@
         <script>
         function change_page_qr() {
             window.location.href = "GenerateQR.html";
+
+            POST / HTTP/1.1
+            Host: whiteboarder.com
+            Content-Type: application/x-www-form-urlencoded
+            Content-Length: 13
+
+            id=blah
         }
         </script>
     </body>
