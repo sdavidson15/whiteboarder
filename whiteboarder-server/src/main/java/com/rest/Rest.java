@@ -4,6 +4,7 @@ import com.core.Context;
 import java.io.IOException;
 import java.net.URI;
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.grizzly.http.server.StaticHttpHandler;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -19,7 +20,11 @@ public class Rest {
 		rc.register(MultiPartFeature.class);
 		rc = rc.packages("com.rest");
 
+		// serve static files on `/`
 		String uri = ctx.isLocal() ? LOCAL_BASE_URI : BASE_URI;
-		return GrizzlyHttpServerFactory.createHttpServer(URI.create(uri), rc);
+		HttpServer server = GrizzlyHttpServerFactory.createHttpServer(URI.create(uri), rc);
+		final StaticHttpHandler httpHandler = new StaticHttpHandler("../whiteboarder-web");
+		server.getServerConfiguration().addHttpHandler(httpHandler, "/");
+		return server;
 	}
 }
