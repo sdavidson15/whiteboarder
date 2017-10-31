@@ -1,5 +1,7 @@
 package whiteboarder.whiteboarder;
 
+import android.util.Log;
+
 import java.util.List;
 
 import okhttp3.RequestBody;
@@ -12,6 +14,8 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 // RESTClient2 is a replacement for RESTClient that makes use of the Retrofit library. Eventually,
 // we will be able to swap this class in and delete RESTClient.
@@ -23,7 +27,7 @@ public class RESTClient2 {
     //
     // The permanent location is probably
     //      "https://proj-309-yt-c-1.cs.iastate.edu/"
-    private static final String HOST = "http://b7bcb9fd.ngrok.io";
+    private static final String HOST = "http://69a89d9a.ngrok.io";
 
     public abstract static class Callback<T> {
         abstract void success(T data);
@@ -39,7 +43,10 @@ public class RESTClient2 {
         Call<Void> submitImage(@Path("sessionID") String sessionID, @Part("photo") RequestBody requestBody);
     }
 
-    private static final Retrofit retrofit = new Retrofit.Builder().baseUrl(HOST).build();
+    private static final Retrofit retrofit = new Retrofit.Builder().baseUrl(HOST)
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
     private final WhiteboarderServer service = retrofit.create(WhiteboarderServer.class);
 
     public void createSession(final Callback<String> callback) {
@@ -57,6 +64,7 @@ public class RESTClient2 {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
+                Log.d("createSession failure", t.toString());
                 callback.fail();
             }
         });
