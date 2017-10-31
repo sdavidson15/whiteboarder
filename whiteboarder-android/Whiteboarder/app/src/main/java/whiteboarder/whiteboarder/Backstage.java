@@ -25,10 +25,10 @@ public class Backstage extends AppCompatActivity {
             @Override
             public void onClick(final View view) {
                 RESTClient2 restClient2 = new RESTClient2();
-                restClient2.createSession(new RESTClient2.Callback() {
+                restClient2.createSession(new RESTClient2.Callback<String>() {
                     @Override
-                    public void success() {
-                        Snackbar.make(view, "session created successfully", Snackbar.LENGTH_LONG)
+                    public void success(String data) {
+                        Snackbar.make(view, "session created successfully. ID = " + data, Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                     }
 

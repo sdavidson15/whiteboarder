@@ -23,18 +23,16 @@ public class RESTClient2 {
     //
     // The permanent location is probably
     //      "https://proj-309-yt-c-1.cs.iastate.edu/"
-    private static final String HOST = "http://79814b7d.ngrok.io:80";
-    private static final String SESSION_ID = "levelheadedness2";
-    private static final String WB_ID = "whiteboard_id";
+    private static final String HOST = "http://b7bcb9fd.ngrok.io";
 
-    public abstract static class Callback {
-        abstract void success();
+    public abstract static class Callback<T> {
+        abstract void success(T data);
         abstract void fail();
     }
 
     private interface WhiteboarderServer {
         @POST("/whiteboarder/session")
-        Call<Void> createSesssion();
+        Call<String> createSesssion();
 
         @FormUrlEncoded
         @POST("/whiteboarder/image/{sessionID}")
@@ -44,32 +42,32 @@ public class RESTClient2 {
     private static final Retrofit retrofit = new Retrofit.Builder().baseUrl(HOST).build();
     private final WhiteboarderServer service = retrofit.create(WhiteboarderServer.class);
 
-    public void createSession(final Callback callback) {
-        Call<Void> call = service.createSesssion();
+    public void createSession(final Callback<String> callback) {
+        Call<String> call = service.createSesssion();
 
-        call.enqueue(new retrofit2.Callback<Void>() {
+        call.enqueue(new retrofit2.Callback<String>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
                 if (response.code() >= 200 && response.code() < 300) {
-                    callback.success();
+                    callback.success(response.body());
                 } else {
                     callback.fail();
                 }
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
                 callback.fail();
             }
         });
     }
 
-    public void postImage(String sessionID, RequestBody requestBody, final Callback callback) {
+    public void postImage(String sessionID, RequestBody requestBody, final Callback<Void> callback) {
         Call<Void> call = service.submitImage(sessionID, requestBody);
         call.enqueue(new retrofit2.Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                callback.success();
+                callback.success(null);
             }
 
             @Override
