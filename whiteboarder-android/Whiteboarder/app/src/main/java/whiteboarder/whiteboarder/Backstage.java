@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class Backstage extends AppCompatActivity {
     String sessionID;
@@ -30,6 +31,7 @@ public class Backstage extends AppCompatActivity {
                     public void success(String data) {
                         Snackbar.make(view, "session created successfully. ID = " + data, Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
+                        ((TextView) findViewById(R.id.sessionID)).setText(data);
                     }
 
                     @Override
