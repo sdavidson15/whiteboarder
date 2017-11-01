@@ -37,7 +37,7 @@ public class Image {
 	}
 
 	public void setImgID(int imgID) {
-		if (this.imgID > 0) {
+		if (isPersisted()) {
 			Logger.log.warning("Cannot change the imgID on a persisted Image.");
 			return;
 		}
@@ -57,7 +57,7 @@ public class Image {
 	}
 
 	public void setBytes(byte[] bytes) {
-		if (this.imgID > 0) {
+		if (isPersisted()) {
 			Logger.log.warning("Cannot set the bytes on a persisted Image.");
 			return;
 		}
@@ -69,10 +69,14 @@ public class Image {
 	}
 
 	public void setTimestamp(Date timestamp) {
-		if (this.imgID > 0) {
+		if (isPersisted()) {
 			Logger.log.warning("Cannot change the timestamp on a persisted Image.");
 			return;
 		}
 		this.timestamp = timestamp;
+	}
+
+	private boolean isPersisted() {
+		return this.imgID > 0;
 	}
 }
