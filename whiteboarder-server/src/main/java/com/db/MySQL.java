@@ -12,7 +12,7 @@ public class MySQL {
 
 	final static String CREATE_IMAGES_TABLE = "CREATE TABLE IF NOT EXISTS Images (" + "ImageID INT AUTO_INCREMENT, "
 			+ "WhiteboardID CHAR(36) NOT NULL, " + "Filename VARCHAR(" + Image.MAX_IMG_NAME_LENGTH + "), "
-			+ "Bytes BLOB, " + "Timestamp TIMESTAMP NOT NULL, " + "PRIMARY KEY(ImageID));";
+			+ "Bytes MEDIUMBLOB, " + "Timestamp TIMESTAMP NOT NULL, " + "PRIMARY KEY(ImageID));";
 
 	final static String CREATE_EDITS_TABLE = "CREATE TABLE IF NOT EXISTS Edits (" + "EditID INT AUTO_INCREMENT, "
 			+ "WhiteboardID CHAR(36) NOT NULL, " + "Username VARCHAR(" + User.MAX_USER_NAME_LENGTH + "), "
