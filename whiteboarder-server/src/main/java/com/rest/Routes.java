@@ -29,7 +29,7 @@ import javax.ws.rs.Produces;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
-@Path("/whiteboarder")
+@Path("/")
 public class Routes {
 
 	public static Context ctx;
