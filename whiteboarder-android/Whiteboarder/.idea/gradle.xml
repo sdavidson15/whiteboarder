@@ -7,8 +7,8 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="$USER_HOME$/workspace/src/git.linux.iastate.edu/309Fall2017/YT_C_1_ProjectName/whiteboarder-android/Whiteboarder" />
-            <option value="$USER_HOME$/workspace/src/git.linux.iastate.edu/309Fall2017/YT_C_1_ProjectName/whiteboarder-android/Whiteboarder/app" />
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
