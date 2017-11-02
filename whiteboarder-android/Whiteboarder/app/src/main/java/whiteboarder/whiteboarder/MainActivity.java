@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             camera = Camera.open(0);
-            camera.setDisplayOrientation(90);
+            camera.setDisplayOrientation(0);
             camera.startPreview();
 
             SurfaceView surfaceView = (SurfaceView) findViewById(R.id.cameraPreviewSurface);
