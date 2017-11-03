@@ -2,6 +2,7 @@ package whiteboarder.whiteboarder;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Build;
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             camera = Camera.open(0);
-            camera.setDisplayOrientation(90);
+            camera.setDisplayOrientation(0);
             camera.startPreview();
 
             SurfaceView surfaceView = (SurfaceView) findViewById(R.id.cameraPreviewSurface);
@@ -112,6 +113,13 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private final View.OnClickListener backstageButtonOnClickListener = new View.OnClickListener() {
+        public void onClick(View view) {
+            Intent intent = new Intent(getApplicationContext(), Backstage.class);
+            startActivity(intent);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,5 +129,8 @@ public class MainActivity extends AppCompatActivity {
         openCameraButton.setOnClickListener(cameraButtonOnClickListener);
         Button takePhotoButton = (Button) findViewById(R.id.takePhotoButton);
         takePhotoButton.setOnClickListener(takePhotoButtonOnClickListener);
+
+        Button backstageButton = (Button) findViewById(R.id.backstageButton);
+        backstageButton.setOnClickListener(backstageButtonOnClickListener);
     }
 }
