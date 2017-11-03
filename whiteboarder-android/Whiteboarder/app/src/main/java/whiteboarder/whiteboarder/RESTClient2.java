@@ -2,24 +2,18 @@ package whiteboarder.whiteboarder;
 
 import android.util.Log;
 
-import java.util.List;
-
 import okhttp3.RequestBody;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-// RESTClient2 is a replacement for RESTClient that makes use of the Retrofit library. Eventually,
-// we will be able to swap this class in and delete RESTClient.
+// RESTClient2 is a replacement for RESTClient that makes use of the Retrofit library.
 //
 // See https://square.github.io/retrofit/ for information on the library in use.
 // RESTClient2 is *unaware* of the SessionInfo singleton.
