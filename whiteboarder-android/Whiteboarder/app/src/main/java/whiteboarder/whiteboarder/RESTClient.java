@@ -109,13 +109,4 @@ class RESTClient {
             activity.startActivity(i);
         }
     }
-
-    /*
-     Return the Session ID of the new Whiteboard Session.
-     */
-    String createWhiteboardSession(Activity activity, byte []imageData) {
-        CreateSessionTask task = new CreateSessionTask(activity);
-        task.execute(imageData);
-        return null;
-    }
 }

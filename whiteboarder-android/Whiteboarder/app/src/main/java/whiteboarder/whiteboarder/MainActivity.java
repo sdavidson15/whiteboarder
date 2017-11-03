@@ -80,9 +80,10 @@ public class MainActivity extends AppCompatActivity {
 
             camera.takePicture(null, null, null, new Camera.PictureCallback() {
                 public void onPictureTaken(byte[] data, Camera camera) {
+                    // Post to the server
+
                     // You have to restart the preview-- otherwise the camera freezes.
                     camera.startPreview();
-                    new RESTClient().createWhiteboardSession(MainActivity.this, data);
                 }
             });
         }
