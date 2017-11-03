@@ -27,6 +27,10 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okio.BufferedSink;
+
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
@@ -80,7 +84,18 @@ public class MainActivity extends AppCompatActivity {
 
             camera.takePicture(null, null, null, new Camera.PictureCallback() {
                 public void onPictureTaken(byte[] data, Camera camera) {
+                    RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), data);
+
                     // Post to the server
+                    new RESTClient2().postImage(SessionInfo.sessionID, requestBody, new RESTClient2.Callback<Void>() {
+                        void success(Void v) {
+                            Log.d("takePicture", "success");
+                        }
+
+                        void fail() {
+                            Log.d("takePicture", "failure");
+                        }
+                    });
 
                     // You have to restart the preview-- otherwise the camera freezes.
                     camera.startPreview();

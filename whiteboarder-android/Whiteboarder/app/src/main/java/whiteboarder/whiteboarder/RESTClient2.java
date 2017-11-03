@@ -11,6 +11,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
@@ -21,13 +22,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 // we will be able to swap this class in and delete RESTClient.
 //
 // See https://square.github.io/retrofit/ for information on the library in use.
+// RESTClient2 is *unaware* of the SessionInfo singleton.
 public class RESTClient2 {
     // TODO: change this to point to the permanent location of our server,
     // or at least make it configurable.
     //
     // The permanent location is probably
     //      "https://proj-309-yt-c-1.cs.iastate.edu/"
-    private static final String HOST = "http://69a89d9a.ngrok.io";
+    private static final String HOST = "https://1c20a79e.ngrok.io";
 
     public abstract static class Callback<T> {
         abstract void success(T data);
@@ -38,9 +40,9 @@ public class RESTClient2 {
         @POST("/whiteboarder/session")
         Call<String> createSesssion();
 
-        @FormUrlEncoded
+        @Multipart
         @POST("/whiteboarder/image/{sessionID}")
-        Call<Void> submitImage(@Path("sessionID") String sessionID, @Part("photo") RequestBody requestBody);
+        Call<Void> submitImage(@Path("sessionID") String sessionID, @Part("file") RequestBody requestBody);
     }
 
     private static final Retrofit retrofit = new Retrofit.Builder().baseUrl(HOST)
