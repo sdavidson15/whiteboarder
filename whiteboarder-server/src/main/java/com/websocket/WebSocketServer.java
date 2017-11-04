@@ -41,6 +41,8 @@
 // package org.glassfish.grizzly.samples.websockets;
 package com.websocket;
 
+import com.core.Context;
+
 import java.net.URL;
 
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -61,17 +63,10 @@ public class WebSocketServer {
     // TODO: The idea here is to communicate all traffic through the same websocket,
     // but send the session id with each message.
     // If a message has a session id that isn't correct, ignore the message.
-    public static void startServer(HttpServer server) throws Exception {
+    public static void startServer(Context ctx, HttpServer server) throws Exception {
         server.getListener("grizzly").registerAddOn(new WebSocketAddOn());
-        final WebSocketApplication wbApp = new WhiteboarderApplication();
+        final WebSocketApplication wbApp = new WhiteboarderApplication(ctx);
         WebSocketEngine.getEngine().register("/ws", "/session", wbApp);
-        server.start();
-    }
-
-    public static void startServer_demo(HttpServer server) throws Exception {
-        server.getListener("grizzly").registerAddOn(new WebSocketAddOn());
-        final WebSocketApplication chatApplication = new ChatApplication();
-        WebSocketEngine.getEngine().register("/ws", "/chat", chatApplication);
         server.start();
     }
 }

@@ -67,8 +67,8 @@ public class Routes {
 			return Response.serverError().entity(e.getMessage()).build();
 		}
 
-		return Response.ok(img.getBytes(), APPLICATION_OCTET_STREAM).header("Content-Disposition",
-			"inline; filename=\"" + sessionID + ".jpg\"").build();
+		return Response.ok(img.getBytes(), APPLICATION_OCTET_STREAM)
+				.header("Content-Disposition", "inline; filename=\"" + sessionID + ".jpg\"").build();
 	}
 
 	@POST

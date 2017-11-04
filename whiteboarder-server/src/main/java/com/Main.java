@@ -5,7 +5,7 @@ import com.core.Logger;
 import com.core.WbException;
 import com.rest.Rest;
 import com.db.DatabaseConnector;
-import com.websocket.ChatWebSocketSecuredServer;
+import com.websocket.WebSocketServer;
 
 import java.io.IOException;
 
@@ -20,8 +20,8 @@ public class Main {
 		Logger.setupLogger();
 		DatabaseConnector dbc = startDatabaseConnection(true);
 		Context ctx = new Context(null, dbc, true);
-		HttpServer server = Rest.startServer(ctx);
-		ChatWebSocketSecuredServer.startServer(server);
+		HttpServer server = Rest.setupServer(ctx);
+		WebSocketServer.startServer(ctx, server);
 		System.in.read();
 		server.stop();
 		endDatabaseConnection(dbc);

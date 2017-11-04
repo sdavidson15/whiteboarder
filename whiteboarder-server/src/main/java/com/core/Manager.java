@@ -44,4 +44,20 @@ public class Manager {
 		return ctx != null && ctx.isValid();
 	}
 
+	public static void applyEdit(Context ctx, Edit edit) {
+		// TODO:
+	}
+
+	public static void removeEdit(Context ctx, Edit edit) {
+		// TODO:
+	}
+
+	public static void addUser(Context ctx, String sessionID, String username) {
+		// TODO:
+	}
+
+	public static void removeUser(Context ctx, String sessionID, String username) {
+		// TODO:
+	}
+
 }

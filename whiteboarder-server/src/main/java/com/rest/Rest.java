@@ -18,7 +18,7 @@ public class Rest {
 	public static final String LOCAL_BASE_URI = "http://localhost/whiteboarder/";
 
 	// TODO: This no longer starts the server. Might need to rename this.
-	public static HttpServer startServer(Context ctx) {
+	public static HttpServer setupServer(Context ctx) {
 		Routes.ctx = ctx;
 
 		ResourceConfig rc = new ResourceConfig().packages("com.rest").register(MultiPartFeature.class);
