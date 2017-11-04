@@ -1,65 +1,89 @@
-<h1></h1><h1></h1><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">
+<h1></h1>
+<h1></h1>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
 <head>
-<title>Whiteboarder QRCode Generator</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
-<script type="text/javascript" src="jquery.js"></script>
-<script type="text/javascript" src="qrcode.js"></script>
+        <title>Whiteboarder QRCode Generator</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="qrcode.js"></script>
 </head>
+
 <body>
 
-    <p>Hello World!</p>
+        <p>Hello World!</p>
 
-<div id="qrcode" style="margin:auto; width:500px; height:500px; margin-top:100px; margin-bottom:100px;"></div>
+        <div id="qrcode" style="margin:auto; width:500px; height:500px; margin-top:100px; margin-bottom:100px;"></div>
 
-<script type="text/javascript">
-var qrcode = new QRCode(document.getElementById("qrcode"), {
-	width : 500,
-	height : 500
-});
-
-
-/*var sessionID = parseUrl(document.location.href).search;
-
-document.getElementById("URL").innerHTML = "stuff " + window.location.href;
-
-var partsURL = document.location.search.split("?");
-var lastPartURL = partsURL[partsURL.length - 1];*/
+        <script type="text/javascript">
+                var qrcode = new QRCode(document.getElementById("qrcode"), {
+                        width: 500,
+                        height: 500
+                });
 
 
+                /*var sessionID = parseUrl(document.location.href).search;
+                
+                document.getElementById("URL").innerHTML = "stuff " + window.location.href;
+                
+                var partsURL = document.location.search.split("?");
+                var lastPartURL = partsURL[partsURL.length - 1];*/
 
-var parts = document.location.href.split("?");
-// parts will be like
-// 0 - https://whiteboarder/session
-// 1 - x=y&sessionID=hello
-if (parts.length > 1) {
-        var lastPart = parts[parts.length - 1];
-        // params will be like
-        // 0 - x=y
-        // 1 - sessionID=hello
-        var params = lastPart.split("&");
-        var keyToPairsMap = [];
-        for (var i = 0; i < params.length; i++) {
-                var paramParts = params[i].split("=", 2);
-                var key = paramParts[0];
-                var value = "";
-                if (paramParts.length > 1) {
-                        value = paramParts[1];
+
+
+                //var parts = document.location.href.split("?");
+
+                // parts will be like
+                // 0 - https://whiteboarder/session
+                // 1 - x=y&sessionID=hello
+
+                // if (parts.length > 1) {
+                //         var lastPart = parts[parts.length - 1];
+                //         // params will be like
+                //         // 0 - x=y
+                //         // 1 - sessionID=hello
+                //         var params = lastPart.split("&");
+                //         var keyToPairsMap = [];
+                //         for (var i = 0; i < params.length; i++) {
+                //                 var paramParts = params[i].split("=", 2);
+                //                 var key = paramParts[0];
+                //                 var value = "";
+                //                 if (paramParts.length > 1) {
+                //                         value = paramParts[1];
+                //                 }
+                //                 keyToPairsMap[key] = value;
+                //         }
+                //         var id = String(keyToPairsMap["sessionID"]);
+                // }
+
+                var id = getCookie("wb_session_id");
+
+                // parse id from cookie string
+                function getCookie(cookieName) {
+                        var name = cookieName + "=";
+                        var ca = document.cookie.split(';');
+                        for (var i = 0; i < ca.length; i++) {
+                                var c = ca[i];
+                                while (c.charAt(0) == ' ') {
+                                        c = c.substring(1);
+                                }
+                                if (c.indexOf(name) == 0) {
+                                        return c.substring(name.length, c.length);
+                                }
+                        }
+                        return "";
                 }
-                keyToPairsMap[key] = value;
-        }
-        var id = String(keyToPairsMap["sessionID"]);
-}
 
-qrcode.makeCode(id);
 
-</script>
+                qrcode.makeCode(id);
+        </script>
 
-<h1 id="demo" align="center"></h1>
-<script>
+        <h1 id="demo" align="center"></h1>
+        <script>
 /*document.getElementById("demo").innerHTML = keyToPairsMap["index"];*/
-</script>
+        </script>
 
 
 </body>
