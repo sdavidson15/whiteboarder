@@ -5,8 +5,13 @@ import com.core.Logger;
 import com.core.WbException;
 import com.model.*;
 import java.sql.*;
-import javax.sql.rowset.serial.SerialBlob;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import javax.sql.rowset.serial.SerialBlob;
+
 
 public class DatabaseConnector {
 
@@ -263,8 +268,8 @@ public class DatabaseConnector {
 		return new Image(imgID, wbID, filename, bytes, timestamp);
 	}
 
-	public ArrayList<Image> getImages(String wbID) throws WbException {
-		List<Image> images = new ArrayList<Image>();
+	public List<Image> getImages(String wbID) throws WbException {
+		ArrayList<Image> images = new ArrayList<Image>();
 		
 		int imgID = -1;
 		String filename = null;
@@ -296,8 +301,8 @@ public class DatabaseConnector {
 		return images;
 	}
 
-	public HashSet<Edit> getEdits(String wbID) throws WbException {
-		Set<Edit> edits = new HashSet<Edit>();
+	public Set<Edit> getEdits(String wbID) throws WbException {
+		HashSet<Edit> edits = new HashSet<Edit>();
 
 		// WhiteboardID, Username, Color, BrushSize, Timestamp
 		String username = null;
@@ -338,17 +343,25 @@ public class DatabaseConnector {
 			if (rs.next()) {
 				modeNum = rs.getInt("Mode");
 				// TODO: add these for other values? (Possible -1/null color, bytesize, timestamp, etc.)
-				if (modeNum == -1) throw new WbException(WbException.DB_INVALID_MODE);
 			}
 		} catch (Exception e) {
 			throw new WbException(WbException.DB_GET_USER, e);
 		}
 
-		return new User(wbID, username, new Mode(modeNum));
+		switch (modeNum) {
+			case 0:
+				return new User(wbID, username, Mode.HOST);
+			case 1:
+				return new User(wbID, username, Mode.COLLABORATOR);
+			case 2:
+				return new User(wbID, username, Mode.VIEWER);
+			default:
+				throw new Wb(Exception(WbException.DB_INVALID_MODE));
+		}
 	}
 
-	public HashSet<User> getUsers(String wbID) {
-		Set<User> users = new HashSet<User>();
+	public Set<User> getUsers(String wbID) {
+		HashSet<User> users = new HashSet<User>();
 
 		String username = null;
 		int modeNum = -1;
@@ -361,9 +374,20 @@ public class DatabaseConnector {
 			while (rs.next()) {
 				username = rs.getString("Username");
 				modeNum = rs.getInt("Mode");
-				if (modeNum == -1) throw new WbException(WbException.DB_INVALID_MODE);
 
-				users.add(new User(wbID, username, new Mode(modeNum)));
+				switch (modeNum) {
+					case 0:
+						users.add(new User(wbID, username, Mode.HOST));
+						break;
+					case 1:
+						users.add(new User(wbID, username, Mode.COLLABORATOR));
+						break;
+					case 2:
+						users.add(new User(wbID, username, Mode.VIEWER));
+						break;
+					default:
+						throw new Wb(Exception(WbException.DB_INVALID_MODE));
+				}
 			}
 		} catch (Exception e) {
 			throw new WbException(WbException.DB_GET_USERS, e);
