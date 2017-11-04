@@ -234,8 +234,9 @@ public class DatabaseConnector {
 		} catch (Exception e) {
 			throw new WbException(WbException.DB_GET_WB, e);
 		}
-		// TODO: Populate wb's Edits and Images
-		Whiteboard wb = new Whiteboard(wbID, name, null, null);
+		// TODO: Populate wb's Edits and Images -- EDIT: images should be null
+		Set<Edit> edits = this.getEdits(wbID);
+		Whiteboard wb = new Whiteboard(wbID, name, null, edits);
 		return wb;
 	}
 

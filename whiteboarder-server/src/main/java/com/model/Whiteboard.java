@@ -10,19 +10,19 @@ public class Whiteboard {
 	private String wbID;
 	private String name;
 	private List<Image> imgHistory;
-	private List<Edit> edits;
+	private Set<Edit> edits;
 
 	/**
 	 *  General purpose Whiteboard contructor
 	 **/
 	public Whiteboard(String name) {
-		this(UUID.randomUUID().toString(), name, new ArrayList<Image>(), new ArrayList<Edit>());
+		this(UUID.randomUUID().toString(), name, new ArrayList<Image>(), new HashSet<Edit>());
 	}
 
 	/**
 	 * Constructor used only for loading an existing Whiteboard from the database
 	 **/
-	public Whiteboard(String wbID, String name, List<Image> imgHistory, List<Edit> edits) {
+	public Whiteboard(String wbID, String name, List<Image> imgHistory, Set<Edit> edits) {
 		this.wbID = wbID;
 		this.name = name;
 		this.imgHistory = (imgHistory != null) ? imgHistory : new ArrayList<Image>();
@@ -66,7 +66,7 @@ public class Whiteboard {
 		return this.edits.get(0);
 	}
 
-	public List<Edit> getEdits() {
+	public Set<Edit> getEdits() {
 		return this.edits;
 	}
 

@@ -32,6 +32,11 @@ public class WbException extends Exception {
     public static final String DB_GET_USER = "Failed to retrieve User from the database.";
     public static final String DB_GET_USERS = "Failed to retrieve Users from the database.";
 
+    public static final String INVALID_USER = "Failed to create session with a null user.";
+    public static final String INVALID_CONTEXT = "Invalid context.";
+    public static final String INVALID_NAME = "Failed to create session with a null name.";
+    public static final String INVALID_SESSION = "SessionID cannot be empty.";
+
     public static final String WHITEBOARD_DNE = "Whiteboard does not exist.";
     public static final String USER_DNE = "User does not exist.";
 }
