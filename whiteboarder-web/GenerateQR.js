@@ -6,7 +6,7 @@ function postSession() {
                 type: 'POST',
                 contentType: "application/json",
                 success: function (response) {
-                        //make cookie
+                        // make cookie
                         document.cookie = "wb_session_id=" + response + ";path=/";
                         window.location.href = "GenerateQR.html"
                 },

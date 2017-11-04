@@ -23,41 +23,6 @@
                         height: 500
                 });
 
-
-                /*var sessionID = parseUrl(document.location.href).search;
-                
-                document.getElementById("URL").innerHTML = "stuff " + window.location.href;
-                
-                var partsURL = document.location.search.split("?");
-                var lastPartURL = partsURL[partsURL.length - 1];*/
-
-
-
-                //var parts = document.location.href.split("?");
-
-                // parts will be like
-                // 0 - https://whiteboarder/session
-                // 1 - x=y&sessionID=hello
-
-                // if (parts.length > 1) {
-                //         var lastPart = parts[parts.length - 1];
-                //         // params will be like
-                //         // 0 - x=y
-                //         // 1 - sessionID=hello
-                //         var params = lastPart.split("&");
-                //         var keyToPairsMap = [];
-                //         for (var i = 0; i < params.length; i++) {
-                //                 var paramParts = params[i].split("=", 2);
-                //                 var key = paramParts[0];
-                //                 var value = "";
-                //                 if (paramParts.length > 1) {
-                //                         value = paramParts[1];
-                //                 }
-                //                 keyToPairsMap[key] = value;
-                //         }
-                //         var id = String(keyToPairsMap["sessionID"]);
-                // }
-
                 var id = getCookie("wb_session_id");
 
                 // parse id from cookie string
@@ -81,9 +46,6 @@
         </script>
 
         <h1 id="demo" align="center"></h1>
-        <script>
-/*document.getElementById("demo").innerHTML = keyToPairsMap["index"];*/
-        </script>
 
 
 </body>
