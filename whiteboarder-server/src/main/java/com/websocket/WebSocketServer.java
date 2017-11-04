@@ -42,6 +42,7 @@
 package com.websocket;
 
 import java.net.URL;
+
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.ssl.SSLContextConfigurator;
 import org.glassfish.grizzly.ssl.SSLEngineConfigurator;
@@ -49,51 +50,28 @@ import org.glassfish.grizzly.websockets.WebSocketAddOn;
 import org.glassfish.grizzly.websockets.WebSocketApplication;
 import org.glassfish.grizzly.websockets.WebSocketEngine;
 
-import org.glassfish.grizzly.http.server.NetworkListener;
-
 /**
 * Secured standalone Java websocket chat server implementation. 
 * Server expects to get the path to webapp as command line parameter 
 * 
 * @author Alexey Stashok 
 */
-public class ChatWebSocketSecuredServer {
+public class WebSocketServer {
 
+    // TODO: The idea here is to communicate all traffic through the same websocket,
+    // but send the session id with each message.
+    // If a message has a session id that isn't correct, ignore the message.
     public static void startServer(HttpServer server) throws Exception {
-        // Register the WebSockets add on with the HttpServer 
         server.getListener("grizzly").registerAddOn(new WebSocketAddOn());
-
-        // // Enable SSL on the listener 
-        // server.getListener("grizzly").setSSLEngineConfig(createSslConfiguration());
-        // server.getListener("grizzly").setSecure(true);
-
-        // initialize websocket chat application 
-        final WebSocketApplication chatApplication = new ChatApplication();
-
-        // register the application 
-        WebSocketEngine.getEngine().register("/grizzly-websockets-chat", "/chat", chatApplication);
-
+        final WebSocketApplication wbApp = new WhiteboarderApplication();
+        WebSocketEngine.getEngine().register("/ws", "/session", wbApp);
         server.start();
     }
 
-    /**
-    * Initialize server side SSL configuration. 
-    *  
-    * @return server side {@link SSLEngineConfigurator}. 
-    */
-    private static SSLEngineConfigurator createSslConfiguration() {
-        // Initialize SSLContext configuration 
-        SSLContextConfigurator sslContextConfig = new SSLContextConfigurator();
-
-        ClassLoader cl = ChatWebSocketSecuredServer.class.getClassLoader();
-        // Set key store 
-        URL keystoreUrl = cl.getResource("ssltest-keystore.jks");
-        if (keystoreUrl != null) {
-            sslContextConfig.setKeyStoreFile(keystoreUrl.getFile());
-            sslContextConfig.setKeyStorePass("changeit");
-        }
-
-        // Create SSLEngine configurator 
-        return new SSLEngineConfigurator(sslContextConfig.createSSLContext(), false, false, false);
+    public static void startServer_demo(HttpServer server) throws Exception {
+        server.getListener("grizzly").registerAddOn(new WebSocketAddOn());
+        final WebSocketApplication chatApplication = new ChatApplication();
+        WebSocketEngine.getEngine().register("/ws", "/chat", chatApplication);
+        server.start();
     }
 }
