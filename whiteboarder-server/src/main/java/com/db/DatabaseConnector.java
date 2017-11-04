@@ -262,4 +262,113 @@ public class DatabaseConnector {
 
 		return new Image(imgID, wbID, filename, bytes, timestamp);
 	}
+
+	public ArrayList<Image> getImages(String wbID) throws WbException {
+		List<Image> images = new ArrayList<Image>();
+		
+		int imgID = -1;
+		String filename = null;
+		byte[] bytes = null;
+		Date timestamp = null;
+
+		try {
+			PreparedStatement stmt = c.prepareStatement(MySQL.GET_IMAGES);
+			stmt.setString(1, wbID);
+
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				imgID = rs.getInt("ImageID");
+				filename = rs.getString("Filename");
+				timestamp = rs.getTimestamp("Timestamp");
+
+				Blob blob = rs.getBlob("Bytes");
+				// casted to an int from a long (problem when posting massive pictures?? over 4.2Gb i think)
+				if (blob != null) bytes = blob.getBytes(1, (int) blob.length());
+
+				images.add(new Image(imgID, wbID, filename, bytes, timestamp));
+			}
+			rs.close();
+			stmt.close();
+		} catch (Exception e) {
+			throw new WbException(WbException.DB_GET_IMGS, e);
+		}
+
+		return images;
+	}
+
+	public HashSet<Edit> getEdits(String wbID) throws WbException {
+		Set<Edit> edits = new HashSet<Edit>();
+
+		// WhiteboardID, Username, Color, BrushSize, Timestamp
+		String username = null;
+		int color = -1, brushsize = -1;
+		Date timestamp = null;
+
+		try {
+			PreparedStatement stmt = c.prepareStatement(MySQL.GET_EDITS);
+			stmt.setString(1, wbID);
+
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				username = rs.getString("Username");
+				color = rs.getInt("Color");
+				brushsize = rs.getInt("BrushSize");
+				timestamp = rs.getTimestamp("Timestamp");
+
+				edits.add(new Edit(wbID, username, color, brushsize, null));
+			}
+			rs.close();
+			stmt.close();
+		} catch (Exception e) {
+			throw new WbException(WbException.DB_GET_EDITS, e);
+		}
+
+		return edits;
+	}
+
+	public User getUser(String wbID, String username) {
+		int modeNum = -1;
+
+		try {
+			PreparedStatement stmt = c.prepareStatement(MySQL.GET_USER);
+			stmt.setString(1, wbID);
+			stmt.setString(2, username);
+
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				modeNum = rs.getInt("Mode");
+				// TODO: add these for other values? (Possible -1/null color, bytesize, timestamp, etc.)
+				if (modeNum == -1) throw new WbException(WbException.DB_INVALID_MODE);
+			}
+		} catch (Exception e) {
+			throw new WbException(WbException.DB_GET_USER, e);
+		}
+
+		return new User(wbID, username, new Mode(modeNum));
+	}
+
+	public HashSet<User> getUsers(String wbID) {
+		Set<User> users = new HashSet<User>();
+
+		String username = null;
+		int modeNum = -1;
+
+		try {
+			PreparedStatement stmt = c.prepareStatement(MySQL.GET_USERS);
+			stmt.setString(1, wbID);
+
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				username = rs.getString("Username");
+				modeNum = rs.getInt("Mode");
+				if (modeNum == -1) throw new WbException(WbException.DB_INVALID_MODE);
+
+				users.add(new User(wbID, username, new Mode(modeNum)));
+			}
+		} catch (Exception e) {
+			throw new WbException(WbException.DB_GET_USERS, e);
+		}
+
+		return users;
+	}
 }
