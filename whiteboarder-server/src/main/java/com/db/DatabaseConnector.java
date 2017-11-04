@@ -356,7 +356,7 @@ public class DatabaseConnector {
 			case 2:
 				return new User(wbID, username, Mode.VIEWER);
 			default:
-				throw new Wb(Exception(WbException.DB_INVALID_MODE));
+				throw new WbException(WbException.DB_INVALID_MODE);
 		}
 	}
 
@@ -386,7 +386,7 @@ public class DatabaseConnector {
 						users.add(new User(wbID, username, Mode.VIEWER));
 						break;
 					default:
-						throw new Wb(Exception(WbException.DB_INVALID_MODE));
+						throw new WbException(WbException.DB_INVALID_MODE);
 				}
 			}
 		} catch (Exception e) {
