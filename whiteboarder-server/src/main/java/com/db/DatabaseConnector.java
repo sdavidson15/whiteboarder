@@ -331,7 +331,7 @@ public class DatabaseConnector {
 		return edits;
 	}
 
-	public User getUser(String wbID, String username) {
+	public User getUser(String wbID, String username) throws WbException {
 		int modeNum = -1;
 
 		try {
@@ -360,7 +360,7 @@ public class DatabaseConnector {
 		}
 	}
 
-	public Set<User> getUsers(String wbID) {
+	public Set<User> getUsers(String wbID) throws WbException {
 		HashSet<User> users = new HashSet<User>();
 
 		String username = null;
