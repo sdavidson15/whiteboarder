@@ -2,6 +2,7 @@ package com.websocket;
 
 import com.core.Context;
 import com.core.Manager;
+import com.core.WbException;
 import com.core.Logger;
 import com.model.Edit;
 import com.google.gson.Gson;
@@ -75,10 +76,16 @@ public class WhiteboarderApplication extends WebSocketApplication {
             return;
         }
 
-        if (h.isRemove)
-            Manager.removeEdit(ctx, h.edit);
-        else
-            Manager.applyEdit(ctx, h.edit);
+        Logger.log.info("Recieved web socket message to handle an Edit.");
+        try {
+            if (h.isRemove)
+                Manager.removeEdit(ctx, h.edit);
+            else
+                Manager.applyEdit(ctx, h.edit);
+        } catch (WbException e) {
+            Logger.log.severe("Error while handling edit: " + e.getMessage());
+            return;
+        }
 
         broadcast(wws.getSessionID(), wws.getUser(), jsonData);
     }
@@ -92,7 +99,11 @@ public class WhiteboarderApplication extends WebSocketApplication {
     public void onClose(WebSocket websocket, DataFrame frame) {
         WhiteboarderWebSocket wws = (WhiteboarderWebSocket) websocket;
         Logger.log.info(wws.getUser() + " left session " + wws.getSessionID());
-        Manager.removeUser(ctx, wws.getSessionID(), wws.getUser());
+        try {
+            Manager.removeUser(ctx, wws.getSessionID(), wws.getUser());
+        } catch (WbException e) {
+            Logger.log.severe("Error while removing User: " + e.getMessage());
+        }
         members.remove(websocket);
     }
 
@@ -107,7 +118,13 @@ public class WhiteboarderApplication extends WebSocketApplication {
         String sessionID = fields[0];
         String username = fields[1];
 
-        Manager.addUser(ctx, sessionID, username);
+        try {
+            Manager.addUser(ctx, sessionID, username);
+        } catch (WbException e) {
+            Logger.log.severe("Error while adding User: " + e.getMessage());
+            return;
+        }
+
         wws.setSessionID(sessionID);
         wws.setUser(username);
         members.add(websocket);

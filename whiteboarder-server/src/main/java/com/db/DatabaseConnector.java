@@ -4,6 +4,7 @@ import com.core.Context;
 import com.core.Logger;
 import com.core.WbException;
 import com.model.*;
+
 import java.sql.*;
 import javax.sql.rowset.serial.SerialBlob;
 import java.util.Date;
@@ -48,6 +49,7 @@ public class DatabaseConnector {
 	public void endConnection() throws WbException {
 		try {
 			c.close();
+			Logger.log.info("Disconnected from MySQL database.");
 		} catch (Exception e) {
 			throw new WbException(WbException.DB_END_CONNECTION, e);
 		}
@@ -57,6 +59,7 @@ public class DatabaseConnector {
 	private void initTables(boolean isLocal) throws WbException {
 		if (isLocal) {
 			try {
+				Logger.log.info("Clearing old database tables for local run.");
 				Statement stmt = c.createStatement();
 				stmt.addBatch(MySQL.REMOVE_WHITEBOARDS_TABLE);
 				stmt.addBatch(MySQL.REMOVE_IMAGES_TABLE);
@@ -70,6 +73,7 @@ public class DatabaseConnector {
 		}
 
 		try {
+			Logger.log.info("Creating database tables.");
 			Statement stmt = c.createStatement();
 			stmt.addBatch(MySQL.CREATE_WHITEBOARDS_TABLE);
 			stmt.addBatch(MySQL.CREATE_IMAGES_TABLE);
@@ -84,6 +88,7 @@ public class DatabaseConnector {
 
 	// Mutations
 	public void addWhiteboard(Whiteboard wb) throws WbException {
+		Logger.log.info("Adding a Whiteboard.");
 		try {
 			PreparedStatement stmt = c.prepareStatement(MySQL.ADD_WHITEBOARD);
 			stmt.setString(1, wb.getWbID());
@@ -96,6 +101,7 @@ public class DatabaseConnector {
 	}
 
 	public void removeWhiteboard(Whiteboard wb) throws WbException {
+		Logger.log.info("Removing a Whiteboard.");
 		try {
 			PreparedStatement stmt = c.prepareStatement(MySQL.REMOVE_WHITEBOARD);
 			stmt.setString(1, wb.getWbID());
@@ -108,6 +114,7 @@ public class DatabaseConnector {
 	}
 
 	public void renameWhiteboard(String wbID, String newName) throws WbException {
+		Logger.log.info("Renaming a Whiteboard.");
 		try {
 			PreparedStatement stmt = c.prepareStatement(MySQL.RENAME_WHITEBOARD);
 			stmt.setString(1, newName);
@@ -121,6 +128,7 @@ public class DatabaseConnector {
 	}
 
 	public Image addImage(Image img) throws WbException {
+		Logger.log.info("Adding an Image.");
 		try {
 			PreparedStatement stmt = c.prepareStatement(MySQL.ADD_IMAGE, Statement.RETURN_GENERATED_KEYS);
 			stmt.setString(1, img.getWbID());
@@ -144,6 +152,7 @@ public class DatabaseConnector {
 	}
 
 	public Edit addEdit(Edit edit) throws WbException {
+		Logger.log.info("Adding an Edit.");
 		try {
 			PreparedStatement stmt = c.prepareStatement(MySQL.ADD_EDIT);
 			stmt.setString(1, edit.getWbID());
@@ -163,6 +172,7 @@ public class DatabaseConnector {
 	}
 
 	public void removeEdit(Edit edit) throws WbException {
+		Logger.log.info("Removing an Edit.");
 		try {
 			PreparedStatement stmt = c.prepareStatement(MySQL.REMOVE_EDIT);
 			stmt.setInt(1, edit.getEditID());
@@ -175,6 +185,7 @@ public class DatabaseConnector {
 	}
 
 	public void addUser(User user) throws WbException {
+		Logger.log.info("Adding a User.");
 		try {
 			PreparedStatement stmt = c.prepareStatement(MySQL.ADD_USER);
 			stmt.setString(1, user.getWbID());
@@ -188,6 +199,7 @@ public class DatabaseConnector {
 	}
 
 	public void renameUser(User user, String newName) throws WbException {
+		Logger.log.info("Renaming a User.");
 		try {
 			PreparedStatement stmt = c.prepareStatement(MySQL.REMOVE_USER);
 			stmt.setString(1, user.getWbID());
@@ -201,6 +213,7 @@ public class DatabaseConnector {
 	}
 
 	public void setUserMode(User user, Mode mode) throws WbException {
+		Logger.log.info("Setting User Mode.");
 		try {
 			PreparedStatement stmt = c.prepareStatement(MySQL.SET_USER_MODE);
 			stmt.setInt(1, user.getMode().getValue());
@@ -216,6 +229,7 @@ public class DatabaseConnector {
 
 	// Queries
 	public Whiteboard getWhiteboard(String wbID) throws WbException {
+		Logger.log.info("Querying for a Whiteboard.");
 		String name = null;
 		try {
 			PreparedStatement stmt = c.prepareStatement(MySQL.GET_WHITEBOARD);
@@ -235,6 +249,7 @@ public class DatabaseConnector {
 	}
 
 	public Image getImage(String wbID) throws WbException {
+		Logger.log.info("Querying for an Image.");
 		int imgID = -1;
 		String filename = null;
 		byte[] bytes = null;
