@@ -16,6 +16,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.content.Intent;
 
 import java.io.IOException;
 
@@ -123,6 +124,17 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private final View.OnClickListener scanQRButtonOnClicklistener = new View.OnClickListener() {
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        @Override
+        public void onClick(View view) {
+            doPermissionsCheck();
+            Intent i = new Intent(MainActivity.this, ReadQR.class);
+            startActivity(i);
+        }
+    };
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -132,6 +144,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button backstageButton = (Button) findViewById(R.id.backstageButton);
         backstageButton.setOnClickListener(backstageButtonOnClickListener);
+
+        Button scanQR = (Button) findViewById(R.id.scanQRButton);
+        scanQR.setOnClickListener(scanQRButtonOnClicklistener);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
