@@ -6,24 +6,19 @@ import com.model.*;
 public class Manager {
 
 	public static Whiteboard getSession(Context ctx, String wbID) throws WbException {
-		if (!isValid(ctx)) {
+		if (!isValid(ctx))
 			throw new WbException(WbException.INVALID_CONTEXT);
-		} else if (ctx.getUser() == null) {
-			throw new WbException(WbException.INVALID_USER);
-		}
 
-		Whiteboard storedWb = ctx.getDbc().getWhiteboard(wbID);
-		Whiteboard wb = new Whiteboard(wbID, storedWb.getName(), null, storedWb.getEdits(wbID));
-			
+		Whiteboard wb = ctx.getDbc().getWhiteboard(wbID);
+		wb.setEdits(ctx.getDbc().getEdits(wbID));
 		return wb;
 	}
 
 	public static Whiteboard createSession(Context ctx) throws WbException {
-		if (!isValid(ctx)) {
+		if (!isValid(ctx))
 			throw new WbException(WbException.INVALID_CONTEXT);
-		} else if (ctx.getUser() == null) {
+		else if (ctx.getUser() == null)
 			throw new WbException(WbException.INVALID_USER);
-		}
 
 		Whiteboard wb = new Whiteboard("New Whiteboard");
 
@@ -32,22 +27,21 @@ public class Manager {
 	}
 
 	public static void renameSession(Context ctx, String wbID, String newName) throws WbException {
-		if (!isValid(ctx)) {
+		if (!isValid(ctx))
 			throw new WbException(WbException.INVALID_CONTEXT);
-		} else if (wbID == null) {
+		else if (wbID == null)
 			throw new WbException(WbException.INVALID_SESSION);
-		} else if (newName == null)
+		else if (newName == null)
 			throw new WbException(WbException.INVALID_NAME);
 
 		ctx.getDbc().renameWhiteboard(wbID, newName);
 	}
 
 	public static Whiteboard uploadImage(Context ctx, String wbID, Image img) throws WbException {
-		if (!isValid(ctx)) {
+		if (!isValid(ctx))
 			throw new WbException(WbException.INVALID_CONTEXT);
-		} else if (wbID == null) {
+		else if (wbID == null)
 			throw new WbException(WbException.INVALID_SESSION);
-		}
 
 		img = (img != null) ? img : new Image(wbID, "Blank Image", null);
 		Whiteboard wb = ctx.getDbc().getWhiteboard(wbID);
@@ -57,9 +51,8 @@ public class Manager {
 	}
 
 	public static Image getImage(Context ctx, String wbID) throws WbException {
-		if (!isValid(ctx)) {
+		if (!isValid(ctx))
 			throw new WbException(WbException.INVALID_CONTEXT);
-		}
 
 		return ctx.getDbc().getImage(wbID);
 	}

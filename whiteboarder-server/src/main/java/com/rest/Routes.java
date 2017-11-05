@@ -33,6 +33,8 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 @Path("/")
 public class Routes {
 
+	// internal class used for renaming whiteboards or users
+	// exists for JSON serialization
 	class RenameRequest {
 		String sessionID, newName, oldName;
 
@@ -48,16 +50,16 @@ public class Routes {
 	@GET
 	@Path("/session/{sessionID}")
 	@Produces(APPLICATION_JSON)
-	public Response getSession(@PathParam("SessionID") String sessionID) {
+	public Response getSession(@PathParam("sessionID") String sessionID) {
+		Whiteboard wb = null;
 		try {
-			Whiteboard wb = Manager.getSession(sessionID);
+			wb = Manager.getSession(ctx, sessionID);
 		} catch (WbException e) {
 			return Response.serverError().entity(e.getMessage()).build();
 		}
 		
-		Gson gson = GsonBuilder().create();
-		String wbJson = gson.toJson(wb);
-		return Response.ok(wbJson, APPLICATION_JSON).build();
+		Gson gson = new GsonBuilder().create();
+		return Response.ok(gson.toJson(wb), APPLICATION_JSON).build();
 	}
 
 	@POST
@@ -87,9 +89,16 @@ public class Routes {
 			Gson gson = new GsonBuilder().create();
 			rr = gson.fromJson(payload, new TypeToken<RenameRequest>() {
 			}.getType());
+
+			Manager.renameSession(ctx, rr.sessionID, rr.newName);
+
 		} catch (JsonSyntaxException e) {
 			return Response.status(400).entity("Incorrect JSON format").build();
+		} catch (WbException e) {
+			return Response.serverError().entity(e.getMessage()).build();
 		}
+
+		return Response.ok("Session renamed.").build();
 	}
 
 	@GET
@@ -134,5 +143,4 @@ public class Routes {
 
 		return Response.ok("Image uploaded.").build();
 	}
-
 }

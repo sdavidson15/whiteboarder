@@ -234,9 +234,8 @@ public class DatabaseConnector {
 		} catch (Exception e) {
 			throw new WbException(WbException.DB_GET_WB, e);
 		}
-		// TODO: Populate wb's Edits and Images -- EDIT: images should be null
-		Set<Edit> edits = this.getEdits(wbID);
-		Whiteboard wb = new Whiteboard(wbID, name, null, edits);
+		// Images and edits should be null
+		Whiteboard wb = new Whiteboard(wbID, name, null, null);
 		return wb;
 	}
 
@@ -292,6 +291,7 @@ public class DatabaseConnector {
 				if (blob != null) bytes = blob.getBytes(1, (int) blob.length());
 
 				images.add(new Image(imgID, wbID, filename, bytes, timestamp));
+				bytes = null;
 			}
 			rs.close();
 			stmt.close();
@@ -321,6 +321,7 @@ public class DatabaseConnector {
 				brushsize = rs.getInt("BrushSize");
 				timestamp = rs.getTimestamp("Timestamp");
 
+				// TODO: points field is using null value
 				edits.add(new Edit(wbID, username, color, brushsize, null));
 			}
 			rs.close();
@@ -343,7 +344,7 @@ public class DatabaseConnector {
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
 				modeNum = rs.getInt("Mode");
-				// TODO: add these for other values? (Possible -1/null color, bytesize, timestamp, etc.)
+				// TODO: validate values for color, brushsize, etc.
 			}
 		} catch (Exception e) {
 			throw new WbException(WbException.DB_GET_USER, e);
