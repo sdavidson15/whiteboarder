@@ -18,7 +18,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/colorPrimary">
 
             <Button
                 android:id="@+id/cameraButton"
@@ -32,11 +33,27 @@
                 android:layout_height="wrap_content"
                 android:text="Take Photo" />
 
-            <SurfaceView
-                android:id="@+id/cameraPreviewSurface"
+
+            <Button
+                android:id="@+id/backstageButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.40" />
+                android:text="Backstage" />
+
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimaryDark">
+
+                <SurfaceView
+                    android:id="@+id/cameraPreviewSurface"
+                    android:layout_width="320dp"
+                    android:layout_height="240dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.40" />
+
+            </FrameLayout>
 
         </LinearLayout>
 
