@@ -1,7 +1,6 @@
 package whiteboarder.whiteboarder;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
@@ -10,7 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.ActivityCompat;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -19,13 +18,11 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,26 +44,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
-                    return true;
-                case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
-                    return true;
-                case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
-                    return true;
-            }
-            return false;
-        }
-    };
-
     private final View.OnClickListener takePhotoButtonOnClickListener = new View.OnClickListener() {
         @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
@@ -80,9 +57,20 @@ public class MainActivity extends AppCompatActivity {
 
             camera.takePicture(null, null, null, new Camera.PictureCallback() {
                 public void onPictureTaken(byte[] data, Camera camera) {
+                    RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), data);
+
+                    // Post to the server
+                    new RESTClient2().postImage(SessionInfo.sessionID, requestBody, new RESTClient2.Callback<Void>() {
+                        void success(Void v) {
+                            Snackbar.make(view, "Image posted!", Snackbar.LENGTH_LONG).show();
+                        }
+                        void fail() {
+                            Snackbar.make(view, "Failed to post image.", Snackbar.LENGTH_LONG).show();
+                        }
+                    });
+
                     // You have to restart the preview-- otherwise the camera freezes.
                     camera.startPreview();
-                    new RESTClient().createWhiteboardSession(MainActivity.this, data);
                 }
             });
         }
