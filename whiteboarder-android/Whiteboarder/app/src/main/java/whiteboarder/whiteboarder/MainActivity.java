@@ -3,7 +3,6 @@ package whiteboarder.whiteboarder;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,7 +15,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.content.Intent;
 
 import java.io.IOException;
 
@@ -55,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
             camera.takePicture(null, null, null, new Camera.PictureCallback() {
                 public void onPictureTaken(byte[] data, Camera camera) {
                     RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), data);
+                    Snackbar.make(view, "Uploading...", Snackbar.LENGTH_SHORT).show();
 
                     // Post to the server
                     new RESTClient2().postImage(SessionInfo.sessionID, requestBody, new RESTClient2.Callback<Void>() {
