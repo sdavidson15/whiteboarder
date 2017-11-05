@@ -24,7 +24,7 @@ public class Main {
 		} else {
 			Logger.setupLogger();
 			DatabaseConnector dbc = startDatabaseConnection(true);
-			if (dbc != null) {
+			if (true) {
 				Context ctx = new Context(null, dbc, true);
 				final HttpServer server = Rest.startServer(ctx);
 				System.in.read();
