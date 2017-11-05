@@ -10,7 +10,6 @@ import org.glassfish.grizzly.websockets.WebSocket;
 import org.glassfish.grizzly.websockets.WebSocketListener;
 
 public class WhiteboarderWebSocket extends DefaultWebSocket {
-    // TODO: Why volatile?
     private volatile String sessionID;
     private volatile String user;
 

@@ -66,11 +66,12 @@ public class WhiteboarderApplication extends WebSocketApplication {
         if (wws.getSessionID() == null || wws.getUser() == null)
             return;
 
+        Gson gson = new GsonBuilder().create();
         HandleEdit h = null;
         try {
-            Gson gson = new GsonBuilder().create();
             h = gson.fromJson(jsonData, new TypeToken<HandleEdit>() {
             }.getType());
+            h.edit.setNewTimestamp();
         } catch (JsonSyntaxException e) {
             Logger.log.warning("Recieved web socket message with bad json syntax.");
             return;
@@ -80,8 +81,10 @@ public class WhiteboarderApplication extends WebSocketApplication {
         try {
             if (h.isRemove)
                 Manager.removeEdit(ctx, h.edit);
-            else
-                Manager.applyEdit(ctx, h.edit);
+            else {
+                h.edit = Manager.applyEdit(ctx, h.edit);
+                jsonData = gson.toJson(h);
+            }
         } catch (WbException e) {
             Logger.log.severe("Error while handling edit: " + e.getMessage());
             return;

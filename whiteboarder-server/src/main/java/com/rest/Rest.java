@@ -17,7 +17,6 @@ public class Rest {
 	public static final String BASE_URI = "http://proj-309-yt-c-1.cs.iastate.edu/whiteboarder/";
 	public static final String LOCAL_BASE_URI = "http://localhost/whiteboarder/";
 
-	// TODO: This no longer starts the server. Might need to rename this.
 	public static HttpServer setupServer(Context ctx) {
 		Routes.ctx = ctx;
 
@@ -25,7 +24,6 @@ public class Rest {
 
 		String uriStr = ctx.isLocal() ? LOCAL_BASE_URI : BASE_URI;
 		final URI uri = UriBuilder.fromUri(uriStr).port(8080).build();
-
 		HttpServer server = GrizzlyHttpServerFactory.createHttpServer(uri, rc, false);
 
 		// serve static files on "/"

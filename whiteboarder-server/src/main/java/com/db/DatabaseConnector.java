@@ -108,7 +108,6 @@ public class DatabaseConnector {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (Exception e) {
-			// TODO: Check for Whiteboard does not exist
 			throw new WbException(WbException.DB_REMOVE_WB, e);
 		}
 	}
@@ -122,7 +121,6 @@ public class DatabaseConnector {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (Exception e) {
-			// TODO: Check for Whiteboard does not exist
 			throw new WbException(WbException.DB_RENAME_WB, e);
 		}
 	}
@@ -144,7 +142,6 @@ public class DatabaseConnector {
 			img.setImgID(rs.getInt(1));
 			stmt.close();
 		} catch (Exception e) {
-			// TODO: Check for Whiteboard does not exist
 			throw new WbException(WbException.DB_ADD_IMG, e);
 		}
 
@@ -161,13 +158,15 @@ public class DatabaseConnector {
 			stmt.setInt(4, edit.getBrushSize());
 			stmt.setTimestamp(5, new Timestamp(edit.getTimestamp().getTime()));
 			stmt.executeUpdate();
+			ResultSet rs = stmt.getGeneratedKeys();
+			rs.next();
+			edit.setEditID(rs.getInt(1));
 			stmt.close();
 		} catch (Exception e) {
-			// TODO: Check for Whiteboard does not exist
+			e.printStackTrace();
 			throw new WbException(WbException.DB_ADD_EDIT, e);
 		}
 
-		// TODO: Retrieve the edit ID
 		return edit;
 	}
 
@@ -179,7 +178,6 @@ public class DatabaseConnector {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (Exception e) {
-			// TODO: Check for Whiteboard does not exist
 			throw new WbException(WbException.DB_REMOVE_EDIT, e);
 		}
 	}
@@ -207,7 +205,6 @@ public class DatabaseConnector {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (Exception e) {
-			// TODO: Check for User does not exist
 			throw new WbException(WbException.DB_RENAME_USER, e);
 		}
 	}
@@ -222,27 +219,50 @@ public class DatabaseConnector {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (Exception e) {
-			// TODO: Check for User does not exist
 			throw new WbException(WbException.DB_SET_USER_MODE, e);
+		}
+	}
+
+	public void removeUser(User user) throws WbException {
+		Logger.log.info("Removing a User.");
+		try {
+			PreparedStatement stmt = c.prepareStatement(MySQL.REMOVE_USER);
+			stmt.setString(1, user.getWbID());
+			stmt.setString(2, user.getUsername());
+			stmt.executeUpdate();
+			stmt.close();
+		} catch (Exception e) {
+			throw new WbException(WbException.DB_REMOVE_USER, e);
 		}
 	}
 
 	// Queries
 	public Whiteboard getWhiteboard(String wbID) throws WbException {
 		Logger.log.info("Querying for a Whiteboard.");
+
 		String name = null;
+
+		boolean found = false;
 		try {
 			PreparedStatement stmt = c.prepareStatement(MySQL.GET_WHITEBOARD);
 			stmt.setString(1, wbID);
 
 			ResultSet rs = stmt.executeQuery();
-			if (rs.next())
+			if (rs.next()) {
 				name = rs.getString("Name");
+				found = true;
+			}
+
 			rs.close();
 			stmt.close();
 		} catch (Exception e) {
 			throw new WbException(WbException.DB_GET_WB, e);
 		}
+
+		if (!found) {
+			throw new WbException(WbException.WHITEBOARD_DNE);
+		}
+
 		// TODO: Populate wb's Edits and Images
 		Whiteboard wb = new Whiteboard(wbID, name, null, null);
 		return wb;
@@ -250,11 +270,13 @@ public class DatabaseConnector {
 
 	public Image getImage(String wbID) throws WbException {
 		Logger.log.info("Querying for an Image.");
+
 		int imgID = -1;
 		String filename = null;
 		byte[] bytes = null;
 		Date timestamp = null;
 
+		boolean found = false;
 		try {
 			PreparedStatement stmt = c.prepareStatement(MySQL.GET_IMAGE);
 			stmt.setString(1, wbID);
@@ -268,6 +290,7 @@ public class DatabaseConnector {
 				Blob blob = rs.getBlob("Bytes");
 				if (blob != null)
 					bytes = blob.getBytes(1, (int) blob.length());
+				found = true;
 			}
 			rs.close();
 			stmt.close();
