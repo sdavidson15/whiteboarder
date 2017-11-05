@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 camera.startPreview();
+                camera.autoFocus(null);
             }
 
             @Override
