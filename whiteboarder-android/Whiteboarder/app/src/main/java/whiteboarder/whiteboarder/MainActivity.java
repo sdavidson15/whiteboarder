@@ -84,7 +84,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         camera = Camera.open(0);
-        camera.setDisplayOrientation(0);
+
+        // hack to make the camera show up as rotated correctly.
+        // see https://stackoverflow.com/questions/19176038/camera-setdisplayorientation-function-is-not-working-for-samsung-galaxy-ace-wi#19257186
+        Camera.Parameters parameters = camera.getParameters();
+        parameters.set("orientation", "portrait"); // why is this necessary?
+        parameters.setRotation(0);
+        camera.setParameters(parameters);
+        camera.setDisplayOrientation(90);
 
         SurfaceView surfaceView = (SurfaceView) findViewById(R.id.cameraPreviewSurface);
         SurfaceHolder surfaceHolder = surfaceView.getHolder();
