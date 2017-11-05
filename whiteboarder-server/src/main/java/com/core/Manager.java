@@ -45,18 +45,22 @@ public class Manager {
 	}
 
 	public static void applyEdit(Context ctx, Edit edit) {
+		Logger.log.info("Manager.applyEdit");
 		// TODO:
 	}
 
 	public static void removeEdit(Context ctx, Edit edit) {
+		Logger.log.info("Manager.removeEdit");
 		// TODO:
 	}
 
 	public static void addUser(Context ctx, String sessionID, String username) {
+		Logger.log.info("Manager.addUser");
 		// TODO:
 	}
 
 	public static void removeUser(Context ctx, String sessionID, String username) {
+		Logger.log.info("Manager.removeUser");
 		// TODO:
 	}
 

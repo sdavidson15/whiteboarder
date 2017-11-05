@@ -4,7 +4,6 @@ import com.core.Context;
 import com.core.Manager;
 import com.core.Logger;
 import com.model.Edit;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -51,11 +50,21 @@ public class WhiteboarderApplication extends WebSocketApplication {
 
     @Override
     public WebSocket createSocket(ProtocolHandler handler, HttpRequestPacket request, WebSocketListener... listeners) {
+        Logger.log.info("Creating a web socket.");
         return new WhiteboarderWebSocket(handler, request, listeners);
     }
 
     @Override
     public void onMessage(WebSocket websocket, String jsonData) {
+        if (jsonData != null && jsonData.startsWith("login:")) {
+            login(websocket, jsonData);
+            return;
+        }
+
+        WhiteboarderWebSocket wws = (WhiteboarderWebSocket) websocket;
+        if (wws.getSessionID() == null || wws.getUser() == null)
+            return;
+
         HandleEdit h = null;
         try {
             Gson gson = new GsonBuilder().create();
@@ -63,7 +72,7 @@ public class WhiteboarderApplication extends WebSocketApplication {
             }.getType());
         } catch (JsonSyntaxException e) {
             Logger.log.warning("Recieved web socket message with bad json syntax.");
-            // TODO: Handle error
+            return;
         }
 
         if (h.isRemove)
@@ -71,15 +80,12 @@ public class WhiteboarderApplication extends WebSocketApplication {
         else
             Manager.applyEdit(ctx, h.edit);
 
-        WhiteboarderWebSocket wws = (WhiteboarderWebSocket) websocket;
         broadcast(wws.getSessionID(), wws.getUser(), jsonData);
     }
 
     @Override
     public void onConnect(WebSocket websocket) {
-        WhiteboarderWebSocket wws = (WhiteboarderWebSocket) websocket;
-        Manager.addUser(ctx, wws.getSessionID(), wws.getUser());
-        Logger.log.info(wws.getUser() + " joined session " + wws.getSessionID());
+        // Have to override this and do nothing.
     }
 
     @Override
@@ -88,6 +94,24 @@ public class WhiteboarderApplication extends WebSocketApplication {
         Logger.log.info(wws.getUser() + " left session " + wws.getSessionID());
         Manager.removeUser(ctx, wws.getSessionID(), wws.getUser());
         members.remove(websocket);
+    }
+
+    private void login(WebSocket websocket, String jsonData) {
+        // Expect to recieve a login message that looks like "login:{sessionID},{username}"
+        WhiteboarderWebSocket wws = (WhiteboarderWebSocket) websocket;
+        String[] fields = jsonData.substring(6).split(",");
+        if (fields.length != 2) {
+            Logger.log.warning("Recieved web socket login message with bad syntax.");
+            return;
+        }
+        String sessionID = fields[0];
+        String username = fields[1];
+
+        Manager.addUser(ctx, sessionID, username);
+        wws.setSessionID(sessionID);
+        wws.setUser(username);
+        members.add(websocket);
+        Logger.log.info(wws.getUser() + " joined session " + wws.getSessionID());
     }
 
     private void broadcast(String sessionID, String username, String jsonData) {

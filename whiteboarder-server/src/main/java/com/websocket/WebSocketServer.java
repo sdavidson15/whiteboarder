@@ -52,17 +52,7 @@ import org.glassfish.grizzly.websockets.WebSocketAddOn;
 import org.glassfish.grizzly.websockets.WebSocketApplication;
 import org.glassfish.grizzly.websockets.WebSocketEngine;
 
-/**
-* Secured standalone Java websocket chat server implementation. 
-* Server expects to get the path to webapp as command line parameter 
-* 
-* @author Alexey Stashok 
-*/
 public class WebSocketServer {
-
-    // TODO: The idea here is to communicate all traffic through the same websocket,
-    // but send the session id with each message.
-    // If a message has a session id that isn't correct, ignore the message.
     public static void startServer(Context ctx, HttpServer server) throws Exception {
         server.getListener("grizzly").registerAddOn(new WebSocketAddOn());
         final WebSocketApplication wbApp = new WhiteboarderApplication(ctx);
