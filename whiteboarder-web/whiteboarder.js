@@ -36,6 +36,7 @@ $(function() {
             });
         }
         if (sessionID) {
+            console.log('making QR from sessionID ' + sessionID);
             qrcode.makeCode(sessionID);
         } else {
             qrcode.clear();
@@ -44,7 +45,12 @@ $(function() {
 
     function loadSessionIDFromURL() {
         var parsedURL = new URL(window.location.href);
-        console.log(parsedURL.searchParams.hash);
+        var hash = parsedURL.hash;
+        if (hash) {
+            // remove # symbol from beginning of hash
+            sessionID = hash.substring(1);
+            console.log("loaded sessionID from hash: " + sessionID);
+        }
     }
 
     function switchToSession(newSessionID) {
