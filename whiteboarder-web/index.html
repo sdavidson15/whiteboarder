@@ -39,32 +39,8 @@
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
         crossorigin="anonymous"></script>
-    <script>
-        var routePrefix = "localhost:8080/whiteboarder/"
-
-        function postSession() {
-
-            $.ajax('http://localhost:8080/whiteboarder/session', {
-                type: 'POST',
-                contentType: "application/json",
-                success: function (response) {
-                    //make cookie
-                    document.cookie = "wb_session_id=" + response + ";path=/";
-                    window.location.href = "GenerateQR.html"
-                },
-                dataType: 'text'
-            });
-        }
-
-
-        document.getElementById("create_session_btn").addEventListener("click", function () {
-            change_page_qr();
-        });
-
-        function change_page_qr() {
-            postSession();
-        }
-    </script>
+    <script src="GenerateQR.js"></script>
+    <script src="whiteboarder.js"></script>
 </body>
 
 </html>
