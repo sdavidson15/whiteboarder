@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -61,11 +62,10 @@ public class MainActivity extends AppCompatActivity {
                     // Post to the server
                     new RESTClient2().postImage(SessionInfo.sessionID, requestBody, new RESTClient2.Callback<Void>() {
                         void success(Void v) {
-                            Log.d("takePicture", "success");
+                            Snackbar.make(view, "Image posted!", Snackbar.LENGTH_LONG).show();
                         }
-
                         void fail() {
-                            Log.d("takePicture", "failure");
+                            Snackbar.make(view, "Failed to post image.", Snackbar.LENGTH_LONG).show();
                         }
                     });
 
