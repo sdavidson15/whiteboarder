@@ -75,11 +75,13 @@ $(function() {
         }
     });
 
-    var time = 0;
+    var refreshIteration = 0;
     function refreshCurrentImage() {
         if (!sessionID) return;
-        var img = $("<img />").attr("src",
-            routePrefix + '/image/' + sessionID + '?q=' + (time++));
+        refreshIteration = refreshIteration + 1;
+        var imgURL = routePrefix + '/image/' + sessionID + '#q=' + refreshIteration;
+        console.log("reloading image from " + imgURL);
+        var img = $("<img />").attr("src", imgURL);
         $('#imagebox').empty().append(img);
     }
 
