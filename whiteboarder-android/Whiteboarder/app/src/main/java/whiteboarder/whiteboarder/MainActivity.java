@@ -3,16 +3,14 @@ package whiteboarder.whiteboarder;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -31,14 +29,12 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void doPermissionsCheck() {
-        if (checkSelfPermission(Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 
             requestPermissions(new String[]{Manifest.permission.CAMERA}, 0);
         }
 
-        if (checkSelfPermission(Manifest.permission.INTERNET)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
 
             requestPermissions(new String[]{Manifest.permission.INTERNET}, 0);
         }
@@ -64,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                         void success(Void v) {
                             Snackbar.make(view, "Image posted!", Snackbar.LENGTH_LONG).show();
                         }
+
                         void fail() {
                             Snackbar.make(view, "Failed to post image.", Snackbar.LENGTH_LONG).show();
                         }
@@ -76,30 +73,48 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private final View.OnClickListener cameraButtonOnClickListener =  new View.OnClickListener() {
-        @RequiresApi(api = Build.VERSION_CODES.M)
-        @Override
-        public void onClick(View view) {
-            doPermissionsCheck();
 
-            if (camera != null) {
-                // camera is already open.
-                return;
-            }
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void openCamera() {
+        doPermissionsCheck();
 
-            camera = Camera.open(0);
-            camera.setDisplayOrientation(0);
-            camera.startPreview();
-
-            SurfaceView surfaceView = (SurfaceView) findViewById(R.id.cameraPreviewSurface);
-            SurfaceHolder surfaceHolder = surfaceView.getHolder();
-            try {
-                camera.setPreviewDisplay(surfaceHolder);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (camera != null) {
+            // camera is already open.
+            return;
         }
-    };
+
+        camera = Camera.open(0);
+
+        // hack to make the camera show up as rotated correctly.
+        // see https://stackoverflow.com/questions/19176038/camera-setdisplayorientation-function-is-not-working-for-samsung-galaxy-ace-wi#19257186
+        Camera.Parameters parameters = camera.getParameters();
+        parameters.set("orientation", "portrait"); // why is this necessary?
+        parameters.setRotation(0);
+        camera.setParameters(parameters);
+        camera.setDisplayOrientation(90);
+
+        SurfaceView surfaceView = (SurfaceView) findViewById(R.id.cameraPreviewSurface);
+        SurfaceHolder surfaceHolder = surfaceView.getHolder();
+        surfaceHolder.addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(SurfaceHolder holder) {
+                Log.d("openCamera", holder.toString());
+                try {
+                    camera.setPreviewDisplay(holder);
+                } catch (IOException e) {
+                    Log.d("openCamera", "unable to setPreviewDisplay on camera");
+                    e.printStackTrace();
+                }
+                camera.startPreview();
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {}
+        });
+    }
 
     private final View.OnClickListener backstageButtonOnClickListener = new View.OnClickListener() {
         public void onClick(View view) {
@@ -108,17 +123,21 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button openCameraButton = (Button) findViewById(R.id.cameraButton);
-        openCameraButton.setOnClickListener(cameraButtonOnClickListener);
         Button takePhotoButton = (Button) findViewById(R.id.takePhotoButton);
         takePhotoButton.setOnClickListener(takePhotoButtonOnClickListener);
 
         Button backstageButton = (Button) findViewById(R.id.backstageButton);
         backstageButton.setOnClickListener(backstageButtonOnClickListener);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    protected void onStart() {
+        super.onStart();
+        openCamera();
     }
 }
