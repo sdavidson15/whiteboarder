@@ -1,5 +1,6 @@
 package whiteboarder.whiteboarder;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -118,10 +119,12 @@ public class ReadQR extends AppCompatActivity implements ZXingScannerView.Result
 
     @Override
     public void handleResult(Result rawResult) {
+        final Activity parentActivity = ReadQR.this;
 
         final String result = rawResult.getText();
         Log.d("QRCodeScanner", rawResult.getText());
         Log.d("QRCodeScanner", rawResult.getBarcodeFormat().toString());
+        SessionInfo.sessionID = result;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Scan Result");
@@ -129,14 +132,7 @@ public class ReadQR extends AppCompatActivity implements ZXingScannerView.Result
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mScannerView.resumeCameraPreview(ReadQR.this);
-            }
-        });
-        builder.setNeutralButton("Visit", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // TODO start session??
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result));
-                startActivity(browserIntent);
+                parentActivity.finish();
             }
         });
         builder.setMessage(rawResult.getText());
