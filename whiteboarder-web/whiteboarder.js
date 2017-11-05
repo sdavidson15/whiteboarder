@@ -82,7 +82,10 @@ $(function() {
         var imgURL = routePrefix + '/image/' + sessionID + '#q=' + refreshIteration;
         console.log("reloading image from " + imgURL);
         var img = $("<img />").attr("src", imgURL);
-        $('#imagebox').empty().append(img);
+        img.css('transform', 'rotate(90deg)');
+        img.ready(function() {
+            $('#imagebox').empty().append(img);
+        });
     }
 
     // refresh the current session image every 5 seconds
