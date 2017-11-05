@@ -19,7 +19,7 @@ function getCookie(cookieName) {
 
 var DEBUG_MODE = true;
 
-var routePrefix = "/whiteboarder";
+var routePrefix = "http://localhost:8080/whiteboarder";
 var sessionID = null;
 var id = getCookie("wb_session_id");
 var qrcode = null;
@@ -53,11 +53,12 @@ $(function() {
         var parsedURL = new URL(window.location.href);
         parsedURL.hash = sessionID;
         window.location.href = parsedURL.href;
+        refreshCurrentImage();
     }
 
     $("#create_session_btn").click(function() {
         if (!DEBUG_MODE) {
-            $.ajax('http://localhost:8080/whiteboarder/session', {
+            $.ajax(routePrefix + '/session', {
                 type: "POST",
                 contentType: "application/json",
                 dataType: 'text',
@@ -67,5 +68,16 @@ $(function() {
             switchToSession('new-session-id');
         }
     });
+
+    var time = 0;
+    function refreshCurrentImage() {
+        if (!sessionID) return;
+        var img = $("<img />").attr("src",
+            routePrefix + '/image/' + sessionID + '?q=' + (time++));
+        $('#imagebox').empty().append(img);
+    }
+
+    // refresh the current session image every 5 seconds
+    setInterval(refreshCurrentImage, 5000);
 });
 
