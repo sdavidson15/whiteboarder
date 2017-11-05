@@ -22,8 +22,6 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 public class MainActivity extends AppCompatActivity {
-
-    private TextView mTextMessage;
     private Camera camera;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
