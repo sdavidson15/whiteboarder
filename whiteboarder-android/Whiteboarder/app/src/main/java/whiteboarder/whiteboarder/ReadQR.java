@@ -131,7 +131,8 @@ public class ReadQR extends AppCompatActivity implements ZXingScannerView.Result
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mScannerView.resumeCameraPreview(ReadQR.this);
+                mScannerView.stopCamera();
+                mScannerView.stopCameraPreview();
                 parentActivity.finish();
             }
         });

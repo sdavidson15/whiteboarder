@@ -129,6 +129,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             doPermissionsCheck();
+            camera.cancelAutoFocus();
+            camera.release();
+            camera = null;
             Intent i = new Intent(MainActivity.this, ReadQR.class);
             startActivity(i);
         }
@@ -147,6 +150,13 @@ public class MainActivity extends AppCompatActivity {
 
         Button scanQR = (Button) findViewById(R.id.scanQRButton);
         scanQR.setOnClickListener(scanQRButtonOnClicklistener);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    protected void onResume() {
+        super.onResume();
+        openCamera();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
