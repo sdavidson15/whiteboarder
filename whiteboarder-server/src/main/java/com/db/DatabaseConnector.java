@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Set;
 import javax.sql.rowset.serial.SerialBlob;
 
-
 public class DatabaseConnector {
 
 	public static final String LOCAL_MYSQL_DB = "jdbc:mysql://localhost:3306/mysql";
@@ -66,6 +65,7 @@ public class DatabaseConnector {
 				stmt.addBatch(MySQL.REMOVE_WHITEBOARDS_TABLE);
 				stmt.addBatch(MySQL.REMOVE_IMAGES_TABLE);
 				stmt.addBatch(MySQL.REMOVE_EDITS_TABLE);
+				stmt.addBatch(MySQL.REMOVE_POINTS_TABLE);
 				stmt.addBatch(MySQL.REMOVE_USERS_TABLE);
 				stmt.executeBatch();
 				stmt.close();
@@ -79,6 +79,7 @@ public class DatabaseConnector {
 			stmt.addBatch(MySQL.CREATE_WHITEBOARDS_TABLE);
 			stmt.addBatch(MySQL.CREATE_IMAGES_TABLE);
 			stmt.addBatch(MySQL.CREATE_EDITS_TABLE);
+			stmt.addBatch(MySQL.CREATE_POINTS_TABLE);
 			stmt.addBatch(MySQL.CREATE_USERS_TABLE);
 			stmt.executeBatch();
 			stmt.close();
@@ -270,7 +271,7 @@ public class DatabaseConnector {
 
 	public List<Image> getImages(String wbID) throws WbException {
 		ArrayList<Image> images = new ArrayList<Image>();
-		
+
 		int imgID = -1;
 		String filename = null;
 		byte[] bytes = null;
@@ -288,7 +289,8 @@ public class DatabaseConnector {
 
 				Blob blob = rs.getBlob("Bytes");
 				// casted to an int from a long (problem when posting massive pictures?? over 4.2Gb i think)
-				if (blob != null) bytes = blob.getBytes(1, (int) blob.length());
+				if (blob != null)
+					bytes = blob.getBytes(1, (int) blob.length());
 
 				images.add(new Image(imgID, wbID, filename, bytes, timestamp));
 				bytes = null;
@@ -352,14 +354,14 @@ public class DatabaseConnector {
 		}
 
 		switch (modeNum) {
-			case 0:
-				return new User(wbID, username, Mode.HOST);
-			case 1:
-				return new User(wbID, username, Mode.COLLABORATOR);
-			case 2:
-				return new User(wbID, username, Mode.VIEWER);
-			default:
-				throw new WbException(WbException.DB_INVALID_MODE);
+		case 0:
+			return new User(wbID, username, Mode.HOST);
+		case 1:
+			return new User(wbID, username, Mode.COLLABORATOR);
+		case 2:
+			return new User(wbID, username, Mode.VIEWER);
+		default:
+			throw new WbException(WbException.DB_INVALID_MODE);
 		}
 	}
 
@@ -379,17 +381,17 @@ public class DatabaseConnector {
 				modeNum = rs.getInt("Mode");
 
 				switch (modeNum) {
-					case 0:
-						users.add(new User(wbID, username, Mode.HOST));
-						break;
-					case 1:
-						users.add(new User(wbID, username, Mode.COLLABORATOR));
-						break;
-					case 2:
-						users.add(new User(wbID, username, Mode.VIEWER));
-						break;
-					default:
-						throw new WbException(WbException.DB_INVALID_MODE);
+				case 0:
+					users.add(new User(wbID, username, Mode.HOST));
+					break;
+				case 1:
+					users.add(new User(wbID, username, Mode.COLLABORATOR));
+					break;
+				case 2:
+					users.add(new User(wbID, username, Mode.VIEWER));
+					break;
+				default:
+					throw new WbException(WbException.DB_INVALID_MODE);
 				}
 			}
 		} catch (Exception e) {
