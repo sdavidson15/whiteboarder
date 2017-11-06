@@ -30,11 +30,11 @@ var drawingApp = (function () {
             var x = [], y = [], drag = [], color = [], size = [];
             for (i = 0; i < edits.length; i++) {
                 var edit = edits[i];
-                for (j = 0; j < edit.points; j++) {
+                for (j = 0; j < edit.points.length; j++) {
                     var point = edit.points[j];
-                    x.push(point.x);
-                    y.push(point.y);
-                    drag.push(j == 0);
+                    x.push(point.xcoord);
+                    y.push(point.ycoord);
+                    drag.push(j != 0);
                     color.push(edit.color);
                     size.push(edit.brushSize);
                 }
@@ -66,12 +66,12 @@ var drawingApp = (function () {
             context.restore();
         },
 
-        addClick = function (x, y, dragging) {
+        addClick = function (x, y, isDragging) {
             cachedX.push(x);
             cachedY.push(y);
             cachedColor.push(currentColor);
             cachedSize.push(currentSize);
-            cachedDrag.push(dragging);
+            cachedDrag.push(isDragging);
         },
 
         addEdit = function (edit) {
@@ -95,7 +95,7 @@ var drawingApp = (function () {
 
             points = [];
             for (i = 0; i < cachedX.length; i++)
-                points.push({ x: cachedX[i], y: cachedY[i] });
+                points.push({ editID: -1, xcoord: cachedX[i], ycoord: cachedY[i] });
 
             edit = {
                 editID: -1,
@@ -106,8 +106,6 @@ var drawingApp = (function () {
                 points: points,
                 timestamp: null
             }
-
-            alert(JSON.stringify(edit));
 
             websocketApp.handleEdit(edit, false);
         },
