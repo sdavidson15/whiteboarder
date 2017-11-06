@@ -3,6 +3,8 @@ package com.core;
 import com.db.DatabaseConnector;
 import com.model.*;
 
+import java.util.Set;
+
 public class Manager {
 
 	public static Whiteboard getSession(Context ctx, String wbID) throws WbException {
@@ -10,7 +12,10 @@ public class Manager {
 			throw new WbException(WbException.INVALID_CONTEXT);
 
 		Whiteboard wb = ctx.getDbc().getWhiteboard(wbID);
-		wb.setEdits(ctx.getDbc().getEdits(wbID));
+		Set<Edit> edits = ctx.getDbc().getEdits(wbID);
+		for (Edit edit : edits)
+			edit.setPoints(ctx.getDbc().getPoints(edit.getEditID()));
+		wb.setEdits(edits);
 		return wb;
 	}
 

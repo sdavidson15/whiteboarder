@@ -4,6 +4,7 @@ import com.core.Context;
 import com.core.Logger;
 import com.core.WbException;
 import com.model.*;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -180,6 +181,41 @@ public class DatabaseConnector {
 		}
 	}
 
+	public void addPoints(Set<Point> points) throws WbException {
+		Logger.log.info("Adding Points.");
+		String stmtStr = MySQL.ADD_POINTS;
+		String valuesStr = ", (?, ?, ?)";
+		for (int i = 0; i < points.size(); i++)
+			stmtStr += ", (?, ?, ?)";
+		stmtStr = stmtStr.substring(0, stmtStr.length() - valuesStr.length());
+
+		try {
+			PreparedStatement stmt = c.prepareStatement(stmtStr);
+			int i = 1;
+			for (Point p : points) {
+				stmt.setInt(i++, p.getEditID());
+				stmt.setInt(i++, p.getXCoord());
+				stmt.setInt(i++, p.getYCoord());
+			}
+			stmt.executeUpdate();
+			stmt.close();
+		} catch (Exception e) {
+			throw new WbException(WbException.DB_ADD_POINTS, e);
+		}
+	}
+
+	public void removePoints(int editID) throws WbException {
+		Logger.log.info("Removing Points.");
+		try {
+			PreparedStatement stmt = c.prepareStatement(MySQL.REMOVE_POINTS);
+			stmt.setInt(1, editID);
+			stmt.executeUpdate();
+			stmt.close();
+		} catch (Exception e) {
+			throw new WbException(WbException.DB_REMOVE_POINTS, e);
+		}
+	}
+
 	public void addUser(User user) throws WbException {
 		try {
 			PreparedStatement stmt = c.prepareStatement(MySQL.ADD_USER);
@@ -334,6 +370,25 @@ public class DatabaseConnector {
 		}
 
 		return edits;
+	}
+
+	public Set<Point> getPoints(int editID) throws WbException {
+		Logger.log.info("Querying for Points.");
+		HashSet<Point> points = new HashSet<Point>();
+		try {
+			PreparedStatement stmt = c.prepareStatement(MySQL.GET_POINTS);
+			stmt.setInt(1, editID);
+
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				Point p = new Point(rs.getInt("EditID"), rs.getInt("X"), rs.getInt("Y"));
+				points.add(p);
+			}
+		} catch (Exception e) {
+			throw new WbException(WbException.DB_GET_POINTS, e);
+		}
+
+		return points;
 	}
 
 	public User getUser(String wbID, String username) throws WbException {
