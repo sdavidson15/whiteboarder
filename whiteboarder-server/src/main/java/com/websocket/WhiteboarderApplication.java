@@ -136,6 +136,7 @@ public class WhiteboarderApplication extends WebSocketApplication {
 
     private void broadcast(String sessionID, String username, String jsonData) {
         Logger.log.info("User " + username + " in session " + sessionID + " is broadcasting an Edit.");
+        // FIXME: Broadcast only to members in this session (sessionID == wws.getSessionID())
         broadcaster.broadcast(members, jsonData);
     }
 }

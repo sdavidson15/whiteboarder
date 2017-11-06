@@ -373,6 +373,7 @@ public class DatabaseConnector {
 	public User getUser(String wbID, String username) throws WbException {
 		int modeNum = -1;
 
+		boolean found = false;
 		try {
 			PreparedStatement stmt = c.prepareStatement(MySQL.GET_USER);
 			stmt.setString(1, wbID);
@@ -382,10 +383,14 @@ public class DatabaseConnector {
 			if (rs.next()) {
 				modeNum = rs.getInt("Mode");
 				// TODO: validate values for color, brushsize, etc.
+				found = true;
 			}
 		} catch (Exception e) {
 			throw new WbException(WbException.DB_GET_USER, e);
 		}
+
+		if (!found)
+			throw new WbException(WbException.USER_DNE);
 
 		switch (modeNum) {
 		case 0:
