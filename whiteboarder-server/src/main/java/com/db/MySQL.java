@@ -34,7 +34,7 @@ public class MySQL {
 	final static String ADD_IMAGE = "INSERT INTO Images (WhiteboardID, Filename, Bytes, Timestamp) VALUES (?, ?, ?, ?);";
 	final static String ADD_EDIT = "INSERT INTO Edits (WhiteboardID, Username, Color, BrushSize, Timestamp) VALUES (?, ?, ?, ?, ?);";
 	final static String REMOVE_EDIT = "DELETE FROM Edits WHERE EditID = ?;";
-	final static String ADD_POINTS = "INSERT INTO Points (EditID, X, Y) VALUES (?, ?, ?)";
+	final static String ADD_POINT = "INSERT INTO Points (EditID, X, Y) VALUES (?, ?, ?);";
 	final static String REMOVE_POINTS = "DELETE FROM Points WHERE EditID = ?;";
 	final static String ADD_USER = "INSERT INTO Users (WhiteboardID, Username, Mode) VALUES (?, ?, ?);";
 	final static String REMOVE_USER = "DELETE FROM Users WHERE WhiteboardID = ? AND Username = ?;";

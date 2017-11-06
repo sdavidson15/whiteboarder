@@ -20,8 +20,6 @@ public class Edit {
 		this.color = color;
 		this.brushSize = brushSize;
 		this.points = points;
-
-		this.editID = -1;
 		this.timestamp = new Date();
 	}
 

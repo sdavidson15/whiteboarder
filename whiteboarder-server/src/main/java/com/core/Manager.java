@@ -8,6 +8,7 @@ import java.util.Set;
 public class Manager {
 
 	public static Whiteboard getSession(Context ctx, String wbID) throws WbException {
+		Logger.log.info("Retrieving a session.");
 		if (!isValid(ctx))
 			throw new WbException(WbException.INVALID_CONTEXT);
 
@@ -32,6 +33,7 @@ public class Manager {
 	}
 
 	public static void renameSession(Context ctx, String wbID, String newName) throws WbException {
+		Logger.log.info("Renaming a session.");
 		if (!isValid(ctx))
 			throw new WbException(WbException.INVALID_CONTEXT);
 		else if (wbID == null)
@@ -60,6 +62,55 @@ public class Manager {
 			throw new WbException(WbException.INVALID_CONTEXT);
 
 		return ctx.getDbc().getImage(wbID);
+	}
+
+	public static Edit applyEdit(Context ctx, Edit edit) throws WbException {
+		Logger.log.info("Applying an edit.");
+		if (!isValid(ctx)) {
+			throw new WbException("Invalid context");
+		}
+
+		ctx.getDbc().getWhiteboard(edit.getWbID()); // Confirm that the Whiteboard exists
+		ctx.getDbc().getUser(edit.getWbID(), edit.getUsername()); // Confirm that the User exists
+		Edit storedEdit = ctx.getDbc().addEdit(edit);
+		for (Point p : edit.getPoints())
+			p.setEditID(storedEdit.getEditID());
+		ctx.getDbc().addPoints(edit.getPoints());
+		return storedEdit;
+	}
+
+	public static void removeEdit(Context ctx, Edit edit) throws WbException {
+		Logger.log.info("Removing an edit.");
+		if (!isValid(ctx)) {
+			throw new WbException("Invalid context");
+		}
+
+		ctx.getDbc().getWhiteboard(edit.getWbID()); // Confirm that the Whiteboard exists
+		ctx.getDbc().getUser(edit.getWbID(), edit.getUsername()); // Confirm that the User exists
+		ctx.getDbc().removeEdit(edit);
+		ctx.getDbc().removePoints(edit.getEditID());
+	}
+
+	public static void addUser(Context ctx, String sessionID, String username) throws WbException {
+		Logger.log.info("Adding a user.");
+		if (!isValid(ctx)) {
+			throw new WbException("Invalid context");
+		}
+
+		ctx.getDbc().getWhiteboard(sessionID); // Confirm that the Whiteboard exists
+		User user = new User(sessionID, username, Mode.COLLABORATOR);
+		ctx.getDbc().addUser(user);
+	}
+
+	public static void removeUser(Context ctx, String sessionID, String username) throws WbException {
+		Logger.log.info("Removing a user.");
+		if (!isValid(ctx)) {
+			throw new WbException("Invalid context");
+		}
+
+		ctx.getDbc().getWhiteboard(sessionID); // Confirm that the Whiteboard exists
+		User user = new User(sessionID, username, Mode.COLLABORATOR);
+		ctx.getDbc().removeUser(user);
 	}
 
 	private static boolean isValid(Context ctx) {

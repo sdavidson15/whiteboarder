@@ -183,24 +183,18 @@ public class DatabaseConnector {
 
 	public void addPoints(Set<Point> points) throws WbException {
 		Logger.log.info("Adding Points.");
-		String stmtStr = MySQL.ADD_POINTS;
-		String valuesStr = ", (?, ?, ?)";
-		for (int i = 0; i < points.size(); i++)
-			stmtStr += ", (?, ?, ?)";
-		stmtStr = stmtStr.substring(0, stmtStr.length() - valuesStr.length());
 
-		try {
-			PreparedStatement stmt = c.prepareStatement(stmtStr);
-			int i = 1;
-			for (Point p : points) {
-				stmt.setInt(i++, p.getEditID());
-				stmt.setInt(i++, p.getXCoord());
-				stmt.setInt(i++, p.getYCoord());
+		for (Point p : points) {
+			try {
+				PreparedStatement stmt = c.prepareStatement(MySQL.ADD_POINT);
+				stmt.setInt(1, p.getEditID());
+				stmt.setInt(2, p.getXCoord());
+				stmt.setInt(3, p.getYCoord());
+				stmt.executeUpdate();
+				stmt.close();
+			} catch (Exception e) {
+				throw new WbException(WbException.DB_ADD_POINTS, e);
 			}
-			stmt.executeUpdate();
-			stmt.close();
-		} catch (Exception e) {
-			throw new WbException(WbException.DB_ADD_POINTS, e);
 		}
 	}
 
