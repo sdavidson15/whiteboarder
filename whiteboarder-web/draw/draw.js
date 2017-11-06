@@ -11,13 +11,11 @@ var drawingApp = (function () {
         brushLarge = 10,
         brushNormal = 5,
         brushSmall = 2,
-        mousedownIndex = 0,
-        clickX = [],
-        clickY = [],
-        clickColor = [],
-        clickTool = [],
-        clickSize = [],
-        clickDrag = [],
+        cachedX = [],
+        cachedY = [],
+        cachedColor = [],
+        cachedSize = [],
+        cachedDrag = [],
         edits = [],
         paint = false,
         currentColor = colorBlack,
@@ -25,23 +23,42 @@ var drawingApp = (function () {
         currentSize = brushNormal,
 
         redraw = function () {
-            // FIXME: Redraw from edits. Then you can get rid of clickColor, clickTools, and clickSize.
-            // Also, you can get rid of mousedownIndex and reset clickX, clickY, and clickDrag after each stroke.
             context.clearRect(0, 0, canvas.width, canvas.height);
 
-            for (i = 0; i < clickX.length; i += 1) {
-                context.beginPath();
-                if (clickDrag[i] && i > 0) {
-                    context.moveTo(clickX[i - 1], clickY[i - 1]);
-                } else {
-                    context.moveTo(clickX[i] - 1, clickY[i]);
+            // Combine the edits from the server with any cached
+            // "in progress" edits stored only on this client.
+            var x = [], y = [], drag = [], color = [], size = [];
+            for (i = 0; i < edits.length; i++) {
+                var edit = edits[i];
+                for (j = 0; j < edit.points; j++) {
+                    var point = edit.points[j];
+                    x.push(point.x);
+                    y.push(point.y);
+                    drag.push(j == 0);
+                    color.push(edit.color);
+                    size.push(edit.brushSize);
                 }
-                context.lineTo(clickX[i], clickY[i]);
+            }
+            x = x.concat(cachedX);
+            y = y.concat(cachedY);
+            drag = drag.concat(cachedDrag);
+            color = color.concat(cachedColor);
+            size = size.concat(cachedSize);
 
-                context.strokeStyle = (clickTool[i] === "eraser") ? 'white' : clickColor[i];
+            // This for loop takes care of the actual drawing
+            for (i = 0; i < x.length; i++) {
+                context.beginPath();
+                if (drag[i] && i > 0) {
+                    context.moveTo(x[i - 1], y[i - 1]);
+                } else {
+                    context.moveTo(x[i] - 1, y[i]);
+                }
+                context.lineTo(x[i], y[i]);
+
+                context.strokeStyle = color[i];
                 context.lineCap = "round";
                 context.lineJoin = "round";
-                context.lineWidth = clickSize[i];
+                context.lineWidth = size[i];
 
                 context.stroke();
             }
@@ -50,21 +67,21 @@ var drawingApp = (function () {
         },
 
         addClick = function (x, y, dragging) {
-            clickX.push(x);
-            clickY.push(y);
-            clickTool.push(currentTool);
-            clickColor.push(currentColor);
-            clickSize.push(currentSize);
-            clickDrag.push(dragging);
+            cachedX.push(x);
+            cachedY.push(y);
+            cachedColor.push(currentColor);
+            cachedSize.push(currentSize);
+            cachedDrag.push(dragging);
         },
 
         addEdit = function (edit) {
             if (edit != null) {
                 edits.push(edit);
+                redraw();
                 return;
             }
 
-            var colorNum, edit, points = [];
+            var colorNum, edit, points;
 
             colorNum = 0;
             switch (currentColor) {
@@ -77,18 +94,20 @@ var drawingApp = (function () {
             }
 
             points = [];
-            for (i = mousedownIndex; i < clickX.length; i++)
-                points.push({ x: clickX[i], y: clickY[i] });
+            for (i = 0; i < cachedX.length; i++)
+                points.push({ x: cachedX[i], y: cachedY[i] });
 
             edit = {
                 editID: -1,
-                wbID: websocketApp.sessionID,
-                username: websocketApp.username,
+                wbID: websocketApp.getSessionID(),
+                username: websocketApp.getUsername(),
                 color: colorNum,
                 brushSize: currentSize,
                 points: points,
                 timestamp: null
             }
+
+            alert(JSON.stringify(edit));
 
             websocketApp.handleEdit(edit, false);
         },
@@ -99,11 +118,20 @@ var drawingApp = (function () {
                 if (index > -1)
                     edits.splice(index, 1);
 
+                redraw();
                 return;
             }
 
-            // TODO: Figure out which edits clickX and clickY intersect, and loop
+            // TODO: Figure out which edits cachedX and cachedY intersect, and loop
             // through them, passing each into websocketApp.handleEdit()
+        },
+
+        resetEditCache = function () {
+            cachedX = [];
+            cachedY = [];
+            cachedColor = [];
+            cachedSize = [];
+            cachedDrag = [];
         },
 
         setupListeners = function () {
@@ -142,8 +170,8 @@ var drawingApp = (function () {
                 var mouseX = e.pageX - this.offsetLeft,
                     mouseY = e.pageY - this.offsetTop;
 
-                mousedownIndex = clickX.length;
                 paint = true;
+                resetEditCache();
                 addClick(mouseX, mouseY, false);
                 redraw();
             };
@@ -158,7 +186,10 @@ var drawingApp = (function () {
             };
             var release = function () {
                 paint = false;
-                addEdit();
+                if (currentTool === "eraser")
+                    removeEdit(null);
+                else
+                    addEdit(null);
                 redraw();
             };
             var cancel = function () {
@@ -188,74 +219,8 @@ var drawingApp = (function () {
         };
 
     return {
-        init: init
-    };
-}());
-
-var websocketApp = (function () {
-    var socket,
-        url,
-        username,
-        sessionID,
-        nameBox,
-        nameBtn,
-
-        handleEdit = function (edit, isRemove) {
-            if (sessionID == null || username == null)
-                return;
-
-            h = { edit: edit, isRemove: isRemove };
-            websocketApp.socket.send(JSON.stringify(h));
-        },
-
-        login = function () {
-            username = nameBox.value;
-            if (sessionID == null) {
-                // TODO: parse url for session id
-                sessionID = "test-session";
-                socket.send("login:" + sessionID + "," + username);
-                nameBtn.value = "Change name";
-            } else {
-                // TODO: Send http user rename request
-            }
-        },
-
-        setupEventHandlers = function () {
-            socket.onopen = function (event) {
-                drawingApp.init();
-            };
-            socket.onerror = function (error) {
-                alert('WebSocket Error: ' + JSON.stringify(error));
-            };
-            socket.onmessage = function (event) {
-                var message = event.data;
-                // TODO: Deserialize the message into a handle edit
-                var h = { edit: null, isRemove: false };
-                if (h.isRemove) {
-                    drawingApp.removeEdit(h.edit);
-                    return;
-                }
-                drawingApp.addEdit(h.edit);
-            };
-            socket.onclose = function (event) {
-                drawingApp = null;
-                nameBtn.value = "Join";
-            };
-
-            document.getElementById("nameForm").onsubmit = function () {
-                login();
-            };
-        },
-
-        init = function () {
-            url = 'ws://' + window.location.hostname + '/ws/session';
-            socket = new WebSocket(url);
-            nameBox = document.getElementById("nameBox");
-            nameBtn = document.getElementById("nameBtn");
-            setupEventHandlers();
-        };
-
-    return {
-        init: init
+        init: init,
+        addEdit: addEdit,
+        removeEdit: removeEdit
     };
 }());
