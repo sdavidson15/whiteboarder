@@ -6,8 +6,12 @@ import com.core.WbException;
 import com.model.*;
 
 import java.sql.*;
-import javax.sql.rowset.serial.SerialBlob;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import javax.sql.rowset.serial.SerialBlob;
 
 public class DatabaseConnector {
 
@@ -258,12 +262,10 @@ public class DatabaseConnector {
 		} catch (Exception e) {
 			throw new WbException(WbException.DB_GET_WB, e);
 		}
-
-		if (!found) {
+		if (!found)
 			throw new WbException(WbException.WHITEBOARD_DNE);
-		}
 
-		// TODO: Populate wb's Edits and Images
+		// Images and edits should be null
 		Whiteboard wb = new Whiteboard(wbID, name, null, null);
 		return wb;
 	}
@@ -299,5 +301,137 @@ public class DatabaseConnector {
 		}
 
 		return new Image(imgID, wbID, filename, bytes, timestamp);
+	}
+
+	public List<Image> getImages(String wbID) throws WbException {
+		ArrayList<Image> images = new ArrayList<Image>();
+
+		int imgID = -1;
+		String filename = null;
+		byte[] bytes = null;
+		Date timestamp = null;
+
+		try {
+			PreparedStatement stmt = c.prepareStatement(MySQL.GET_IMAGES);
+			stmt.setString(1, wbID);
+
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				imgID = rs.getInt("ImageID");
+				filename = rs.getString("Filename");
+				timestamp = rs.getTimestamp("Timestamp");
+
+				Blob blob = rs.getBlob("Bytes");
+				// casted to an int from a long (problem when posting massive pictures?? over 4.2Gb i think)
+				if (blob != null)
+					bytes = blob.getBytes(1, (int) blob.length());
+
+				images.add(new Image(imgID, wbID, filename, bytes, timestamp));
+				bytes = null;
+			}
+			rs.close();
+			stmt.close();
+		} catch (Exception e) {
+			throw new WbException(WbException.DB_GET_IMGS, e);
+		}
+
+		return images;
+	}
+
+	public Set<Edit> getEdits(String wbID) throws WbException {
+		HashSet<Edit> edits = new HashSet<Edit>();
+
+		// WhiteboardID, Username, Color, BrushSize, Timestamp
+		String username = null;
+		int color = -1, brushsize = -1, editID = -1;
+		Date timestamp = null;
+
+		try {
+			PreparedStatement stmt = c.prepareStatement(MySQL.GET_EDITS);
+			stmt.setString(1, wbID);
+
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				editID = rs.getInt("EditID");
+				username = rs.getString("Username");
+				color = rs.getInt("Color");
+				brushsize = rs.getInt("BrushSize");
+				timestamp = rs.getTimestamp("Timestamp");
+
+				// TODO: points field is using null value
+				edits.add(new Edit(editID, wbID, username, color, brushsize, null));
+			}
+			rs.close();
+			stmt.close();
+		} catch (Exception e) {
+			throw new WbException(WbException.DB_GET_EDITS, e);
+		}
+
+		return edits;
+	}
+
+	public User getUser(String wbID, String username) throws WbException {
+		int modeNum = -1;
+
+		try {
+			PreparedStatement stmt = c.prepareStatement(MySQL.GET_USER);
+			stmt.setString(1, wbID);
+			stmt.setString(2, username);
+
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				modeNum = rs.getInt("Mode");
+				// TODO: validate values for color, brushsize, etc.
+			}
+		} catch (Exception e) {
+			throw new WbException(WbException.DB_GET_USER, e);
+		}
+
+		switch (modeNum) {
+		case 0:
+			return new User(wbID, username, Mode.HOST);
+		case 1:
+			return new User(wbID, username, Mode.COLLABORATOR);
+		case 2:
+			return new User(wbID, username, Mode.VIEWER);
+		default:
+			throw new WbException(WbException.DB_INVALID_MODE);
+		}
+	}
+
+	public Set<User> getUsers(String wbID) throws WbException {
+		HashSet<User> users = new HashSet<User>();
+
+		String username = null;
+		int modeNum = -1;
+
+		try {
+			PreparedStatement stmt = c.prepareStatement(MySQL.GET_USERS);
+			stmt.setString(1, wbID);
+
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				username = rs.getString("Username");
+				modeNum = rs.getInt("Mode");
+
+				switch (modeNum) {
+				case 0:
+					users.add(new User(wbID, username, Mode.HOST));
+					break;
+				case 1:
+					users.add(new User(wbID, username, Mode.COLLABORATOR));
+					break;
+				case 2:
+					users.add(new User(wbID, username, Mode.VIEWER));
+					break;
+				default:
+					throw new WbException(WbException.DB_INVALID_MODE);
+				}
+			}
+		} catch (Exception e) {
+			throw new WbException(WbException.DB_GET_USERS, e);
+		}
+
+		return users;
 	}
 }

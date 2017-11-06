@@ -26,6 +26,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -36,11 +37,37 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 @Path("/")
 public class Routes {
 
+	// internal class used for renaming whiteboards or users
+	// exists for JSON serialization
+	class RenameRequest {
+		String sessionID, newName, oldName;
+
+		public RenameRequest(String sessionID, String newName, String oldName) {
+			this.sessionID = sessionID;
+			this.newName = newName;
+			this.oldName = oldName;
+		}
+	}
+
 	public static Context ctx;
+
+	@GET
+	@Path("/session/{sessionID}")
+	@Produces(APPLICATION_JSON)
+	public Response getSession(@PathParam("sessionID") String sessionID) {
+		Whiteboard wb = null;
+		try {
+			wb = Manager.getSession(ctx, sessionID);
+		} catch (WbException e) {
+			return Response.serverError().entity(e.getMessage()).build();
+		}
+		
+		Gson gson = new GsonBuilder().create();
+		return Response.ok(gson.toJson(wb), APPLICATION_JSON).build();
+	}
 
 	@POST
 	@Path("/session")
-	@Consumes(APPLICATION_JSON)
 	@Produces(TEXT_PLAIN)
 	public Response createSession(String payload) {
 		Logger.log.info("Recieved a POST session request.");
@@ -56,6 +83,28 @@ public class Routes {
 		}
 
 		return Response.ok(wb.getWbID(), TEXT_PLAIN).build();
+	}
+
+	@PUT
+	@Path("/session")
+	@Consumes(APPLICATION_JSON)
+	@Produces(TEXT_PLAIN)
+	public Response renameSession(String payload) {
+		RenameRequest rr;
+		try {
+			Gson gson = new GsonBuilder().create();
+			rr = gson.fromJson(payload, new TypeToken<RenameRequest>() {
+			}.getType());
+
+			Manager.renameSession(ctx, rr.sessionID, rr.newName);
+
+		} catch (JsonSyntaxException e) {
+			return Response.status(400).entity("Incorrect JSON format").build();
+		} catch (WbException e) {
+			return Response.serverError().entity(e.getMessage()).build();
+		}
+
+		return Response.ok("Session renamed.").build();
 	}
 
 	@GET

@@ -5,13 +5,21 @@ import com.model.*;
 
 public class Manager {
 
+	public static Whiteboard getSession(Context ctx, String wbID) throws WbException {
+		if (!isValid(ctx))
+			throw new WbException(WbException.INVALID_CONTEXT);
+
+		Whiteboard wb = ctx.getDbc().getWhiteboard(wbID);
+		wb.setEdits(ctx.getDbc().getEdits(wbID));
+		return wb;
+	}
+
 	public static Whiteboard createSession(Context ctx) throws WbException {
 		Logger.log.info("Creating a session.");
-		if (!isValid(ctx)) {
-			throw new WbException("Invalid context");
-		} else if (ctx.getUser() == null) {
-			throw new WbException("Failed to create session with a null user.");
-		}
+		if (!isValid(ctx))
+			throw new WbException(WbException.INVALID_CONTEXT);
+		else if (ctx.getUser() == null)
+			throw new WbException(WbException.INVALID_USER);
 
 		Whiteboard wb = new Whiteboard("New Whiteboard");
 
@@ -19,13 +27,23 @@ public class Manager {
 		return wb;
 	}
 
+	public static void renameSession(Context ctx, String wbID, String newName) throws WbException {
+		if (!isValid(ctx))
+			throw new WbException(WbException.INVALID_CONTEXT);
+		else if (wbID == null)
+			throw new WbException(WbException.INVALID_SESSION);
+		else if (newName == null)
+			throw new WbException(WbException.INVALID_NAME);
+
+		ctx.getDbc().renameWhiteboard(wbID, newName);
+	}
+
 	public static void uploadImage(Context ctx, String wbID, Image img) throws WbException {
 		Logger.log.info("Uploading an image.");
-		if (!isValid(ctx)) {
-			throw new WbException("Invalid context");
-		} else if (wbID == null) {
-			throw new WbException("SessionID cannot be empty.");
-		}
+		if (!isValid(ctx))
+			throw new WbException(WbException.INVALID_CONTEXT);
+		else if (wbID == null)
+			throw new WbException(WbException.INVALID_SESSION);
 
 		img = (img != null) ? img : new Image(wbID, "Blank Image", null);
 		ctx.getDbc().getWhiteboard(wbID); // Confirm that the Whiteboard exists
@@ -34,9 +52,8 @@ public class Manager {
 
 	public static Image getImage(Context ctx, String wbID) throws WbException {
 		Logger.log.info("Retrieving an image.");
-		if (!isValid(ctx)) {
-			throw new WbException("Invalid context");
-		}
+		if (!isValid(ctx))
+			throw new WbException(WbException.INVALID_CONTEXT);
 
 		ctx.getDbc().getWhiteboard(wbID); // Confirm that the Whiteboard exists
 		return ctx.getDbc().getImage(wbID);
@@ -49,7 +66,7 @@ public class Manager {
 		}
 
 		ctx.getDbc().getWhiteboard(edit.getWbID()); // Confirm that the Whiteboard exists
-		// TODO: Confirm that the User exists
+		ctx.getDbc().getUser(edit.getWbID(), edit.getUsername()); // Confirm that the User exists
 		return ctx.getDbc().addEdit(edit);
 	}
 
@@ -60,7 +77,7 @@ public class Manager {
 		}
 
 		ctx.getDbc().getWhiteboard(edit.getWbID()); // Confirm that the Whiteboard exists
-		// TODO: Confirm that the User exists
+		ctx.getDbc().getUser(edit.getWbID(), edit.getUsername()); // Confirm that the User exists
 		ctx.getDbc().removeEdit(edit);
 	}
 
