@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Drawing</title>
+</head>
+
+<body>
+    <img src="images.jpg" width=900 height=540 style="position: absolute;" />
+    <canvas id="canvas"></canvas>
+    <div style="float: right; padding: 10em;">
+        <form>
+            <input id="marker" name="tool" type="radio" checked> Marker
+            <input id="eraser" name="tool" type="radio"> Eraser
+        </form>
+        <form>
+            <input id="black" name="color" type="radio" checked> Black
+            <input id="blue" name="color" type="radio"> Blue
+            <input id="green" name="color" type="radio"> Green
+            <input id="red" name="color" type="radio"> Red
+        </form>
+        <form>
+            <input id="huge" name="brushSize" type="radio"> Huge
+            <input id="large" name="brushSize" type="radio"> Large
+            <input id="normal" name="brushSize" type="radio" checked> Normal
+            <input id="small" name="brushSize" type="radio"> Small
+        </form>
+    </div>
+
+
+    <script type="text/javascript" src="draw.js"></script>
+    <script type="text/javascript">
+        drawingApp.init();
+    </script>
+</body>
+
+</html>
