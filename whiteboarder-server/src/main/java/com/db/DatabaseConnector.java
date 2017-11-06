@@ -307,7 +307,7 @@ public class DatabaseConnector {
 
 		// WhiteboardID, Username, Color, BrushSize, Timestamp
 		String username = null;
-		int color = -1, brushsize = -1;
+		int color = -1, brushsize = -1, editID = -1;
 		Date timestamp = null;
 
 		try {
@@ -316,13 +316,14 @@ public class DatabaseConnector {
 
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
+				editID = rs.getInt("EditID");
 				username = rs.getString("Username");
 				color = rs.getInt("Color");
 				brushsize = rs.getInt("BrushSize");
 				timestamp = rs.getTimestamp("Timestamp");
 
 				// TODO: points field is using null value
-				edits.add(new Edit(wbID, username, color, brushsize, null));
+				edits.add(new Edit(editID, wbID, username, color, brushsize, null));
 			}
 			rs.close();
 			stmt.close();
