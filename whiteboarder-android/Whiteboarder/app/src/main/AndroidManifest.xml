@@ -41,7 +41,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="whiteboarder.whiteboarder.MainActivity" />
         </activity>
-        <activity android:name=".ReadQR"></activity>
+        <activity android:name=".ReadQR"
+            android:label="QR Code Scanner"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="whiteboarder.whiteboarder.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
