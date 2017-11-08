@@ -23,7 +23,7 @@ public class RESTClient2 {
     //
     // The permanent location is probably
     //      "https://proj-309-yt-c-1.cs.iastate.edu/"
-    private static final String HOST = "https://1c20a79e.ngrok.io";
+    private static final String HOST = "https://8892ff70.ngrok.io";
 
     public abstract static class Callback<T> {
         abstract void success(T data);

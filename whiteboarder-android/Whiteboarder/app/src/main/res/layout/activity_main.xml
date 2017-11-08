@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -15,40 +14,35 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/photoActivityButton"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="@color/colorPrimary">
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:text="Take Photo" />
 
-            <Button
-                android:id="@+id/takePhotoButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Take Photo" />
+        <Button
+            android:id="@+id/scanQRButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:text="Scan QR" />
 
-            <Button
-                android:id="@+id/backstageButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Backstage" />
+        <Button
+            android:id="@+id/backstageButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:text="Backstage" />
 
-            <Button
-                android:id="@+id/scanQRButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Scan QR Code" />
-
-
-            <SurfaceView
-                android:id="@+id/cameraPreviewSurface"
-                android:layout_width="270dp"
-                android:layout_height="480dp"
-                android:layout_gravity="center"
-                android:layout_weight="0.40" />
-
-        </LinearLayout>
-
-    </FrameLayout>
-
-</LinearLayout>
+    </LinearLayout>
+</FrameLayout>
+</android.support.constraint.ConstraintLayout>
