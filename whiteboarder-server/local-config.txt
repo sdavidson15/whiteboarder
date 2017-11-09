@@ -1,6 +1,0 @@
-rest-uri=http://localhost/whiteboarder/
-port=8080
-db-host=jdbc:mysql://localhost:3306/mysql
-db-user=root
-db-pass=n/a
-log-location=whiteboarder-server.log

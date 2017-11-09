@@ -9,8 +9,12 @@ import com.db.DatabaseConnector;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -18,39 +22,56 @@ import org.glassfish.grizzly.http.server.HttpServer;
 public class Main {
 
 	public static final int DB_CONNECTION_NUM_RETRIES = 5;
-	public static final String LOCAL_CONFIG_PATH = "local-config.txt";
+
+	// Local config
+	public static final String LOCAL_DB_HOST = "jdbc:mysql://localhost:3306/mysql";
+	public static final String LOCAL_DB_USER = "root";
+	public static final String LOCAL_URI = "http://localhost/whiteboarder/";
+	public static final int LOCAL_PORT = 8080;
+
+	// Prod config
+	public static final String PROD_DB_HOST = "jdbc:mysql://mysql.cs.iastate.edu:3306/db309ytc1";
+	public static final String PROD_DB_USER = "dbu309ytc1";
+	public static final String PROD_URI = "http://proj-309-yt-c-1.cs.iastate.edu/whiteboarder/";
+	public static final int PROD_PORT = 80;
 
 	public static void main(String[] args) throws Exception {
-		String cfgPath = LOCAL_CONFIG_PATH;
 		boolean isLocal = true;
-		if (args.length == 1) {
-			cfgPath = args[0];
+		if (args.length == 1 && args[0].equals("prod"))
 			isLocal = false;
-		}
 
-		Map<String, String> cfg = getConfig(cfgPath);
+		String dbHost = isLocal ? LOCAL_DB_HOST : PROD_DB_HOST;
+		String dbUser = isLocal ? LOCAL_DB_USER : PROD_DB_USER;
+		String dbPass = isLocal ? null : getDbPassword();
+		String uri = isLocal ? LOCAL_URI : PROD_URI;
+		int port = isLocal ? LOCAL_PORT : PROD_PORT;
+		writeRunType(isLocal);
 
-		Logger.setupLogger(cfg.get("log-location"));
-		DatabaseConnector dbc = startDatabaseConnection(cfg.get("db-host"), cfg.get("db-user"), cfg.get("db-pass"),
-				isLocal);
+		Logger.setupLogger();
+		DatabaseConnector dbc = startDatabaseConnection(dbHost, dbUser, dbPass, isLocal);
 		Context ctx = new Context(null, dbc, isLocal);
-		final HttpServer server = Rest.startServer(ctx, cfg.get("rest-uri"), Integer.parseInt(cfg.get("port")));
+		final HttpServer server = Rest.startServer(ctx, uri, port);
 		System.in.read();
 		server.shutdownNow();
 		endDatabaseConnection(dbc);
 	}
 
-	public static Map<String, String> getConfig(String path) throws FileNotFoundException {
-		HashMap<String, String> cfg = new HashMap<String, String>();
-		File f = new File(path);
-		Scanner scanner = new Scanner(f);
+	public static void writeRunType(boolean isLocal) throws IOException {
+		File f = new File("../whiteboarder-web/runtype.txt");
+		f.delete();
+		f.createNewFile();
 
-		while (scanner.hasNext()) {
-			String[] fields = scanner.nextLine().split("=");
-			cfg.put(fields[0].trim(), fields[1].trim());
-		}
+		List<String> line = Arrays.asList(isLocal ? "local" : "prod");
+		Path path = Paths.get("../whiteboarder-web/runtype.txt");
+		Files.write(path, line, Charset.forName("UTF-8"));
+	}
+
+	public static String getDbPassword() throws FileNotFoundException {
+		File f = new File("password.txt");
+		Scanner scanner = new Scanner(f);
+		String password = scanner.next();
 		scanner.close();
-		return cfg;
+		return password;
 	}
 
 	public static DatabaseConnector startDatabaseConnection(String host, String user, String password,

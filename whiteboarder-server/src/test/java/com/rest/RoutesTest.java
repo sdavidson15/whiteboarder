@@ -22,12 +22,11 @@ public class RoutesTest {
 
 	@Before
 	public void setUp() throws Exception {
-		Map<String, String> cfg = Main.getConfig("local-config.txt");
 		Context ctx = new Context(null, null, true);
-		server = Rest.startServer(ctx, cfg.get("rest-uri"), Integer.parseInt(cfg.get("port")));
+		server = Rest.startServer(ctx, Main.LOCAL_URI, Main.LOCAL_PORT);
 		Client mockClient = ClientBuilder.newClient();
 
-		target = mockClient.target(cfg.get("rest-uri"));
+		target = mockClient.target(Main.LOCAL_URI);
 	}
 
 	@After

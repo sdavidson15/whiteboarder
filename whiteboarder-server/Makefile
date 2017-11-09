@@ -5,8 +5,6 @@ build:
 .PHONY: clean
 clean:
 	mvn clean
-	rm -v -f *.log
-	rm -v -f *.log.lck
 
 .PHONY: test
 test:
@@ -18,4 +16,4 @@ run:
 
 .PHONY: run-prod
 run-prod:
-	mvn exec:java -Dexec.args="prod-config.txt"
+	mvn exec:java -Dexec.args="prod"

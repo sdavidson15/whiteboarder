@@ -5,6 +5,5 @@ target/
 *.log
 *.log.lck
 
-# Config files other than the local config
-*.txt
-!local-config.txt
+# Prod password file
+password.txt

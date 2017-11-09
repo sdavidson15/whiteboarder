@@ -6,15 +6,20 @@ var config = (function () {
         },
 
         init = function () {
-            var localUrl = 'http://localhost:8080';
-            var prodUrl = 'http://proj-309-yt-c-1.cs.iastate.edu';
-            $.ajax(prodUrl, {
+            $.ajax("runtype.txt", {
                 type: 'GET',
                 success: function (response) {
-                    url = prodUrl;
-                },
-                error: function (error) {
-                    url = localUrl;
+                    switch (response.trim()) {
+                        case "prod":
+                            url = 'http://proj-309-yt-c-1.cs.iastate.edu';
+                            return;
+                        case "local":
+                            url = 'http://localhost:8080';
+                            return;
+                        default:
+                            url = 'http://localhost:8080';
+                            console.error("Unable to read run type, using local url.");
+                    }
                 }
             });
         }
