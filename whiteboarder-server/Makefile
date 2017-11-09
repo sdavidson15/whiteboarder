@@ -5,7 +5,6 @@ build:
 .PHONY: clean
 clean:
 	mvn clean
-	rm -v -f whiteboarder-server.log*
 
 .PHONY: test
 test:

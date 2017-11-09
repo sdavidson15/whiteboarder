@@ -392,16 +392,14 @@ public class DatabaseConnector {
 		if (!found)
 			throw new WbException(WbException.USER_DNE);
 
-		switch (modeNum) {
-		case 0:
+		if (modeNum == Mode.HOST.getValue())
 			return new User(wbID, username, Mode.HOST);
-		case 1:
+		else if (modeNum == Mode.COLLABORATOR.getValue())
 			return new User(wbID, username, Mode.COLLABORATOR);
-		case 2:
+		else if (modeNum == Mode.VIEWER.getValue())
 			return new User(wbID, username, Mode.VIEWER);
-		default:
+		else
 			throw new WbException(WbException.DB_INVALID_MODE);
-		}
 	}
 
 	public Set<User> getUsers(String wbID) throws WbException {

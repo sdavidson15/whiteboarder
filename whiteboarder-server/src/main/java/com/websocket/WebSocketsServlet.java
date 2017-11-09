@@ -12,7 +12,7 @@ public class WebSocketsServlet extends HttpServlet {
 
     @Override
     public void init(ServletConfig config) throws ServletException {
-        app = new WhiteboarderApplication(null); // FIXME: This could make the dbc crap out
+        app = new WhiteboarderApplication(null);
         WebSocketEngine.getEngine().register(config.getServletContext().getContextPath(), "/session", app);
     }
 

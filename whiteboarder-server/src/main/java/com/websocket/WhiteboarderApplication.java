@@ -115,7 +115,7 @@ public class WhiteboarderApplication extends WebSocketApplication {
         WhiteboarderWebSocket wws = (WhiteboarderWebSocket) websocket;
         String[] fields = jsonData.substring(6).split(",");
         if (fields.length != 2) {
-            Logger.log.warning("Recieved web socket login message with bad syntax.");
+            Logger.log.warning("Recieved web socket login message with bad syntax: " + jsonData);
             return;
         }
         String sessionID = fields[0];
