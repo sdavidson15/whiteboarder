@@ -14,8 +14,9 @@ public class Edit {
 	private Set<Point> points;
 	private Date timestamp;
 
-	public Edit(String wbID, String username, int color, int brushSize, Set<Point> points) {
+	public Edit(int editID, String wbID, String username, int color, int brushSize, Set<Point> points) {
 		this.wbID = wbID;
+		this.editID = editID;
 		this.username = username;
 		this.color = color;
 		this.brushSize = brushSize;
@@ -55,6 +56,10 @@ public class Edit {
 
 	public Date getTimestamp() {
 		return this.timestamp;
+	}
+
+	public void setNewTimestamp() {
+		this.timestamp = new Date();
 	}
 
 	@Override

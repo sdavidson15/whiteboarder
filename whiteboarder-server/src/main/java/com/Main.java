@@ -5,33 +5,26 @@ import com.core.Logger;
 import com.core.WbException;
 import com.rest.Rest;
 import com.db.DatabaseConnector;
+import com.websocket.WebSocketServer;
+
 import java.io.IOException;
+
 import org.glassfish.grizzly.http.server.HttpServer;
 
 public class Main {
 
 	public static final int DB_CONNECTION_NUM_RETRIES = 5;
 
-	public static void main(String[] args) throws IOException {
-		if (args.length > 0 && args[0] == "prod") {
-			Logger.setupLogger();
-			DatabaseConnector dbc = startDatabaseConnection(false);
-			if (dbc != null) {
-				Context ctx = new Context(null, dbc, false);
-				final HttpServer server = Rest.startServer(ctx);
-				// TODO: Close everything at the appropriate time
-			}
-		} else {
-			Logger.setupLogger();
-			DatabaseConnector dbc = startDatabaseConnection(true);
-			if (true) {
-				Context ctx = new Context(null, dbc, true);
-				final HttpServer server = Rest.startServer(ctx);
-				System.in.read();
-				server.stop();
-				endDatabaseConnection(dbc);
-			}
-		}
+	public static void main(String[] args) throws Exception {
+		// TODO: Read run configuration from a file
+		Logger.setupLogger();
+		DatabaseConnector dbc = startDatabaseConnection(true);
+		Context ctx = new Context(null, dbc, true);
+		HttpServer server = Rest.setupServer(ctx);
+		WebSocketServer.startServer(ctx, server);
+		System.in.read();
+		server.stop();
+		endDatabaseConnection(dbc);
 	}
 
 	public static DatabaseConnector startDatabaseConnection(boolean isLocal) {
