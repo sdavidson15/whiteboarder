@@ -9,3 +9,7 @@ clean:
 .PHONY: test
 test:
 	mvn test
+
+.PHONY: run
+run:
+	mvn exec:java
