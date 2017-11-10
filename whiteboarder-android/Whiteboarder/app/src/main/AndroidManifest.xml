@@ -36,6 +36,7 @@
         </activity>
         <activity android:name=".TakePhoto"
             android:label="Take Photo"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -43,6 +44,7 @@
         </activity>
         <activity android:name=".ReadQR"
             android:label="QR Code Scanner"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
