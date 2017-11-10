@@ -17,14 +17,14 @@ public class Rest {
 	public static final String BASE_URI = "http://proj-309-yt-c-1.cs.iastate.edu/whiteboarder/";
 	public static final String LOCAL_BASE_URI = "http://localhost/whiteboarder/";
 
-	public static HttpServer startServer(Context ctx) {
+	public static HttpServer setupServer(Context ctx) {
 		Routes.ctx = ctx;
 
 		ResourceConfig rc = new ResourceConfig().packages("com.rest").register(MultiPartFeature.class);
 
 		String uriStr = ctx.isLocal() ? LOCAL_BASE_URI : BASE_URI;
 		final URI uri = UriBuilder.fromUri(uriStr).port(8080).build();
-		HttpServer server = GrizzlyHttpServerFactory.createHttpServer(uri, rc);
+		HttpServer server = GrizzlyHttpServerFactory.createHttpServer(uri, rc, false);
 
 		// serve static files on "/"
 		HttpHandler httpHandler = new StaticHttpHandler("../whiteboarder-web");
