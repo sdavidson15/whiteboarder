@@ -28,10 +28,10 @@
 
             <Button
                 android:id="@+id/takePhotoButton"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/oval_shape"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/camera_button"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true" />
 
