@@ -48,7 +48,9 @@ var websocketApp = (function () {
                     drawingApp.removeEdit(h.edit);
                     return;
                 }
-                drawingApp.addEdit(h.edit);
+
+                if (h.edit.wbID == sessionID)
+                    drawingApp.addEdit(h.edit);
             };
             socket.onclose = function (event) {
                 drawingApp = null;
