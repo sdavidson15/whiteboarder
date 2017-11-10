@@ -59,6 +59,10 @@ public class Edit {
 		return this.timestamp;
 	}
 
+	public void setNewTimestamp() {
+		this.timestamp = new Date();
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || o.getClass() != this.getClass()) {

@@ -21,6 +21,7 @@ public class Manager {
 	}
 
 	public static Whiteboard createSession(Context ctx) throws WbException {
+		Logger.log.info("Creating a session.");
 		if (!isValid(ctx))
 			throw new WbException(WbException.INVALID_CONTEXT);
 		else if (ctx.getUser() == null)
@@ -44,23 +45,24 @@ public class Manager {
 		ctx.getDbc().renameWhiteboard(wbID, newName);
 	}
 
-	public static Whiteboard uploadImage(Context ctx, String wbID, Image img) throws WbException {
+	public static void uploadImage(Context ctx, String wbID, Image img) throws WbException {
+		Logger.log.info("Uploading an image.");
 		if (!isValid(ctx))
 			throw new WbException(WbException.INVALID_CONTEXT);
 		else if (wbID == null)
 			throw new WbException(WbException.INVALID_SESSION);
 
 		img = (img != null) ? img : new Image(wbID, "Blank Image", null);
-		Whiteboard wb = ctx.getDbc().getWhiteboard(wbID);
+		ctx.getDbc().getWhiteboard(wbID); // Confirm that the Whiteboard exists
 		img = ctx.getDbc().addImage(img);
-		wb.addImage(img);
-		return wb;
 	}
 
 	public static Image getImage(Context ctx, String wbID) throws WbException {
+		Logger.log.info("Retrieving an image.");
 		if (!isValid(ctx))
 			throw new WbException(WbException.INVALID_CONTEXT);
 
+		ctx.getDbc().getWhiteboard(wbID); // Confirm that the Whiteboard exists
 		return ctx.getDbc().getImage(wbID);
 	}
 
@@ -116,5 +118,4 @@ public class Manager {
 	private static boolean isValid(Context ctx) {
 		return ctx != null && ctx.isValid();
 	}
-
 }
