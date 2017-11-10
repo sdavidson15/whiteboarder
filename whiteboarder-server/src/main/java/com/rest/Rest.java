@@ -14,8 +14,7 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 public class Rest {
-	public static HttpServer startServer(Context ctx, String uriStr, int port) {
-
+	public static HttpServer setupServer(Context ctx, String uriStr, int port) {
 		Routes.ctx = ctx;
 
 		ResourceConfig rc = new ResourceConfig().packages("com.rest").register(MultiPartFeature.class);

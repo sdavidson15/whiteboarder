@@ -5,6 +5,7 @@ import com.core.Logger;
 import com.core.WbException;
 import com.rest.Rest;
 import com.db.DatabaseConnector;
+import com.websocket.WebSocketServer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -50,7 +51,7 @@ public class Main {
 		Logger.setupLogger();
 		DatabaseConnector dbc = startDatabaseConnection(dbHost, dbUser, dbPass, isLocal);
 		Context ctx = new Context(null, dbc, isLocal);
-		final HttpServer server = Rest.startServer(ctx, uri, port);
+		final HttpServer server = Rest.setupServer(ctx, uri, port);
 		System.in.read();
 		server.shutdownNow();
 		endDatabaseConnection(dbc);

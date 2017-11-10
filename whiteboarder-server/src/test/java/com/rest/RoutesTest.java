@@ -23,7 +23,8 @@ public class RoutesTest {
 	@Before
 	public void setUp() throws Exception {
 		Context ctx = new Context(null, null, true);
-		server = Rest.startServer(ctx, Main.LOCAL_URI, Main.LOCAL_PORT);
+		server = Rest.setupServer(ctx, Main.LOCAL_URI, Main.LOCAL_PORT);
+		server.start();
 		Client mockClient = ClientBuilder.newClient();
 
 		target = mockClient.target(Main.LOCAL_URI);
@@ -31,7 +32,7 @@ public class RoutesTest {
 
 	@After
 	public void tearDown() throws Exception {
-		server.stop();
+		server.shutdownNow();
 	}
 
 	@Test
