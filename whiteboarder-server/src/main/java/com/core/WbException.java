@@ -32,6 +32,9 @@ public class WbException extends Exception {
     public static final String DB_GET_USER = "Failed to retrieve User from the database.";
     public static final String DB_GET_USERS = "Failed to retrieve Users from the database.";
     public static final String DB_REMOVE_USER = "Failed to remove a User from the database.";
+    public static final String DB_ADD_POINTS = "Failed to insert a set of Points into the database.";
+    public static final String DB_REMOVE_POINTS = "Failed to remove a set of Points from the database.";
+    public static final String DB_GET_POINTS = "Failed to retrieve Points from the database.";
 
     public static final String INVALID_USER = "Failed to create session with a null user.";
     public static final String INVALID_CONTEXT = "Invalid context.";
