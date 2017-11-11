@@ -38,7 +38,7 @@ public class InSession extends AppCompatActivity {
         // 4. Render the edits.
         // 5. Connect to the web socket, and log in as "Anonymous".
 
-        setTitle(SessionInfo.sessionName);
+        setTitle((SessionInfo.sessionName == null) ? "No session connected" : SessionInfo.sessionName);
         if (SessionInfo.username == null) {
             Snackbar viewAsAnon = Snackbar.make(findViewById(R.id.content_frame), R.string.view_as_anon, Snackbar.LENGTH_LONG);
             viewAsAnon.show();
