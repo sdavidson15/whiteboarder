@@ -18,7 +18,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <SurfaceView
                 android:id="@+id/cameraPreviewSurface"
@@ -29,10 +29,10 @@
                 android:id="@+id/takePhotoButton"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/camera_button"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true" />
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/camera_button" />
 
         </RelativeLayout>
 

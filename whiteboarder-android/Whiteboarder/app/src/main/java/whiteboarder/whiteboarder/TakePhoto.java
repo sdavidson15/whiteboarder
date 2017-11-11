@@ -3,12 +3,14 @@ package whiteboarder.whiteboarder;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.hardware.Camera.CameraInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -99,14 +101,7 @@ public class TakePhoto extends AppCompatActivity {
         }
 
         camera = Camera.open(0);
-
-        // hack to make the camera show up as rotated correctly.
-        // see https://stackoverflow.com/questions/19176038/camera-setdisplayorientation-function-is-not-working-for-samsung-galaxy-ace-wi#19257186
-        Camera.Parameters parameters = camera.getParameters();
-        parameters.set("orientation", "portrait"); // why is this necessary?
-        parameters.setRotation(0);
-        camera.setParameters(parameters);
-        camera.setDisplayOrientation(90);
+        setCameraDisplayOrientation();
 
         SurfaceView surfaceView = findViewById(R.id.cameraPreviewSurface);
         SurfaceHolder surfaceHolder = surfaceView.getHolder();
@@ -130,5 +125,38 @@ public class TakePhoto extends AppCompatActivity {
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {}
         });
+    }
+
+    private void setCameraDisplayOrientation() {
+        if (camera == null)
+            return;
+
+        CameraInfo info = new CameraInfo();
+        Camera.getCameraInfo(0, info);
+        int rotation = this.getWindowManager().getDefaultDisplay().getRotation();
+        int degrees = 0;
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                degrees = 0;
+                break;
+            case Surface.ROTATION_90:
+                degrees = 90;
+                break;
+            case Surface.ROTATION_180:
+                degrees = 180;
+                break;
+            case Surface.ROTATION_270:
+                degrees = 270;
+                break;
+        }
+
+        int result;
+        if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation + degrees) % 360;
+            result = (360 - result) % 360;
+        } else {
+            result = (info.orientation - degrees + 360) % 360;
+        }
+        camera.setDisplayOrientation(result);
     }
 }

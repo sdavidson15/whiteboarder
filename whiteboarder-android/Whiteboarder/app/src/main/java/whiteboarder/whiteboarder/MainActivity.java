@@ -21,6 +21,13 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private final View.OnClickListener joinSessionButtonOnClickListener = new View.OnClickListener() {
+        public void onClick(View view) {
+            Intent intent = new Intent(MainActivity.this, InSession.class);
+            startActivity(intent);
+        }
+    };
+
     private final View.OnClickListener backstageButtonOnClickListener = new View.OnClickListener() {
         public void onClick(View view) {
             Intent intent = new Intent(MainActivity.this, Backstage.class);
@@ -42,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button scanQR = findViewById(R.id.scanQRButton);
         scanQR.setOnClickListener(scanQRButtonOnClicklistener);
+
+        Button joinSession = findViewById(R.id.joinSessionButton);
+        joinSession.setOnClickListener(joinSessionButtonOnClickListener);
 
         Button backstageButton = findViewById(R.id.backstageButton);
         backstageButton.setOnClickListener(backstageButtonOnClickListener);
