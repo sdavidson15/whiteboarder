@@ -54,7 +54,7 @@
         <activity android:name=".InSession"
             android:label="Whiteboarder Session"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
+            android:theme="@style/InSessionTheme"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
