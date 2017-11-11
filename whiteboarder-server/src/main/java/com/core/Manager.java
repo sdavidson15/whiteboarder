@@ -3,14 +3,20 @@ package com.core;
 import com.db.DatabaseConnector;
 import com.model.*;
 
+import java.util.Set;
+
 public class Manager {
 
 	public static Whiteboard getSession(Context ctx, String wbID) throws WbException {
+		Logger.log.info("Retrieving a session.");
 		if (!isValid(ctx))
 			throw new WbException(WbException.INVALID_CONTEXT);
 
 		Whiteboard wb = ctx.getDbc().getWhiteboard(wbID);
-		wb.setEdits(ctx.getDbc().getEdits(wbID));
+		Set<Edit> edits = ctx.getDbc().getEdits(wbID);
+		for (Edit edit : edits)
+			edit.setPoints(ctx.getDbc().getPoints(edit.getEditID()));
+		wb.setEdits(edits);
 		return wb;
 	}
 
@@ -28,6 +34,7 @@ public class Manager {
 	}
 
 	public static void renameSession(Context ctx, String wbID, String newName) throws WbException {
+		Logger.log.info("Renaming a session.");
 		if (!isValid(ctx))
 			throw new WbException(WbException.INVALID_CONTEXT);
 		else if (wbID == null)
@@ -67,7 +74,11 @@ public class Manager {
 
 		ctx.getDbc().getWhiteboard(edit.getWbID()); // Confirm that the Whiteboard exists
 		ctx.getDbc().getUser(edit.getWbID(), edit.getUsername()); // Confirm that the User exists
-		return ctx.getDbc().addEdit(edit);
+		Edit storedEdit = ctx.getDbc().addEdit(edit);
+		for (Point p : edit.getPoints())
+			p.setEditID(storedEdit.getEditID());
+		ctx.getDbc().addPoints(edit.getPoints());
+		return storedEdit;
 	}
 
 	public static void removeEdit(Context ctx, Edit edit) throws WbException {
@@ -79,6 +90,7 @@ public class Manager {
 		ctx.getDbc().getWhiteboard(edit.getWbID()); // Confirm that the Whiteboard exists
 		ctx.getDbc().getUser(edit.getWbID(), edit.getUsername()); // Confirm that the User exists
 		ctx.getDbc().removeEdit(edit);
+		ctx.getDbc().removePoints(edit.getEditID());
 	}
 
 	public static void addUser(Context ctx, String sessionID, String username) throws WbException {
