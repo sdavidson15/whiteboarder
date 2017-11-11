@@ -33,6 +33,7 @@ public class Main {
 	// Prod config
 	public static final String PROD_DB_HOST = "jdbc:mysql://mysql.cs.iastate.edu:3306/db309ytc1";
 	public static final String PROD_DB_USER = "dbu309ytc1";
+	public static final String PROD_DB_PASS = "sffwC#x#";
 	public static final String PROD_URI = "http://proj-309-yt-c-1.cs.iastate.edu/whiteboarder/";
 	public static final int PROD_PORT = 80;
 
@@ -43,7 +44,7 @@ public class Main {
 
 		String dbHost = isLocal ? LOCAL_DB_HOST : PROD_DB_HOST;
 		String dbUser = isLocal ? LOCAL_DB_USER : PROD_DB_USER;
-		String dbPass = isLocal ? null : getDbPassword();
+		String dbPass = isLocal ? null : PROD_DB_PASS;
 		String uri = isLocal ? LOCAL_URI : PROD_URI;
 		int port = isLocal ? LOCAL_PORT : PROD_PORT;
 		writeRunType(isLocal);
@@ -65,14 +66,6 @@ public class Main {
 		List<String> line = Arrays.asList(isLocal ? "local" : "prod");
 		Path path = Paths.get("../whiteboarder-web/runtype.txt");
 		Files.write(path, line, Charset.forName("UTF-8"));
-	}
-
-	public static String getDbPassword() throws FileNotFoundException {
-		File f = new File("password.txt");
-		Scanner scanner = new Scanner(f);
-		String password = scanner.next();
-		scanner.close();
-		return password;
 	}
 
 	public static DatabaseConnector startDatabaseConnection(String host, String user, String password,

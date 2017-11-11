@@ -4,6 +4,3 @@ target/
 # Logs
 *.log
 *.log.lck
-
-# Prod password file
-password.txt
