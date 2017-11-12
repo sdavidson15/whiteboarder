@@ -14,15 +14,6 @@ import java.util.Set;
 import javax.sql.rowset.serial.SerialBlob;
 
 public class DatabaseConnector {
-
-	public static final String LOCAL_MYSQL_DB = "jdbc:mysql://localhost:3306/mysql";
-	public static final String LOCAL_MYSQL_USER = "root";
-	public static final String LOCAL_MYSQL_PASS = null;
-
-	public static final String MYSQL_DB = "mysql.cs.iastate.edu:3306";
-	public static final String MYSQL_USER = "dbu309ytc1";
-	public static final String MYSQL_PASS = "sffwC#x#";
-
 	private String host;
 	private String username;
 	private String password;
@@ -30,10 +21,10 @@ public class DatabaseConnector {
 
 	private Connection c;
 
-	public DatabaseConnector(boolean isLocal) {
-		this.host = isLocal ? LOCAL_MYSQL_DB : MYSQL_DB;
-		this.username = isLocal ? LOCAL_MYSQL_USER : MYSQL_USER;
-		this.password = isLocal ? LOCAL_MYSQL_PASS : MYSQL_PASS;
+	public DatabaseConnector(String host, String username, String password, boolean isLocal) {
+		this.host = host;
+		this.username = username;
+		this.password = (isLocal) ? null : password;
 		this.isLocal = isLocal;
 	}
 

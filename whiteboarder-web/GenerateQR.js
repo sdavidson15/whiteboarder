@@ -1,8 +1,9 @@
-var routePrefix = "localhost:8080/whiteboarder/"
+document.getElementById("create_session_btn").addEventListener("click", function () {
+        postSession();
+});
 
 function postSession() {
-
-        $.ajax('http://localhost:8080/whiteboarder/session', {
+        $.ajax(config.getUrl() + '/whiteboarder/session', {
                 type: 'POST',
                 contentType: "application/json",
                 success: function (response) {
@@ -12,13 +13,4 @@ function postSession() {
                 },
                 dataType: 'text'
         });
-}
-
-
-document.getElementById("create_session_btn").addEventListener("click", function () {
-        change_page_qr();
-});
-
-function change_page_qr() {
-        postSession();
 }
