@@ -14,15 +14,6 @@ import java.util.Set;
 import javax.sql.rowset.serial.SerialBlob;
 
 public class DatabaseConnector {
-
-	public static final String LOCAL_MYSQL_DB = "jdbc:mysql://localhost:3306/mysql";
-	public static final String LOCAL_MYSQL_USER = "root";
-	public static final String LOCAL_MYSQL_PASS = null;
-
-	public static final String MYSQL_DB = "mysql.cs.iastate.edu:3306";
-	public static final String MYSQL_USER = "dbu309ytc1";
-	public static final String MYSQL_PASS = "sffwC#x#";
-
 	private String host;
 	private String username;
 	private String password;
@@ -30,10 +21,10 @@ public class DatabaseConnector {
 
 	private Connection c;
 
-	public DatabaseConnector(boolean isLocal) {
-		this.host = isLocal ? LOCAL_MYSQL_DB : MYSQL_DB;
-		this.username = isLocal ? LOCAL_MYSQL_USER : MYSQL_USER;
-		this.password = isLocal ? LOCAL_MYSQL_PASS : MYSQL_PASS;
+	public DatabaseConnector(String host, String username, String password, boolean isLocal) {
+		this.host = host;
+		this.username = username;
+		this.password = (isLocal) ? null : password;
 		this.isLocal = isLocal;
 	}
 
@@ -68,6 +59,7 @@ public class DatabaseConnector {
 				stmt.addBatch(MySQL.REMOVE_WHITEBOARDS_TABLE);
 				stmt.addBatch(MySQL.REMOVE_IMAGES_TABLE);
 				stmt.addBatch(MySQL.REMOVE_EDITS_TABLE);
+				stmt.addBatch(MySQL.REMOVE_POINTS_TABLE);
 				stmt.addBatch(MySQL.REMOVE_USERS_TABLE);
 				stmt.executeBatch();
 				stmt.close();
@@ -82,6 +74,7 @@ public class DatabaseConnector {
 			stmt.addBatch(MySQL.CREATE_WHITEBOARDS_TABLE);
 			stmt.addBatch(MySQL.CREATE_IMAGES_TABLE);
 			stmt.addBatch(MySQL.CREATE_EDITS_TABLE);
+			stmt.addBatch(MySQL.CREATE_POINTS_TABLE);
 			stmt.addBatch(MySQL.CREATE_USERS_TABLE);
 			stmt.executeBatch();
 			stmt.close();
@@ -183,6 +176,35 @@ public class DatabaseConnector {
 			stmt.close();
 		} catch (Exception e) {
 			throw new WbException(WbException.DB_REMOVE_EDIT, e);
+		}
+	}
+
+	public void addPoints(Set<Point> points) throws WbException {
+		Logger.log.info("Adding Points.");
+
+		for (Point p : points) {
+			try {
+				PreparedStatement stmt = c.prepareStatement(MySQL.ADD_POINT);
+				stmt.setInt(1, p.getEditID());
+				stmt.setInt(2, p.getXCoord());
+				stmt.setInt(3, p.getYCoord());
+				stmt.executeUpdate();
+				stmt.close();
+			} catch (Exception e) {
+				throw new WbException(WbException.DB_ADD_POINTS, e);
+			}
+		}
+	}
+
+	public void removePoints(int editID) throws WbException {
+		Logger.log.info("Removing Points.");
+		try {
+			PreparedStatement stmt = c.prepareStatement(MySQL.REMOVE_POINTS);
+			stmt.setInt(1, editID);
+			stmt.executeUpdate();
+			stmt.close();
+		} catch (Exception e) {
+			throw new WbException(WbException.DB_REMOVE_POINTS, e);
 		}
 	}
 
@@ -368,6 +390,25 @@ public class DatabaseConnector {
 		}
 
 		return edits;
+	}
+
+	public Set<Point> getPoints(int editID) throws WbException {
+		Logger.log.info("Querying for Points.");
+		HashSet<Point> points = new HashSet<Point>();
+		try {
+			PreparedStatement stmt = c.prepareStatement(MySQL.GET_POINTS);
+			stmt.setInt(1, editID);
+
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				Point p = new Point(rs.getInt("EditID"), rs.getInt("X"), rs.getInt("Y"));
+				points.add(p);
+			}
+		} catch (Exception e) {
+			throw new WbException(WbException.DB_GET_POINTS, e);
+		}
+
+		return points;
 	}
 
 	public User getUser(String wbID, String username) throws WbException {

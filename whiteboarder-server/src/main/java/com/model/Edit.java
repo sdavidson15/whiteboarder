@@ -1,6 +1,5 @@
 package com.model;
 
-import java.awt.Point;
 import java.util.Date;
 import java.util.Set;
 
@@ -21,8 +20,6 @@ public class Edit {
 		this.color = color;
 		this.brushSize = brushSize;
 		this.points = points;
-
-		this.editID = -1;
 		this.timestamp = new Date();
 	}
 
@@ -52,6 +49,10 @@ public class Edit {
 
 	public Set<Point> getPoints() {
 		return this.points;
+	}
+
+	public void setPoints(Set<Point> points) {
+		this.points = points;
 	}
 
 	public Date getTimestamp() {
