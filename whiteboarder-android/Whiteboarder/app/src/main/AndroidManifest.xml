@@ -18,7 +18,8 @@
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,7 +35,31 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="whiteboarder.whiteboarder.MainActivity" />
         </activity>
-        <activity android:name=".ReadQR"></activity>
+        <activity android:name=".TakePhoto"
+            android:label="Take Photo"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="whiteboarder.whiteboarder.MainActivity" />
+        </activity>
+        <activity android:name=".ReadQR"
+            android:label="QR Code Scanner"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="whiteboarder.whiteboarder.MainActivity" />
+        </activity>
+        <activity android:name=".InSession"
+            android:label="Whiteboarder Session"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/InSessionTheme"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="whiteboarder.whiteboarder.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
