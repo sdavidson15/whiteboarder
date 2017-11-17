@@ -1,7 +1,9 @@
 package com.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class Whiteboard {
@@ -10,23 +12,23 @@ public class Whiteboard {
 	private String wbID;
 	private String name;
 	private List<Image> imgHistory;
-	private List<Edit> edits;
+	private Set<Edit> edits;
 
 	/**
 	 *  General purpose Whiteboard contructor
 	 **/
 	public Whiteboard(String name) {
-		this(UUID.randomUUID().toString(), name, new ArrayList<Image>(), new ArrayList<Edit>());
+		this(UUID.randomUUID().toString(), name, new ArrayList<Image>(), new HashSet<Edit>());
 	}
 
 	/**
 	 * Constructor used only for loading an existing Whiteboard from the database
 	 **/
-	public Whiteboard(String wbID, String name, List<Image> imgHistory, List<Edit> edits) {
+	public Whiteboard(String wbID, String name, List<Image> imgHistory, Set<Edit> edits) {
 		this.wbID = wbID;
 		this.name = name;
 		this.imgHistory = (imgHistory != null) ? imgHistory : new ArrayList<Image>();
-		this.edits = (edits != null) ? edits : new ArrayList<Edit>();
+		this.edits = (edits != null) ? edits : new HashSet<Edit>();
 	}
 
 	public String getWbID() {
@@ -59,15 +61,12 @@ public class Whiteboard {
 		this.imgHistory.add(0, img);
 	}
 
-	public Edit getMostRecentEdit() {
-		if (this.edits.size() == 0)
-			return null;
-
-		return this.edits.get(0);
+	public Set<Edit> getEdits() {
+		return this.edits;
 	}
 
-	public List<Edit> getEdits() {
-		return this.edits;
+	public void setEdits(Set<Edit> edits) {
+		this.edits = edits;
 	}
 
 	public void addEdit(Edit edit) {

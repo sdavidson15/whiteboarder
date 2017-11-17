@@ -14,16 +14,12 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 public class Rest {
-	public static final String BASE_URI = "http://proj-309-yt-c-1.cs.iastate.edu/whiteboarder/";
-	public static final String LOCAL_BASE_URI = "http://localhost/whiteboarder/";
-
-	public static HttpServer startServer(Context ctx) {
+	public static HttpServer setupServer(Context ctx, String uriStr, int port) {
 		Routes.ctx = ctx;
 
 		ResourceConfig rc = new ResourceConfig().packages("com.rest").register(MultiPartFeature.class);
 
-		String uriStr = ctx.isLocal() ? LOCAL_BASE_URI : BASE_URI;
-		final URI uri = UriBuilder.fromUri(uriStr).port(8080).build();
+		final URI uri = UriBuilder.fromUri(uriStr).port(port).build();
 		HttpServer server = GrizzlyHttpServerFactory.createHttpServer(uri, rc);
 
 		// serve static files on "/"

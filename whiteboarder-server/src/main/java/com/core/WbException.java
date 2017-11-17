@@ -26,6 +26,20 @@ public class WbException extends Exception {
     public static final String DB_SET_USER_MODE = "Failed to change a User's mode in the database.";
     public static final String DB_GET_WB = "Failed to retrieve a Whiteboard from the database.";
     public static final String DB_GET_IMG = "Failed to retrieve an Image from the database.";
+    public static final String DB_GET_IMGS = "Failed to retrieve Images from the database.";
+    public static final String DB_GET_EDITS = "Failed to retrieve Edits from the database.";
+    public static final String DB_INVALID_MODE = "Mode creation was rejected";
+    public static final String DB_GET_USER = "Failed to retrieve User from the database.";
+    public static final String DB_GET_USERS = "Failed to retrieve Users from the database.";
+    public static final String DB_REMOVE_USER = "Failed to remove a User from the database.";
+    public static final String DB_ADD_POINTS = "Failed to insert a set of Points into the database.";
+    public static final String DB_REMOVE_POINTS = "Failed to remove a set of Points from the database.";
+    public static final String DB_GET_POINTS = "Failed to retrieve Points from the database.";
+
+    public static final String INVALID_USER = "Failed to create session with a null user.";
+    public static final String INVALID_CONTEXT = "Invalid context.";
+    public static final String INVALID_NAME = "Failed to create session with a null name.";
+    public static final String INVALID_SESSION = "SessionID cannot be empty.";
 
     public static final String WHITEBOARD_DNE = "Whiteboard does not exist.";
     public static final String USER_DNE = "User does not exist.";

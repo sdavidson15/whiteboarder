@@ -3,7 +3,6 @@ package whiteboarder.whiteboarder;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,8 +22,6 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 public class MainActivity extends AppCompatActivity {
-
-    private TextView mTextMessage;
     private Camera camera;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -54,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
             camera.takePicture(null, null, null, new Camera.PictureCallback() {
                 public void onPictureTaken(byte[] data, Camera camera) {
                     RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), data);
+                    Snackbar.make(view, "Uploading...", Snackbar.LENGTH_SHORT).show();
 
                     // Post to the server
                     new RESTClient2().postImage(SessionInfo.sessionID, requestBody, new RESTClient2.Callback<Void>() {
@@ -106,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 camera.startPreview();
+                camera.autoFocus(null);
             }
 
             @Override
@@ -123,6 +122,20 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private final View.OnClickListener scanQRButtonOnClicklistener = new View.OnClickListener() {
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        @Override
+        public void onClick(View view) {
+            doPermissionsCheck();
+            camera.cancelAutoFocus();
+            camera.release();
+            camera = null;
+            Intent i = new Intent(MainActivity.this, ReadQR.class);
+            startActivity(i);
+        }
+    };
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -132,6 +145,16 @@ public class MainActivity extends AppCompatActivity {
 
         Button backstageButton = (Button) findViewById(R.id.backstageButton);
         backstageButton.setOnClickListener(backstageButtonOnClickListener);
+
+        Button scanQR = (Button) findViewById(R.id.scanQRButton);
+        scanQR.setOnClickListener(scanQRButtonOnClicklistener);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    protected void onResume() {
+        super.onResume();
+        openCamera();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

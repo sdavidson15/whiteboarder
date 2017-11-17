@@ -2,10 +2,14 @@ package com.rest;
 
 import static org.junit.Assert.assertEquals;
 
+import com.Main;
 import com.core.Context;
+
+import java.util.Map;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
+
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.After;
 import org.junit.Before;
@@ -18,15 +22,17 @@ public class RoutesTest {
 
 	@Before
 	public void setUp() throws Exception {
-		server = Rest.startServer(new Context(null, null, true));
+		Context ctx = new Context(null, null, true);
+		server = Rest.setupServer(ctx, Main.LOCAL_URI, Main.LOCAL_PORT);
+		server.start();
 		Client mockClient = ClientBuilder.newClient();
 
-		target = mockClient.target(Rest.LOCAL_BASE_URI);
+		target = mockClient.target(Main.LOCAL_URI);
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		server.stop();
+		server.shutdownNow();
 	}
 
 	@Test
