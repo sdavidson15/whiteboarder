@@ -1,54 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="whiteboarder.whiteboarder.MainActivity">
 
-
-    <FrameLayout
-        android:id="@+id/content"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="@color/colorPrimary">
-
-            <Button
-                android:id="@+id/takePhotoButton"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Take Photo" />
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/backstageButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Backstage" />
+                <!-- Banner from: https://www.shareicon.net/writing-white-education-whiteboard-tools-tool-board-write-804473 -->
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="250dp"
+                    android:layout_margin="40dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/whiteboarder_banner"/>
 
-            <Button
-                android:id="@+id/scanQRButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Scan QR Code" />
+                <Button
+                    android:id="@+id/photoActivityButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/white"
+                    android:background="@drawable/menu_button_shape"
+                    android:text="Take Photo" />
 
+                <Button
+                    android:id="@+id/scanQRButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:background="@drawable/menu_button_shape"
+                    android:text="Scan QR" />
 
-            <SurfaceView
-                android:id="@+id/cameraPreviewSurface"
-                android:layout_width="270dp"
-                android:layout_height="480dp"
-                android:layout_gravity="center"
-                android:layout_weight="0.40" />
+                <Button
+                    android:id="@+id/joinSessionButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:background="@drawable/menu_button_shape"
+                    android:text="Join Session" />
 
-        </LinearLayout>
+                <Button
+                    android:id="@+id/backstageButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="50dp"
+                    android:textColor="@color/white"
+                    android:background="@drawable/menu_button_shape"
+                    android:text="Backstage" />
 
-    </FrameLayout>
-
-</LinearLayout>
+            </LinearLayout>
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>
