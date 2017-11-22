@@ -7,6 +7,10 @@ h1 {
     font-size: 6em;
 }
 
+div.container {
+	min-width: 80%;
+}
+
 .wb-main-jumbotron {
     min-height: 16em;
 }
