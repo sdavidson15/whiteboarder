@@ -8,10 +8,18 @@ body {
 	min-width: 70%;
 }
 
+.card {
+	margin: 0.3rem;
+}
+
+#welcome-image {
+	margin: 1rem;
+}
+
 .jumbotron-fluid {
 	background: white;
 	padding: 2rem;
-	min-height: 32rem;
+	margin-bottom: 8rem;
 }
 
 #qrcode {
