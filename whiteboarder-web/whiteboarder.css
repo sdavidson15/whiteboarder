@@ -4,16 +4,14 @@ body {
     font-family: 'Quicksand', sans-serif;
 }
 
-h1 {
-    font-size: 4em;
+#wb-main-container {
+	min-width: 70%;
 }
 
-div.container {
-	min-width: 80%;
-}
-
-.wb-main-jumbotron {
-    min-height: 16em;
+.jumbotron-fluid {
+	background: white;
+	padding: 2rem;
+	min-height: 32rem;
 }
 
 #qrcode {
