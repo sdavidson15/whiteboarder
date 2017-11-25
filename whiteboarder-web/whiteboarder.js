@@ -20,10 +20,11 @@ function navigateToURLForSession(sessionID) {
     var parsedURL = new URL(window.location.href);
     var currentURLSessionID = parsedURL.searchParams.get("sessionID");
     if (currentURLSessionID != sessionID) {
-        var newParams = new URLSearchParams();
-        newParams.set("searchParams", sessionID);
-        parsedURL.searchParams.set("sessionID", sessionID);
-        parsedURL.searchParams = newParams;
+        if (sessionID) {
+            parsedURL.searchParams.set("sessionID", sessionID);
+        } else {
+            parsedURL.searchParams.delete("sessionID");
+        }
         console.log(parsedURL.searchParams.get("sessionID"));
         console.log(parsedURL.href);
         window.location.href = parsedURL.href;
@@ -65,13 +66,14 @@ $(function() {
     }
 
     // set up button triggers
+    $("#navbar-title").click(function() { navigateToURLForSession(null); });
+    $("#navbar-home-link").click(function() { navigateToURLForSession(null); });
     $("#session-id-button-navbar").click(function() {
         navigateToURLForSession($("#session-id-input-navbar").val());
     });
     $("#session-id-button-welcome").click(function() {
         navigateToURLForSession($("#session-id-input-welcome").val());
     });
-
     $("#create-new-session").click(function() {
         $("#create-new-session").prop("disabled", true);
         $("#create-new-session").text("Creating...");
