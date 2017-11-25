@@ -3,16 +3,17 @@ const routePrefix = "/whiteboarder";
 
 // `callback` will be called with one parameter: the new sessionID.
 function POST_Session(callback) {
-    if (!DEBUG_MODE) {
-        $.ajax(routePrefix + '/session', {
-            type: "POST",
-            contentType: "application/json",
-            dataType: 'text',
-            success: switchToSession,
-        });
-    } else {
-        switchToSession('new-session-id');
-    }
+    $.ajax(routePrefix + '/session', {
+        type: "POST",
+        contentType: "application/json",
+        dataType: 'text',
+        success: callback,
+        timeout: 2000,
+        error: function(msg) {
+            console.log(msg);
+            alert("error creating session: " + msg.statusText);
+        }
+    });
 }
 
 function navigateToURLForSession(sessionID) {
@@ -69,6 +70,14 @@ $(function() {
     });
     $("#session-id-button-welcome").click(function() {
         navigateToURLForSession($("#session-id-input-welcome").val());
+    });
+
+    $("#create-new-session").click(function() {
+        $("#create-new-session").prop("disabled", true);
+        $("#create-new-session").text("Creating...");
+        POST_Session(function(newSessionID) {
+            navigateToURLForSession(newSessionID);
+        });
     });
 
     var refreshIteration = 0;
