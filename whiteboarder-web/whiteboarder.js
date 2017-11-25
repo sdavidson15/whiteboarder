@@ -19,8 +19,14 @@ function navigateToURLForSession(sessionID) {
     var parsedURL = new URL(window.location.href);
     var currentURLSessionID = parsedURL.searchParams.get("sessionID");
     if (currentURLSessionID != sessionID) {
+        var newParams = new URLSearchParams();
+        newParams.set("searchParams", sessionID);
         parsedURL.searchParams.set("sessionID", sessionID);
+        parsedURL.searchParams = newParams;
+        console.log(parsedURL.searchParams.get("sessionID"));
+        console.log(parsedURL.href);
         window.location.href = parsedURL.href;
+        console.log("udapted href");
     }
 }
 
@@ -38,11 +44,10 @@ function getSessionIDFromURL() {
 $(function() {
     // Put all mutable variables in this object.
     var state = {
-        sessionID:  null,
+        sessionID: null,
     };
 
     state.sessionID = getSessionIDFromURL();
-    navigateToURLForSession(state.sessionID);
 
     if (state.sessionID) {
         // If we are connected to a session
@@ -57,6 +62,14 @@ $(function() {
         $("#section-welcome").show();
         $("#section-connected").hide();
     }
+
+    // set up button triggers
+    $("#session-id-button-navbar").click(function() {
+        navigateToURLForSession($("#session-id-input-navbar").val());
+    });
+    $("#session-id-button-welcome").click(function() {
+        navigateToURLForSession($("#session-id-input-welcome").val());
+    });
 
     var refreshIteration = 0;
     function refreshCurrentImage() {
