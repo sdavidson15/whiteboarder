@@ -1,6 +1,5 @@
 
-const debugMode = false;
-const routePrefix = "http://localhost:8080/whiteboarder";
+const routePrefix = "/whiteboarder";
 
 // `callback` will be called with one parameter: the new sessionID.
 function POST_Session(callback) {
@@ -16,7 +15,7 @@ function POST_Session(callback) {
     }
 }
 
-function updateURLIfNecessary(sessionID) {
+function navigateToURLForSession(sessionID) {
     var parsedURL = new URL(window.location.href);
     var currentURLSessionID = parsedURL.searchParams.get("sessionID");
     if (currentURLSessionID != sessionID) {
@@ -33,7 +32,7 @@ $(function() {
     };
 
     state.sessionID = getSessionIDFromURL();
-    updateURLIfNecessary(state.sessionID);
+    navigateToURLForSession(state.sessionID);
 
     function updateQR() {
         if (!state.qrcode) {
