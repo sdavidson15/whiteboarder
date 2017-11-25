@@ -56,8 +56,8 @@ $(function() {
         $("#section-connected").show();
 
         new QRCode(document.getElementById("qrcode"), {
-            width: 100,
-            height: 100
+            width: 140,
+            height: 140
         }).makeCode(state.sessionID);
     } else {
         $("#section-welcome").show();
