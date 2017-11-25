@@ -29,3 +29,11 @@ body {
 	height: 100px;
 }
 
+#section-welcome {
+	display: none;
+}
+
+#section-connected {
+	display: none;
+}
+

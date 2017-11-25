@@ -24,40 +24,38 @@ function navigateToURLForSession(sessionID) {
     }
 }
 
+function getSessionIDFromURL() {
+    var parsedURL = new URL(window.location.href);
+    var query = parsedURL.searchParams.get("sessionID");
+    console.log(query);
+    if (query) {
+        console.log("parsed sessionID from url: " + query);
+        return query;
+    }
+    return null;
+}
+
 $(function() {
     // Put all mutable variables in this object.
     var state = {
         sessionID:  null,
-        qrcode:     null,
     };
 
     state.sessionID = getSessionIDFromURL();
     navigateToURLForSession(state.sessionID);
 
-    function updateQR() {
-        if (!state.qrcode) {
-            state.qrcode = new QRCode(document.getElementById("qrcode"), {
-                width: 100,
-                height: 100
-            });
-        }
-        if (sessionID) {
-            console.log('making QR from sessionID ' + sessionID);
-            state.qrcode.makeCode(sessionID);
-        } else {
-            state.qrcode.clear();
-        }
-    };
+    if (state.sessionID) {
+        // If we are connected to a session
+        $("#section-welcome").hide();
+        $("#section-connected").show();
 
-    function getSessionIDFromURL() {
-        var parsedURL = new URL(window.location.href);
-        var query = parsedURL.searchParams.get("sessionID");
-        console.log(query);
-        if (query) {
-            console.log("parsed sessionID from url: " + query);
-            return query;
-        }
-        return null;
+        new QRCode(document.getElementById("qrcode"), {
+            width: 100,
+            height: 100
+        }).makeCode(state.sessionID);
+    } else {
+        $("#section-welcome").show();
+        $("#section-connected").hide();
     }
 
     var refreshIteration = 0;
