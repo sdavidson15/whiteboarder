@@ -1,79 +1,65 @@
 
-// parse id from cookie string
-function getCookie(cookieName) {
-        var name = cookieName + "=";
-        var ca = document.cookie.split(';');
-        for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') {
-                        c = c.substring(1);
-                }
-                if (c.indexOf(name) == 0) {
-                        return c.substring(name.length, c.length);
-                }
-        }
-        return "";
+const debugMode = false;
+const routePrefix = "http://localhost:8080/whiteboarder";
+
+// `callback` will be called with one parameter: the new sessionID.
+function POST_Session(callback) {
+    if (!DEBUG_MODE) {
+        $.ajax(routePrefix + '/session', {
+            type: "POST",
+            contentType: "application/json",
+            dataType: 'text',
+            success: switchToSession,
+        });
+    } else {
+        switchToSession('new-session-id');
+    }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-
-var DEBUG_MODE = true;
-
-var routePrefix = "http://localhost:8080/whiteboarder";
-var sessionID = null;
-var id = getCookie("wb_session_id");
-var qrcode = null;
+function updateURLIfNecessary(sessionID) {
+    var parsedURL = new URL(window.location.href);
+    var currentURLSessionID = parsedURL.searchParams.get("sessionID");
+    if (currentURLSessionID != sessionID) {
+        parsedURL.searchParams.set("sessionID", sessionID);
+        window.location.href = parsedURL.href;
+    }
+}
 
 $(function() {
-    loadSessionIDFromURL();
-    switchToSession(sessionID);
+    // Put all mutable variables in this object.
+    var state = {
+        sessionID:  null,
+        qrcode:     null,
+    };
+
+    state.sessionID = getSessionIDFromURL();
+    updateURLIfNecessary(state.sessionID);
 
     function updateQR() {
-        if (!qrcode) {
-            qrcode = new QRCode(document.getElementById("qrcode"), {
+        if (!state.qrcode) {
+            state.qrcode = new QRCode(document.getElementById("qrcode"), {
                 width: 100,
                 height: 100
             });
         }
         if (sessionID) {
             console.log('making QR from sessionID ' + sessionID);
-            qrcode.makeCode(sessionID);
+            state.qrcode.makeCode(sessionID);
         } else {
-            qrcode.clear();
+            state.qrcode.clear();
         }
     };
 
-    function loadSessionIDFromURL() {
+    function getSessionIDFromURL() {
         var parsedURL = new URL(window.location.href);
-        var hash = parsedURL.hash;
-        if (hash) {
-            // remove # symbol from beginning of hash
-            sessionID = hash.substring(1);
-            console.log("loaded sessionID from hash: " + sessionID);
+        var query = parsedURL.searchParams.get("sessionID");
+        console.log(query);
+        if (query) {
+            console.log("parsed sessionID from url: " + query);
+            return query;
         }
+        return null;
     }
-
-    function switchToSession(newSessionID) {
-        sessionID = newSessionID;
-        updateQR();
-        var parsedURL = new URL(window.location.href);
-        parsedURL.hash = sessionID;
-        window.location.href = parsedURL.href;
-        refreshCurrentImage();
-    }
-
-    $("#create_session_btn").click(function() {
-        if (!DEBUG_MODE) {
-            $.ajax(routePrefix + '/session', {
-                type: "POST",
-                contentType: "application/json",
-                dataType: 'text',
-                success: switchToSession,
-            });
-        } else {
-            switchToSession('new-session-id');
-        }
-    });
 
     var refreshIteration = 0;
     function refreshCurrentImage() {
@@ -87,8 +73,5 @@ $(function() {
             $('#imagebox').empty().append(img);
         });
     }
-
-    // refresh the current session image every 5 seconds
-    setInterval(refreshCurrentImage, 5000);
 });
 
