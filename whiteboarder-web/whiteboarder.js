@@ -84,6 +84,7 @@ $(function() {
 
     var refreshIteration = 0;
     function refreshCurrentImage() {
+        var sessionID = state.sessionID;
         if (!sessionID) return;
         refreshIteration = refreshIteration + 1;
         var imgURL = routePrefix + '/image/' + sessionID + '#q=' + refreshIteration;
@@ -94,5 +95,25 @@ $(function() {
             $('#imagebox').empty().append(img);
         });
     }
+    refreshCurrentImage();
+
+    /*
+    var joinedNames = [];
+
+    function clearNameList() {
+        $("#joined-members").empty();
+    }
+
+    function addName(name) {
+        $("#joined-members").append(
+            $("<li />").addClass("list-group-item").addClass("list-group-item-success").text(name)
+        );
+    }
+
+    clearNameList();
+    for (let l : joinedNames) {
+        addName(l);
+    }
+    */
 });
 
