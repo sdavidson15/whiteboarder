@@ -1,12 +1,45 @@
 
 body {
-    font-family: 'Architects Daughter', cursive;
+    background: #ddd;
+    font-family: 'Quicksand', sans-serif;
 }
 
-h1 {
-    font-size: 6em;
+#main-container {
+	min-width: 70%;
 }
 
-.wb-main-jumbotron {
-    min-height: 16em;
+.card {
+	margin: 0.3rem;
 }
+
+#welcome-image {
+	margin: 1rem;
+}
+
+.jumbotron-fluid {
+	background: white;
+	padding: 2rem;
+	margin-bottom: 8rem;
+}
+
+#qrcode {
+	margin: 10px auto;
+	text-align: center;
+	width: 140px;
+	height: 140px;
+}
+
+#section-welcome {
+	display: none;
+}
+
+#section-connected {
+	display: none;
+}
+
+#canvas {
+	width: 100%;
+	height: 100%;
+	border: 2px black dashed;
+}
+

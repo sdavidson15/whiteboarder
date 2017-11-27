@@ -7,43 +7,143 @@
     <title>Whiteboarder</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
-        crossorigin="anonymous">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Architects+Daughter">
+    crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
     <link rel="stylesheet" href="whiteboarder.css" />
 </head>
 
 <body>
-    <div class="container">
-        <div class="row" style="margin-top: 3rem">
-            <div class="col-8">
-                <h1>Whiteboarder</h1>
-            </div>
-            <div class="col-4">
-                <input type="text" placeholder="Session ID" style="width: 100%" />
-                <br />
-                <button class="button-primary" style="width: 100%">Join Session</button>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a id="navbar-title" class="navbar-brand" href="#">Whiteboarder</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a id="navbar-home-link" class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Share
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Copy URL to Clipboard</a>
+                    </div>
+                </li>
+            </ul>
+            <div class="form-inline my-2 my-lg-0">
+                <input id="session-id-input-navbar" class="form-control" placeholder="Session ID" aria-label="Session ID">
+                <button id="session-id-button-navbar" class="btn btn-secondary my-2 my-sm-0" type="submit">Join</button>
             </div>
         </div>
+    </nav>
 
-        <div class="jumbotron" class="wb-main-jumbotron">
-            <h2>Collaborate with your teammates like they're in the room with you!</h2>
-            <br>
-            <div class="btn-group-vertical" role="group"></div>
-            <button id="create_session_btn" class="btn btn-primary btn-lg" href="#" value="create page">Create Whiteboarder Session</button>
+    <div class="container" id="main-container">
+
+        <div class="jumbotron-fluid">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1>Whiteboarder</h1>
+                    <div>Collaborate with your friends as though they are in the room with you!</div>
+                </div>
+            </div>
+
+            <br />
+
+            <div id="section-welcome" class="container-fluid">
+                <div class="row">
+                    <div class="col-2"></div>
+                    <div class="col-8">
+                        <img class="img-fluid" id="welcome-image" src="./welcome-image2.jpg"></img>
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-5 card">
+                        <div class="card-body">
+                            <h4 class="card-title text-center"> Join Existing Session </h4>
+                            <ol>
+                                <li>Enter the session code or URL</li>
+                                <li>Join an existing session</li>
+                            </ol>
+                            <div class="row">
+                                <div class="col-8">
+                                    <input id="session-id-input-welcome" class="form-control" placeholder="Session ID" aria-label="Session ID">
+                                </div>
+                                <div class="col-4">
+                                    <button id="session-id-button-welcome" class="btn btn-primary" style="width: 100%" type="submit">Join</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-5 card">
+                        <div class="card-body">
+                            <h4 class="card-title text-center"> New Session </h4>
+                            <ol>
+                                <li>Generate new SessionID.</li>
+                                <li>Scan QR Code to join session with your phone.</li>
+                                <li>Use phone to photograph your whiteboard.</li>
+                            </ol>
+                            <div class="text-center">
+                                <button id="create-new-session" type="button" class="btn btn-primary">Create New Session</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+            </div>
+
+            <div id="section-connected" class="container-fluid">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title">Active Collaborators</div>
+                                <ul id="joined-members" class="list-group">
+                                    <li class="list-group-item list-group-item-success">John</li>
+                                    <li class="list-group-item list-group-item-success">Paul</li>
+                                    <li class="list-group-item list-group-item-success">George</li>
+                                    <li class="list-group-item list-group-item-success">Ringo</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="qrcode"></div>
+                                <small>Scan this QR with Whiteboarder app to join the session!</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="imagebox"> </div>
+                                <canvas id="canvas">
+                                    Use a browser that supports html5 lmao
+                                </canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
     </div>
 
-    <script src="config.js"></script>
-    <script src="GenerateQR.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
         crossorigin="anonymous"></script>
-    <script>
-        config.init();
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.19.0/URI.js"></script>
+    <script src="qrcodejs/qrcode.js"></script>
+    <script src="whiteboarder.js"></script>
 </body>
 
 </html>
