@@ -47,6 +47,7 @@ $(function() {
     // Put all mutable variables in this object.
     var state = {
         sessionID: null,
+        username: null,
     };
 
     state.sessionID = getSessionIDFromURL();
@@ -60,6 +61,9 @@ $(function() {
             width: 140,
             height: 140
         }).makeCode(state.sessionID);
+
+        state.username = window.prompt("what's ur username", "it's me");
+        console.log(state.username);
     } else {
         $("#section-welcome").show();
         $("#section-connected").hide();
