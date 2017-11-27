@@ -262,6 +262,39 @@ public class DatabaseConnector {
 		}
 	}
 
+	public Message addMessage(Message msg) throws WbException {
+		Logger.log.info("Sending a Message.");
+		try {
+			PreparedStatement stmt = c.prepareStatement(MySQL.ADD_MESSAGE);
+			stmt.setString(1, msg.getWbID());
+			stmt.setString(2, msg.getUsername());
+			stmt.setString(3, msg.getMessage());
+			stmt.setTimestamp(4, new Timestamp(msg.getTimestamp().getTime()));
+			stmt.executeUpdate();
+			ResultSet rs = stmt.getGeneratedKeys();
+			rs.next();
+			msg.setMessageID(rs.getInt(1));
+			stmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new WbException(WbException.DB_ADD_MESSAGE, e);
+		}
+
+		return msg;
+	}
+
+	public void removeMessage(Message msg) throws WbException {
+		Logger.log.info("Removing a Message.");
+		try {
+			PreparedStatement stmt = c.prepareStatement(MySQL.REMOVE_MESSAGE);
+			stmt.setInt(1, msg.getMessageID());
+			stmt.executeUpdate();
+			stmt.close();
+		} catch (Exception e) {
+			throw new WbException(WbException.DB_REMOVE_MESSAGE, e);
+		}
+	}
+
 	// Queries
 	public Whiteboard getWhiteboard(String wbID) throws WbException {
 		Logger.log.info("Querying for a Whiteboard.");
