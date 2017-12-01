@@ -7,7 +7,7 @@
     <title>Whiteboarder</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
-    crossorigin="anonymous">
+        crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
     <link rel="stylesheet" href="whiteboarder.css" />
 </head>
@@ -16,7 +16,8 @@
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a id="navbar-title" class="navbar-brand" href="#">Whiteboarder</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -26,7 +27,8 @@
                     <a id="navbar-home-link" class="nav-link" href="#">Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
                         Share
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -121,12 +123,29 @@
                     </div>
                     <div class="col-9">
                         <div class="card">
-                            <div class="card-body">
-                                <div id="imagebox"> </div>
+                            <div id="imagebox" class="card-body">
                                 <canvas id="canvas">
                                     Use a browser that supports html5 lmao
                                 </canvas>
                             </div>
+                        </div>
+                        <div class="card">
+                            <form>
+                                <input id="marker" name="tool" type="radio" checked> Marker
+                                <input id="eraser" name="tool" type="radio"> Eraser
+                            </form>
+                            <form>
+                                <input id="black" name="color" type="radio" checked> Black
+                                <input id="blue" name="color" type="radio"> Blue
+                                <input id="green" name="color" type="radio"> Green
+                                <input id="red" name="color" type="radio"> Red
+                            </form>
+                            <form>
+                                <input id="huge" name="brushSize" type="radio"> Huge
+                                <input id="large" name="brushSize" type="radio"> Large
+                                <input id="normal" name="brushSize" type="radio" checked> Normal
+                                <input id="small" name="brushSize" type="radio"> Small
+                            </form>
                         </div>
                     </div>
                 </div>
