@@ -62,6 +62,10 @@ public class WhiteboarderApplication extends WebSocketApplication {
             return;
         }
 
+        // if jsondata startswithmessage
+        // handleMessage(..)
+        // broadcast
+
         WhiteboarderWebSocket wws = (WhiteboarderWebSocket) websocket;
         if (wws.getSessionID() == null || wws.getUser() == null)
             return;
