@@ -46,10 +46,9 @@ public class InSession extends AppCompatActivity {
         // 4. Render the edits.
         // 5. Connect to the web socket, and log in as "Anonymous".
 
-        setTitle((SessionInfo.sessionID == null) ? "No session connected" : SessionInfo.sessionName);
+        setTitle(SessionInfo.sessionID == null ? "No session connected" : SessionInfo.sessionName);
         if (SessionInfo.username == null) {
-            Snackbar viewAsAnon = Snackbar.make(findViewById(R.id.content_frame), R.string.view_as_anon, Snackbar.LENGTH_LONG);
-            viewAsAnon.show();
+            Snackbar.make(findViewById(R.id.content_frame), R.string.view_as_anon, Snackbar.LENGTH_LONG).show();
         }
 
         ListView drawerList = findViewById(R.id.left_drawer);
@@ -102,7 +101,7 @@ public class InSession extends AppCompatActivity {
             // of users stored in SessionInfo
         } else if (position == labelsList.indexOf(SHARE_LINK_LABEL)) {
             Log.d("InSession.handleClick", "sharing");
-            //create the send intent
+
             Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Whiteboarder");
