@@ -37,10 +37,7 @@ public class ReadQR extends AppCompatActivity implements ZXingScannerView.Result
         setContentView(mScannerView);
         int currentapiVersion = Build.VERSION.SDK_INT;
         if (currentapiVersion >= Build.VERSION_CODES.M) {
-            if (checkPermission()) {
-                Toast.makeText(getApplicationContext(), "Permission already granted", Toast.LENGTH_LONG).show();
-            }
-            else {
+            if (!checkPermission()) {
                 requestPermission();
             }
         }
