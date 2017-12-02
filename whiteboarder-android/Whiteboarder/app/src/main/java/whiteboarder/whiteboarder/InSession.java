@@ -1,11 +1,13 @@
 package whiteboarder.whiteboarder;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,7 +25,13 @@ public class InSession extends AppCompatActivity {
     private static final String SHARE_LINK_LABEL = "Share Link";
     private static final String UPDATE_BOARD_LABEL = "Update Board";
 
-    private String[] drawerItemLabels;
+    private String[] drawerItemLabels = new String[]{
+            CHANGE_USERNAME_LABEL,
+            CHANGE_SESSION_NAME_LABEL,
+            VIEW_USERS_LABEL,
+            SHARE_LINK_LABEL,
+            UPDATE_BOARD_LABEL
+    };
     private ActionBarDrawerToggle drawerToggle;
 
     @Override
@@ -38,19 +46,12 @@ public class InSession extends AppCompatActivity {
         // 4. Render the edits.
         // 5. Connect to the web socket, and log in as "Anonymous".
 
-        setTitle((SessionInfo.sessionName == null) ? "No session connected" : SessionInfo.sessionName);
+        setTitle((SessionInfo.sessionID == null) ? "No session connected" : SessionInfo.sessionName);
         if (SessionInfo.username == null) {
             Snackbar viewAsAnon = Snackbar.make(findViewById(R.id.content_frame), R.string.view_as_anon, Snackbar.LENGTH_LONG);
             viewAsAnon.show();
         }
 
-        drawerItemLabels = new String[]{
-                CHANGE_USERNAME_LABEL,
-                CHANGE_SESSION_NAME_LABEL,
-                VIEW_USERS_LABEL,
-                SHARE_LINK_LABEL,
-                UPDATE_BOARD_LABEL
-        };
         ListView drawerList = findViewById(R.id.left_drawer);
         drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, drawerItemLabels));
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
@@ -84,6 +85,8 @@ public class InSession extends AppCompatActivity {
     }
 
     private void handleClick(int position) {
+        Log.d("InSession.handleClick", "click at position " + position);
+
         if (SessionInfo.sessionID == null)
             return;
 
@@ -98,7 +101,13 @@ public class InSession extends AppCompatActivity {
             // TODO: Navigate to an Activity that simply lists the list
             // of users stored in SessionInfo
         } else if (position == labelsList.indexOf(SHARE_LINK_LABEL)) {
-            // TODO: Somehow share the link.
+            Log.d("InSession.handleClick", "sharing");
+            //create the send intent
+            Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Whiteboarder");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, RESTClient2.HOST + "/?sessionID=" + SessionInfo.sessionID);
+            startActivity(Intent.createChooser(shareIntent, "some text"));
         } else if (position == labelsList.indexOf(UPDATE_BOARD_LABEL)) {
             // TODO: Navigate to the Take Photo activity. Make sure you
             // can navigate back to this activity by hitting back.
@@ -108,6 +117,7 @@ public class InSession extends AppCompatActivity {
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
+            Log.d("handleClick", "click at position " + position);
             handleClick(position);
         }
     }
