@@ -13,7 +13,7 @@ public class Message {
 
 	public Message(int messageID, String wbID, String username, String msg) {
 		this.wbID = wbID;
-		this.editID = editID;
+		this.messageID = messageID;
         this.username = username;
         this.msg = msg;
 		this.timestamp = new Date();
