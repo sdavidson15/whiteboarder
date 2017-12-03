@@ -20,6 +20,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.File;
 import java.lang.reflect.Type;
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.ws.rs.Consumes;
@@ -61,7 +62,7 @@ public class Routes {
 		} catch (WbException e) {
 			return Response.serverError().entity(e.getMessage()).build();
 		}
-		
+
 		Gson gson = new GsonBuilder().create();
 		return Response.ok(gson.toJson(wb), APPLICATION_JSON).build();
 	}
@@ -152,5 +153,24 @@ public class Routes {
 		}
 
 		return Response.ok("Image uploaded.").build();
+	}
+
+	@GET
+	@Path("/users/{sessionID}")
+	public Response getUsers(@PathParam("sessionID") String sessionID) {
+		Logger.log.info("Recieved a GET users request.");
+		if (sessionID == null || sessionID.trim().length() == 0) {
+			return Response.status(400).entity("Session ID cannot be empty.").build();
+		}
+
+		Set<User> users = null;
+		try {
+			users = Manager.getUsers(ctx, sessionID);
+		} catch (WbException e) {
+			return Response.serverError().entity(e.getMessage()).build();
+		}
+
+		Gson gson = new GsonBuilder().create();
+		return Response.ok(gson.toJson(users), APPLICATION_JSON).build();
 	}
 }
