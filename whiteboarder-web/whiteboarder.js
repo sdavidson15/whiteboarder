@@ -6,6 +6,7 @@ var state = {
     refreshIteration: 0,
     sessionID: null,
     username: null,
+    users: null
 };
 
 // `callback` will be called with one parameter: the new sessionID.
@@ -66,6 +67,32 @@ function refreshCurrentImage() {
     });
 }
 
+function refreshUsersList() {
+    if (!state.sessionID) return;
+    var usersURL = routePrefix + '/users/' + state.sessionID + '#q=' + ++state.refreshIteration;
+    console.log('reloading users from ' + usersURL);
+
+    var redrawUsers = function () {
+        $('#joined-members').empty();
+        for (var i = 0; i < state.users.length; i++) {
+            var user = state.users[i];
+            $("#joined-members").append(
+                $("<li />").addClass("list-group-item").addClass("list-group-item-success").text(user['username'])
+            );
+        }
+    }
+
+    $.getJSON(usersURL, function (data) {
+        console.log('Recieved data: ' + data);
+        console.log('Recieved data (stringified): ' + JSON.stringify(data));
+        state.users = data;
+        for (var i = 0; i < state.users.length; i++) {
+            console.log('Retrieved username: ' + state.users[i]['username']);
+        }
+        redrawUsers();
+    });
+}
+
 $(function () {
     state.sessionID = getSessionIDFromURL();
 
@@ -82,6 +109,8 @@ $(function () {
         state.username = window.prompt("Enter a username", "Anonymous");
         console.log(state.username);
         websocketApp.init();
+        refreshCurrentImage();
+        refreshUsersList();
     } else {
         $("#section-welcome").show();
         $("#section-connected").hide();
@@ -104,27 +133,6 @@ $(function () {
             navigateToURLForSession(newSessionID);
         });
     });
-
-    refreshCurrentImage();
-
-    /*
-    var joinedNames = [];
-
-    function clearNameList() {
-        $("#joined-members").empty();
-    }
-
-    function addName(name) {
-        $("#joined-members").append(
-            $("<li />").addClass("list-group-item").addClass("list-group-item-success").text(name)
-        );
-    }
-
-    clearNameList();
-    for (let l : joinedNames) {
-        addName(l);
-    }
-    */
 });
 
 // ------------------------------------------- Drawing App ------------------------------------------- //
@@ -282,7 +290,6 @@ var drawingApp = (function () {
 
         setupListeners = function () {
             document.getElementById("marker").addEventListener("click", function () {
-                // TODO: Unlock the other options
                 if (currentTool != "marker") {
                     currentColor = stashedColor;
                     currentSize = stashedBrush;
@@ -290,7 +297,6 @@ var drawingApp = (function () {
                 }
             });
             document.getElementById("eraser").addEventListener("click", function () {
-                // TODO: Lock the other options
                 if (currentTool != "eraser") {
                     stashedColor = currentColor;
                     stashedBrush = currentSize;
@@ -382,7 +388,6 @@ var drawingApp = (function () {
             canvasHeight = $('#imagebox').height();
             canvas = document.getElementById('canvas');
 
-            // TODO: Move to .css
             canvas.setAttribute('width', canvasWidth);
             canvas.setAttribute('height', canvasHeight);
             canvas.setAttribute('id', 'canvas');
@@ -430,6 +435,11 @@ var websocketApp = (function () {
                 var message = event.data;
                 if (message.startsWith('refreshImage')) {
                     if (message.substring(message.indexOf(':') + 1) == state.sessionID) { refreshCurrentImage(); }
+                    return;
+                }
+
+                if (message.startsWith('refreshUsers')) {
+                    if (message.substring(message.indexOf(':') + 1) == state.sessionID) { refreshUsersList(); }
                     return;
                 }
 

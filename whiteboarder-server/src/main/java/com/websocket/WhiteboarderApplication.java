@@ -115,6 +115,10 @@ public class WhiteboarderApplication extends WebSocketApplication {
         broadcast("refreshImage:" + sessionID);
     }
 
+    public void refreshUsers(String sessionID) {
+        broadcast("refreshUsers:" + sessionID);
+    }
+
     private void login(WebSocket websocket, String jsonData) {
         // Expect to recieve a login message that looks like "login:{sessionID},{username}"
         WhiteboarderWebSocket wws = (WhiteboarderWebSocket) websocket;
@@ -137,6 +141,7 @@ public class WhiteboarderApplication extends WebSocketApplication {
         wws.setUser(username);
         members.add(websocket);
         Logger.log.info(wws.getUser() + " joined session " + wws.getSessionID());
+        refreshUsers(sessionID);
     }
 
     private void broadcast(String jsonData) {
