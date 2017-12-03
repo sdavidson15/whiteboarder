@@ -10,12 +10,14 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:padding="12dp"
+        android:background="#111">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
+                android:background="@color/white"
                 android:orientation="vertical">
 
                 <!-- Banner from: https://www.shareicon.net/writing-white-education-whiteboard-tools-tool-board-write-804473 -->
@@ -27,38 +29,12 @@
                     android:src="@drawable/whiteboarder_banner"/>
 
                 <Button
-                    android:id="@+id/photoActivityButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:textColor="@color/white"
-                    android:background="@drawable/menu_button_shape"
-                    android:text="Take Photo" />
-
-                <Button
                     android:id="@+id/scanQRButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:background="@drawable/menu_button_shape"
                     android:text="Scan QR" />
-
-                <Button
-                    android:id="@+id/joinSessionButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:background="@drawable/menu_button_shape"
-                    android:text="Join Session" />
-
-                <Button
-                    android:id="@+id/backstageButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="50dp"
-                    android:textColor="@color/white"
-                    android:background="@drawable/menu_button_shape"
-                    android:text="Backstage" />
 
             </LinearLayout>
     </ScrollView>
