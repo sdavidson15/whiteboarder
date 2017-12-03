@@ -152,6 +152,9 @@ public class Routes {
 			return Response.serverError().entity(e.getMessage()).build();
 		}
 
+		// Inform all clients to refresh the background image
+		ctx.getWbApp().refreshImage(sessionID);
+
 		return Response.ok("Image uploaded.").build();
 	}
 

@@ -4,6 +4,16 @@ body {
     font-family: 'Quicksand', sans-serif;
 }
 
+label {
+	width: 25%;
+	margin: 0 auto;
+	background-color: #343a40;
+}
+
+#toolsDiv label {
+	width: 50%;
+}
+
 #main-container {
 	min-width: 70%;
 }
@@ -37,9 +47,18 @@ body {
 	display: none;
 }
 
-#canvas {
-	width: 100%;
-	height: 100%;
-	border: 2px black dashed;
+#imagebox {
+	height: 27.25rem;
 }
 
+#image {
+	width: 95%;
+	height: 25rem;
+	position: absolute;
+}
+
+#canvas {
+	width: 95%;
+	height: 25rem;
+	position: absolute;
+}
