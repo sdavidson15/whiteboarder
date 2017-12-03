@@ -94,7 +94,6 @@ $(function() {
         var imgURL = routePrefix + '/image/' + sessionID + '#q=' + refreshIteration;
         console.log("reloading image from " + imgURL);
         var img = $("<img />").attr("src", imgURL);
-        img.css('transform', 'rotate(90deg)');
         img.ready(function() {
             $('#imagebox').empty().append(img);
         });
