@@ -5,6 +5,7 @@ import com.core.Manager;
 import com.core.WbException;
 import com.core.Logger;
 import com.model.Edit;
+import com.model.Message;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -63,11 +64,11 @@ public class WhiteboarderApplication extends WebSocketApplication {
         }
 
         if (jsonData != null && jsonData.startsWith("message:")) {
-            handleMessage();
+            handleMessage(websocket, jsonData);
             return;
         }
 
-        handleEdit();
+        handleEdit(websocket, jsonData);
     }
 
     @Override
@@ -162,7 +163,7 @@ public class WhiteboarderApplication extends WebSocketApplication {
         Gson gson = new GsonBuilder().create();
         Message m = null;
         try {
-            h = gson.fromJson(jsonMsg, new TypeToken<Message>() {
+            m = gson.fromJson(jsonMsg, new TypeToken<Message>() {
             }.getType());
             m.setNewTimestamp();
         } catch (JsonSyntaxException e) {
