@@ -2,12 +2,15 @@ package whiteboarder.whiteboarder;
 
 import android.util.Log;
 
+import java.util.List;
+
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
+import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -30,6 +33,12 @@ public class RESTClient2 {
         abstract void fail();
     }
 
+    public class User {
+        private String wbID;
+        private String username;
+    }
+
+
     private interface WhiteboarderServer {
         @POST("/whiteboarder/session")
         Call<String> createSesssion();
@@ -37,6 +46,9 @@ public class RESTClient2 {
         @Multipart
         @POST("/whiteboarder/image/{sessionID}")
         Call<Void> submitImage(@Path("sessionID") String sessionID, @Part("file") RequestBody requestBody);
+
+        @GET("/whiteboarder/users/{sessionID}")
+        Call<List<User>> getUsers(@Path("sessionID") String sessionID);
     }
 
     private static final Retrofit retrofit = new Retrofit.Builder().baseUrl(HOST)
@@ -76,6 +88,26 @@ public class RESTClient2 {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+                callback.fail();
+            }
+        });
+    }
+
+    public void getUsers(String sessionID, final Callback<List<User>> callback) {
+        Call<List<User>> call = service.getUsers(sessionID);
+        call.enqueue(new retrofit2.Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                if (response.code() >= 200 && response.code() < 300) {
+                    callback.success(response.body());
+                } else {
+                    callback.fail();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                Log.d("getUsers failure", t.toString());
                 callback.fail();
             }
         });
