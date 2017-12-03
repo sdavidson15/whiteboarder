@@ -43,3 +43,7 @@ body {
 	border: 2px black dashed;
 }
 
+#messagebox {
+	height: 6rem;
+}
+
