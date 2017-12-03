@@ -7,23 +7,24 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-    private final View.OnClickListener scanQRButtonOnClicklistener = new View.OnClickListener() {
-        public void onClick(View view) {
-            Intent intent = new Intent(MainActivity.this, ReadQR.class);
-            startActivity(intent);
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        setupListeners();
+        findViewById(R.id.scanQRButton).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ReadQR.class);
+                startActivity(intent);
+            }
+        });
     }
 
-    private void setupListeners() {
-        Button scanQR = findViewById(R.id.scanQRButton);
-        scanQR.setOnClickListener(scanQRButtonOnClicklistener);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (SessionInfo.sessionID != null) {
+            Intent intent = new Intent(MainActivity.this, InSession.class);
+            startActivity(intent);
+        }
     }
 }

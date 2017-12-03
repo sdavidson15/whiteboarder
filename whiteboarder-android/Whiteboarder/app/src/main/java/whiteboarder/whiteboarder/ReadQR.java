@@ -112,8 +112,6 @@ public class ReadQR extends AppCompatActivity implements ZXingScannerView.Result
     public void onDestroy() {
         super.onDestroy();
         mScannerView.stopCamera();
-        Intent intent = new Intent(ReadQR.this, InSession.class);
-        startActivity(intent);
     }
 
     @Override
