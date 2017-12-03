@@ -52,7 +52,8 @@ public class Main {
 		Logger.setupLogger();
 		DatabaseConnector dbc = startDatabaseConnection(dbHost, dbUser, dbPass, isLocal);
 		Context ctx = new Context(null, dbc, isLocal);
-		final HttpServer server = Rest.setupServer(ctx, uri, port);
+		HttpServer server = Rest.setupServer(ctx, uri, port);
+		WebSocketServer.startServer(ctx, server);
 		System.in.read();
 		server.shutdownNow();
 		endDatabaseConnection(dbc);

@@ -378,10 +378,6 @@ var drawingApp = (function () {
         init = function () {
             canvasWidth = $('#imagebox').width();
             canvasHeight = $('#imagebox').height();
-
-            // FIXME: Need to make sure things are position correctly before I can move forward.
-
-
             canvas = document.getElementById('canvas');
 
             // TODO: Move to .css
@@ -417,18 +413,12 @@ var websocketApp = (function () {
                 return;
 
             h = { edit: edit, isRemove: isRemove };
-            drawingApp.addEdit(edit); // TODO: Remove this once websocket is working again.
-            // TODO: Uncomment this
-            // socket.send(JSON.stringify(h));
-        },
-
-        login = function () {
-            // TODO: Uncomment this
-            // socket.send("login:" + state.sessionID + "," + state.username);
+            socket.send(JSON.stringify(h));
         },
 
         setupEventHandlers = function () {
             socket.onopen = function (event) {
+                socket.send("login:" + state.sessionID + "," + state.username);
                 drawingApp.init();
             };
             socket.onerror = function (error) {
@@ -437,7 +427,7 @@ var websocketApp = (function () {
             socket.onmessage = function (event) {
                 var message = event.data;
                 var h = JSON.parse(message);
-                if (h.edit.wbID == sessionID)
+                if (h.edit.wbID == state.sessionID)
                     drawingApp.addEdit(h.edit);
             };
             socket.onclose = function (event) {
@@ -447,14 +437,10 @@ var websocketApp = (function () {
         },
 
         init = function () {
-            drawingApp.init(); // TODO: Remove this
-
             href = window.location.href;
             url = href.replace(window.location.protocol, 'ws:').replace(href.substring(href.indexOf('?')), 'ws/session');
-            alert(url); // TODO: Remove this
             socket = new WebSocket(url);
             setupEventHandlers();
-            login();
         },
 
         close = function () {
