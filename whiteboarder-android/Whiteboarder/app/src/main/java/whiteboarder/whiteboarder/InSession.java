@@ -105,4 +105,9 @@ public class InSession extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        SessionInfo.sessionID = null;
+        super.onDestroy();
+    }
 }
