@@ -3,6 +3,7 @@ const routePrefix = "/whiteboarder";
 
 // Put all mutable variables in this object.
 var state = {
+    refreshIteration: 0,
     sessionID: null,
     username: null,
 };
@@ -49,6 +50,22 @@ function getSessionIDFromURL() {
     return null;
 }
 
+function refreshCurrentImage() {
+    var sessionID = state.sessionID;
+    if (!sessionID) return;
+    var imgURL = routePrefix + '/image/' + sessionID + '#q=' + ++state.refreshIteration;
+    console.log('reloading image from ' + imgURL);
+    var img = $('<img />').attr({
+        'src': imgURL,
+        'id': 'image'
+    });
+    img.ready(function () {
+        var oldCanvas = $('#canvas');
+        $('#imagebox').empty().append(img);
+        $('#imagebox').append(oldCanvas);
+    });
+}
+
 $(function () {
     state.sessionID = getSessionIDFromURL();
 
@@ -88,21 +105,6 @@ $(function () {
         });
     });
 
-    var refreshIteration = 0;
-    function refreshCurrentImage() {
-        var sessionID = state.sessionID;
-        if (!sessionID) return;
-        refreshIteration = refreshIteration + 1;
-        var imgURL = routePrefix + '/image/' + sessionID + '#q=' + refreshIteration;
-        console.log("reloading image from " + imgURL);
-        var img = $("<img />").attr("src", imgURL);
-        img.setAttribute('id', 'image');
-        img.ready(function () {
-            var oldCanvas = $('#canvas');
-            $('#imagebox').empty().append(img);
-            $('#imagebox').append(oldCanvas);
-        });
-    }
     refreshCurrentImage();
 
     /*
@@ -426,6 +428,11 @@ var websocketApp = (function () {
             };
             socket.onmessage = function (event) {
                 var message = event.data;
+                if (message.startsWith('refreshImage')) {
+                    if (message.substring(message.indexOf(':') + 1) == state.sessionID) { refreshCurrentImage(); }
+                    return;
+                }
+
                 var h = JSON.parse(message);
                 if (h.edit.wbID == state.sessionID)
                     drawingApp.addEdit(h.edit);

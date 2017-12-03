@@ -61,7 +61,7 @@ public class Routes {
 		} catch (WbException e) {
 			return Response.serverError().entity(e.getMessage()).build();
 		}
-		
+
 		Gson gson = new GsonBuilder().create();
 		return Response.ok(gson.toJson(wb), APPLICATION_JSON).build();
 	}
@@ -150,6 +150,9 @@ public class Routes {
 			Logger.log.severe("Error POSTing image: " + e.getMessage());
 			return Response.serverError().entity(e.getMessage()).build();
 		}
+
+		// Inform all clients to refresh the background image
+		ctx.getWbApp().refreshImage(sessionID);
 
 		return Response.ok("Image uploaded.").build();
 	}
