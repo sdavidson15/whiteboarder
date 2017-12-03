@@ -5,16 +5,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".InSession">
-    <FrameLayout
-        android:id="@+id/content_frame"
+
+    <LinearLayout
         android:layout_width="match_parent"
+        android:padding="15dp"
+        android:orientation="vertical"
         android:layout_height="match_parent">
 
-        <ImageView
+        <Button
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"/>
-    </FrameLayout>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Take New Image" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="8pt"
+            android:text="Connected Users" />
+
+        <TextView
+            android:id="@+id/connected_user_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
     <ListView
         android:id="@+id/left_drawer"
         android:padding="5dp"
