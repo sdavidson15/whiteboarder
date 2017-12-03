@@ -68,7 +68,6 @@ public class WhiteboarderApplication extends WebSocketApplication {
         }
 
         handleEdit();
-
     }
 
     @Override
@@ -86,6 +85,14 @@ public class WhiteboarderApplication extends WebSocketApplication {
             Logger.log.severe("Error while removing User: " + e.getMessage());
         }
         members.remove(websocket);
+    }
+
+    public void refreshImage(String sessionID) {
+        broadcast("refreshImage:" + sessionID);
+    }
+
+    public void refreshUsers(String sessionID) {
+        broadcast("refreshUsers:" + sessionID);
     }
 
     private void login(WebSocket websocket, String jsonData) {
@@ -110,6 +117,7 @@ public class WhiteboarderApplication extends WebSocketApplication {
         wws.setUser(username);
         members.add(websocket);
         Logger.log.info(wws.getUser() + " joined session " + wws.getSessionID());
+        refreshUsers(sessionID);
     }
 
     private void handleEdit(WebSocket websocket, String jsonData) {
@@ -141,7 +149,8 @@ public class WhiteboarderApplication extends WebSocketApplication {
             return;
         }
 
-        broadcast(wws.getSessionID(), wws.getUser(), jsonData);
+        Logger.log.info("User " + wws.getUser() + " in session " + wws.getSessionID() + " is broadcasting an Edit.");
+        broadcast(jsonData);
     }
 
     private void handleMessage(WebSocket websocket, String jsonData) {
@@ -149,7 +158,7 @@ public class WhiteboarderApplication extends WebSocketApplication {
         String jsonMsg = jsonData.substring(8);
         if (wws.getSessionID() == null || wws.getUser() == null)
             return;
-        
+
         Gson gson = new GsonBuilder().create();
         Message m = null;
         try {
@@ -171,12 +180,11 @@ public class WhiteboarderApplication extends WebSocketApplication {
             return;
         }
 
-        broadcast(wws.getSessionID(), wws.getUser()j, jsonData);
+        Logger.log.info("User " + wws.getUser() + " in session " + wws.getSessionID() + " is broadcasting a Message.");
+        broadcast(jsonData);
     }
 
-    private void broadcast(String sessionID, String username, String jsonData) {
-        Logger.log.info("User " + username + " in session " + sessionID + " is broadcasting an Edit.");
-        // FIXME: Broadcast only to members in this session (sessionID == wws.getSessionID())
+    private void broadcast(String jsonData) {
         broadcaster.broadcast(members, jsonData);
     }
 }

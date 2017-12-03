@@ -13,8 +13,10 @@ import org.glassfish.grizzly.websockets.WebSocketEngine;
 
 public class WebSocketServer {
     public static void startServer(Context ctx, HttpServer server) throws Exception {
-        server.getListener("grizzly").registerAddOn(new WebSocketAddOn());
         final WebSocketApplication wbApp = new WhiteboarderApplication(ctx);
+        ctx.setWbApp((WhiteboarderApplication) wbApp);
+
+        server.getListener("grizzly").registerAddOn(new WebSocketAddOn());
         WebSocketEngine.getEngine().register("/ws", "/session", wbApp);
         server.start();
     }
