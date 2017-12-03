@@ -41,6 +41,13 @@ public class InSession extends AppCompatActivity {
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,null, R.string.drawer_open, R.string.drawer_close) {};
         drawerLayout.addDrawerListener(drawerToggle);
 
+        findViewById(R.id.new_image_button).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(InSession.this, TakePhoto.class);
+                startActivity(intent);
+            }
+        });
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
     }
