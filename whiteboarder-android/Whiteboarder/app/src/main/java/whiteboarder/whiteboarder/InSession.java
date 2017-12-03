@@ -18,17 +18,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class InSession extends AppCompatActivity {
-
-    private static final String CHANGE_USERNAME_LABEL = "Change Username";
-    private static final String CHANGE_SESSION_NAME_LABEL = "Change Session Name";
-    private static final String VIEW_USERS_LABEL = "View Online Users";
     private static final String SHARE_LINK_LABEL = "Share Link";
-    private static final String UPDATE_BOARD_LABEL = "Update Board";
+    private static final String UPDATE_BOARD_LABEL = "Take New Photo";
 
     private String[] drawerItemLabels = new String[]{
-            CHANGE_USERNAME_LABEL,
-            CHANGE_SESSION_NAME_LABEL,
-            VIEW_USERS_LABEL,
             SHARE_LINK_LABEL,
             UPDATE_BOARD_LABEL
     };
@@ -46,7 +39,7 @@ public class InSession extends AppCompatActivity {
         // 4. Render the edits.
         // 5. Connect to the web socket, and log in as "Anonymous".
 
-        setTitle(SessionInfo.sessionID == null ? "No session connected" : SessionInfo.sessionName);
+        setTitle("Connected to Sesssion");
         if (SessionInfo.username == null) {
             Snackbar.make(findViewById(R.id.content_frame), R.string.view_as_anon, Snackbar.LENGTH_LONG).show();
         }
@@ -90,16 +83,7 @@ public class InSession extends AppCompatActivity {
             return;
 
         ArrayList<String> labelsList = (ArrayList<String>) Arrays.asList(drawerItemLabels);
-        if (position == labelsList.indexOf(CHANGE_USERNAME_LABEL)) {
-            // TODO: Let the user type a new username, send the PUT
-            // request to the server, then update it in SessionInfo.
-        } else if (position == labelsList.indexOf(CHANGE_SESSION_NAME_LABEL)) {
-            // TODO: Let the user type a new session name, send the PUT
-            // request to the server, then update it in SessionInfo.
-        } else if (position == labelsList.indexOf(VIEW_USERS_LABEL)) {
-            // TODO: Navigate to an Activity that simply lists the list
-            // of users stored in SessionInfo
-        } else if (position == labelsList.indexOf(SHARE_LINK_LABEL)) {
+        if (position == labelsList.indexOf(SHARE_LINK_LABEL)) {
             Log.d("InSession.handleClick", "sharing");
 
             Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
