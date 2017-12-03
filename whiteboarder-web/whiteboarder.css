@@ -42,13 +42,13 @@ body {
 }
 
 #image {
-	width: 44rem;
+	width: 95%;
 	height: 25rem;
 	position: absolute;
 }
 
 #canvas {
-	width: 44rem;
+	width: 95%;
 	height: 25rem;
 	position: absolute;
 }
