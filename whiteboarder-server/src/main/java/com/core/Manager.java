@@ -118,7 +118,7 @@ public class Manager {
 	public static Message sendMessage(Context ctx, Message msg) throws WbException {
 		Logger.log.info("Sending a message.");
 		if (!isValid(ctx)) {
-			throw new WbException(WbException.INVALID_CONTEXT)
+			throw new WbException(WbException.INVALID_CONTEXT);
 		}
 
 		ctx.getDbc().getWhiteboard(msg.getWbID());
@@ -130,12 +130,22 @@ public class Manager {
 	public static void removeMessage(Context ctx, Message msg) throws WbException {
 		Logger.log.info("Deleting a message.");
 		if (!isValid(ctx)) {
-			throw new WbException(WbException.INVALID_CONTEXT)
+			throw new WbException(WbException.INVALID_CONTEXT);
 		}
 
 		ctx.getDbc().getWhiteboard(msg.getWbID());
 		ctx.getDbc().getUser(msg.getWbID(), msg.getUsername());
 		ctx.getDbc().removeMessage(msg);
+	}
+
+	public static Set<User> getUsers(Context ctx, String sessionID) throws WbException {
+		Logger.log.info("Retrieving users.");
+		if (!isValid(ctx)) {
+			throw new WbException("Invalid context");
+		}
+
+		ctx.getDbc().getWhiteboard(sessionID); // Confirm that the Whiteboard exists
+		return ctx.getDbc().getUsers(sessionID);
 	}
 
 	private static boolean isValid(Context ctx) {
