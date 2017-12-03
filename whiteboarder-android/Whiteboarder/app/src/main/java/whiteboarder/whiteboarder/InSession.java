@@ -32,18 +32,7 @@ public class InSession extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_in_session);
 
-        // TODO:
-        // 1. Make a GET request for the session's image.
-        // 2. Make a GET request for the session's data and update SessionInfo.
-        // 3. Render the background image.
-        // 4. Render the edits.
-        // 5. Connect to the web socket, and log in as "Anonymous".
-
         setTitle("Connected to Sesssion");
-        if (SessionInfo.username == null) {
-            Snackbar.make(findViewById(R.id.content_frame), R.string.view_as_anon, Snackbar.LENGTH_LONG).show();
-        }
-
         ListView drawerList = findViewById(R.id.left_drawer);
         drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, drawerItemLabels));
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
