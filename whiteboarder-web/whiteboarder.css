@@ -4,6 +4,16 @@ body {
     font-family: 'Quicksand', sans-serif;
 }
 
+label {
+	width: 25%;
+	margin: 0 auto;
+	background-color: #343a40;
+}
+
+#toolsDiv label {
+	width: 50%;
+}
+
 #main-container {
 	min-width: 70%;
 }

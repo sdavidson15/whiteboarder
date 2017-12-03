@@ -130,22 +130,42 @@
                             </div>
                         </div>
                         <div class="card">
-                            <form>
-                                <input id="marker" name="tool" type="radio" checked> Marker
-                                <input id="eraser" name="tool" type="radio"> Eraser
-                            </form>
-                            <form>
-                                <input id="black" name="color" type="radio" checked> Black
-                                <input id="blue" name="color" type="radio"> Blue
-                                <input id="green" name="color" type="radio"> Green
-                                <input id="red" name="color" type="radio"> Red
-                            </form>
-                            <form>
-                                <input id="huge" name="brushSize" type="radio"> Huge
-                                <input id="large" name="brushSize" type="radio"> Large
-                                <input id="normal" name="brushSize" type="radio" checked> Normal
-                                <input id="small" name="brushSize" type="radio"> Small
-                            </form>
+                            <div id="toolsDiv" class="btn-group" data-toggle="buttons">
+                                <label id="marker" class="btn btn-primary active">
+                                    <input type="radio" name="tools" autocomplete="off" checked> Marker
+                                </label>
+                                <label id="eraser" class="btn btn-primary">
+                                    <input type="radio" name="tools" autocomplete="off"> Eraser
+                                </label>
+                            </div>
+                            <div class="btn-group" data-toggle="buttons">
+                                <label id="black" class="btn btn-primary active">
+                                    <input type="radio" name="colors" autocomplete="off" checked> Black
+                                </label>
+                                <label id="blue" class="btn btn-primary">
+                                    <input type="radio" name="colors" autocomplete="off"> Blue
+                                </label>
+                                <label id="green" class="btn btn-primary">
+                                    <input type="radio" name="colors" autocomplete="off"> Green
+                                </label>
+                                <label id="red" class="btn btn-primary">
+                                    <input type="radio" name="colors" autocomplete="off"> Red
+                                </label>
+                            </div>
+                            <div class="btn-group" data-toggle="buttons">
+                                <label id="huge" class="btn btn-primary">
+                                    <input type="radio" name="sizes" autocomplete="off"> Huge
+                                </label>
+                                <label id="large" class="btn btn-primary">
+                                    <input type="radio" name="sizes" autocomplete="off"> Large
+                                </label>
+                                <label id="normal" class="btn btn-primary active">
+                                    <input type="radio" name="sizes" autocomplete="off" checked> Normal
+                                </label>
+                                <label id="small" class="btn btn-primary">
+                                    <input type="radio" name="sizes" autocomplete="off"> Small
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
