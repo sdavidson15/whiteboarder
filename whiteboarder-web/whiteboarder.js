@@ -98,7 +98,7 @@ function refreshMessagesList() {
         var currentMsg = state.messages[i];
         var currentAuth = currentMsg.username;
         var currentMsgTime = currentMsg.timestamp;
-        var messageElement = $("<li />").addClass("list-group-item").attr("data-toggle", "popover").attr("data-placement", "right").attr("data-content", "" + currentMsgTime);        
+        var messageElement = $("<li />").addClass("list-group-item");       
         $("#messagebox").append(
             (currentAuth == state.username) ? messageElement.addClass("list-group-item-success") : messageElement
         );
@@ -107,7 +107,7 @@ function refreshMessagesList() {
         )
         if (currentAuth != state.username)
             $(messageElement).append(
-                $("<a />").text(currentAuth)
+                $("<small />").text(currentAuth + " | " + currentMsgTime).addClass("text-muted")
             );
     }
 }
