@@ -68,7 +68,11 @@ public class InSession extends AppCompatActivity {
             @Override
             void success(List<RESTClient2.User> data) {
                 TextView textView = (TextView) findViewById(R.id.connected_user_list);
-                textView.setText(data.toString());
+                String text = "";
+                for (RESTClient2.User user: data) {
+                    text = text + user.username + "\n";
+                }
+                textView.setText(text);
             }
 
             @Override

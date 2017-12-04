@@ -35,10 +35,11 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textSize="8pt"
-            android:text="Connected Users" />
+            android:text="Connected Web Users" />
 
         <TextView
             android:id="@+id/connected_user_list"
+            android:textSize="7pt"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
