@@ -20,7 +20,7 @@ public class Rest {
 		ResourceConfig rc = new ResourceConfig().packages("com.rest").register(MultiPartFeature.class);
 
 		final URI uri = UriBuilder.fromUri(uriStr).port(port).build();
-		HttpServer server = GrizzlyHttpServerFactory.createHttpServer(uri, rc);
+		HttpServer server = GrizzlyHttpServerFactory.createHttpServer(uri, rc, false);
 
 		// serve static files on "/"
 		HttpHandler httpHandler = new StaticHttpHandler("../whiteboarder-web");
