@@ -24,8 +24,7 @@ public class InSession extends AppCompatActivity {
     private static final String UPDATE_BOARD_LABEL = "Take New Photo";
 
     private String[] drawerItemLabels = new String[]{
-            SHARE_LINK_LABEL,
-            UPDATE_BOARD_LABEL
+            "Administrative controls coming soon!"
     };
     private ActionBarDrawerToggle drawerToggle;
 
@@ -34,7 +33,7 @@ public class InSession extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_in_session);
 
-        setTitle("Connected to Sesssion");
+        setTitle("Connected to Session");
         ListView drawerList = findViewById(R.id.left_drawer);
         drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, drawerItemLabels));
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
@@ -43,13 +42,14 @@ public class InSession extends AppCompatActivity {
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,null, R.string.drawer_open, R.string.drawer_close) {};
         drawerLayout.addDrawerListener(drawerToggle);
 
+        ((TextView) findViewById(R.id.meta_session_id)).setText("Session ID: " + SessionInfo.sessionID);
+
         findViewById(R.id.new_image_button).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent intent = new Intent(InSession.this, TakePhoto.class);
                 startActivity(intent);
             }
         });
-
 
         findViewById(R.id.refresh_user_list).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {

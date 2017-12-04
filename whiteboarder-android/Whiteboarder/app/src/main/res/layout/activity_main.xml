@@ -11,13 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="12dp"
-        android:background="#111">
+        android:background="@color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:background="@color/white"
+                android:layout_marginTop="50dp"
                 android:orientation="vertical">
 
                 <!-- Banner from: https://www.shareicon.net/writing-white-education-whiteboard-tools-tool-board-write-804473 -->
