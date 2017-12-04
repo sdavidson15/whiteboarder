@@ -94,6 +94,7 @@ function refreshMessagesList() {
     if (state.messages.length > 50) state.messages = state.messages.slice(state.messages.length - 50);
 
     $('#messagebox').empty();
+    $("#message-input").empty();
     for (var i = 0; i < state.messages.length; i++) {
         var currentMsg = state.messages[i];
         var currentAuth = currentMsg.username;
