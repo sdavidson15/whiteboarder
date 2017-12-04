@@ -360,8 +360,8 @@ public class DatabaseConnector {
 		return images;
 	}
 
-	public Set<Edit> getEdits(String wbID) throws WbException {
-		HashSet<Edit> edits = new HashSet<Edit>();
+	public List<Edit> getEdits(String wbID) throws WbException {
+		ArrayList<Edit> edits = new ArrayList<Edit>();
 
 		// WhiteboardID, Username, Color, BrushSize, Timestamp
 		String username = null;
