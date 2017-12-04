@@ -7,53 +7,24 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-    private final View.OnClickListener scanQRButtonOnClicklistener = new View.OnClickListener() {
-        public void onClick(View view) {
-            Intent intent = new Intent(MainActivity.this, ReadQR.class);
-            startActivity(intent);
-        }
-    };
-
-    private final View.OnClickListener photoActivityButtonOnClickListener = new View.OnClickListener() {
-        public void onClick(View view) {
-            Intent intent = new Intent(MainActivity.this, TakePhoto.class);
-            startActivity(intent);
-        }
-    };
-
-    private final View.OnClickListener joinSessionButtonOnClickListener = new View.OnClickListener() {
-        public void onClick(View view) {
-            Intent intent = new Intent(MainActivity.this, InSession.class);
-            startActivity(intent);
-        }
-    };
-
-    private final View.OnClickListener backstageButtonOnClickListener = new View.OnClickListener() {
-        public void onClick(View view) {
-            Intent intent = new Intent(MainActivity.this, Backstage.class);
-            startActivity(intent);
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        setupListeners();
+        findViewById(R.id.scanQRButton).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ReadQR.class);
+                startActivity(intent);
+            }
+        });
     }
 
-    private void setupListeners() {
-        Button photoActivityButton = findViewById(R.id.photoActivityButton);
-        photoActivityButton.setOnClickListener(photoActivityButtonOnClickListener);
-
-        Button scanQR = findViewById(R.id.scanQRButton);
-        scanQR.setOnClickListener(scanQRButtonOnClicklistener);
-
-        Button joinSession = findViewById(R.id.joinSessionButton);
-        joinSession.setOnClickListener(joinSessionButtonOnClickListener);
-
-        Button backstageButton = findViewById(R.id.backstageButton);
-        backstageButton.setOnClickListener(backstageButtonOnClickListener);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (SessionInfo.sessionID != null) {
+            Intent intent = new Intent(MainActivity.this, InSession.class);
+            startActivity(intent);
+        }
     }
 }
