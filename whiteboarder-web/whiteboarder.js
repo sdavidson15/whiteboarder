@@ -7,7 +7,7 @@ var state = {
     sessionID: null,
     username: null,
     users: null,
-    messages: {}
+    messages: []
 };
 
 // `callback` will be called with one parameter: the new sessionID.
@@ -91,12 +91,16 @@ function refreshUsersList() {
 
 function refreshMessagesList() {
     if (!state.sessionID) return;
-    
-    var redrawMessages = function () {
-        //$("#messagebox").empty();
-        var msg = state.messages[state.messages.length - 1]; // will this get the right message?
-        $("messagebox").append(
-            $("<li />").addClass("list-group-item").text(msg.message)
+    if (state.messages.length > 50) state.messages = state.messages.slice(state.messages.length - 50);
+
+    $('#messagebox').empty();
+    for (var i = 0; i < state.messages.length; i++) {
+        alert('iterating');
+        var currentMsg = state.messages[i];
+        $("#messagebox").append(
+            (currentMsg.username == state.username) ?
+                $("<li />").addClass("list-group-item").addClass("list-group-item-success").text(currentMsg.msg) :
+                $("<li />").addClass("list-group-item").text(currentMsg.msg)
         );
     }
 }
@@ -142,11 +146,15 @@ $(function () {
         });
     });
     $("#message-submit").click(function () {
+        var msgStr = $("#message-input").val();
+        if (msgStr == null || msgStr.trim().length == 0) return;
+
         var m = {
             wbID: state.sessionID,
             messageID: -1,
             username: state.username,
             message: $("#message-input").val(),
+            msg: msgStr.trim(),
             timestamp: null
         }
         websocketApp.handleMessage(m);
@@ -450,7 +458,7 @@ var websocketApp = (function () {
         handleMessage = function (message) {
             if (state.sessionID == null || state.username == null) return;
 
-            socket.send("message:" + JSON.stringify(m));
+            socket.send("message:" + JSON.stringify(message));
         },
 
         setupEventHandlers = function () {
@@ -475,10 +483,11 @@ var websocketApp = (function () {
 
                 if (message.startsWith('message')) {
                     var msg = JSON.parse(message.substring(8));
-                    if (message.wbID == state.sessionID) {
+                    if (msg.wbID == state.sessionID) {
                         state.messages.push(msg);
                         refreshMessagesList();
                     }
+                    return;
                 }
 
                 var h = JSON.parse(message);
