@@ -101,8 +101,8 @@ function refreshMessagesList() {
         var currentMsgTime = currentMsg.timestamp;
         $("#messagebox").append(
             (currentAuth == state.username) ?
-                $("<li />").addClass("list-group-item").addClass("list-group-item-success").text(currentMsg.msg).attr("data-toggle", "popover").attr("data-placement", "right").attr("data-content", currentMsgTime) :
-                $("<li />").addClass("list-group-item").text(currentMsg.msg).attr("data-toggle", "popover").attr("data-placement", "right").attr("data-content", currentMsgTime)
+                $("<li />").addClass("list-group-item").addClass("list-group-item-success").text(currentMsg.msg).attr("data-toggle", "popover").attr("data-placement", "right").attr("data-content", "" + currentMsgTime) :
+                $("<li />").addClass("list-group-item").text(currentMsg.msg).attr("data-toggle", "popover").attr("data-placement", "right").attr("data-content", "" + currentMsgTime)
         );
         if (currentAuth != state.username)
             $("#messagebox").append(
