@@ -84,12 +84,7 @@ function refreshUsersList() {
     }
 
     $.getJSON(usersURL, function (data) {
-        console.log('Recieved data: ' + data);
-        console.log('Recieved data (stringified): ' + JSON.stringify(data));
         state.users = data;
-        for (var i = 0; i < state.users.length; i++) {
-            console.log('Retrieved username: ' + state.users[i]['username']);
-        }
         redrawUsers();
     });
 }
@@ -412,7 +407,13 @@ var drawingApp = (function () {
             }
             context = canvas.getContext("2d");
 
-            redraw();
+            // Retrieve existing edits from the server
+            var editsURL = routePrefix + '/session/' + state.sessionID + '#q=' + ++state.refreshIteration;
+            $.getJSON(editsURL, function (data) {
+                edits = data['edits'];
+                redraw();
+            });
+
             setupListeners();
         };
 

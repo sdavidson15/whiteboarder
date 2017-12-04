@@ -179,7 +179,7 @@ public class DatabaseConnector {
 		}
 	}
 
-	public void addPoints(Set<Point> points) throws WbException {
+	public void addPoints(List<Point> points) throws WbException {
 		Logger.log.info("Adding Points.");
 
 		for (Point p : points) {
@@ -425,9 +425,9 @@ public class DatabaseConnector {
 		return edits;
 	}
 
-	public Set<Point> getPoints(int editID) throws WbException {
+	public List<Point> getPoints(int editID) throws WbException {
 		Logger.log.info("Querying for Points.");
-		HashSet<Point> points = new HashSet<Point>();
+		ArrayList<Point> points = new ArrayList<Point>();
 		try {
 			PreparedStatement stmt = c.prepareStatement(MySQL.GET_POINTS);
 			stmt.setInt(1, editID);
