@@ -6,7 +6,8 @@ var state = {
     refreshIteration: 0,
     sessionID: null,
     username: null,
-    users: null
+    users: null,
+    messages: []
 };
 
 // `callback` will be called with one parameter: the new sessionID.
@@ -88,6 +89,33 @@ function refreshUsersList() {
     });
 }
 
+function refreshMessagesList() {
+    if (!state.sessionID) return;
+    if (state.messages.length > 50) state.messages = state.messages.slice(state.messages.length - 50);
+
+    $('#messagebox').empty();
+    $("#message-input").empty();
+    for (var i = 0; i < state.messages.length; i++) {
+        var currentMsg = state.messages[i];
+        var currentAuth = currentMsg.username;
+        var currentMsgTime = currentMsg.timestamp;
+        var messageElement = $("<li />").addClass("list-group-item");       
+        $("#messagebox").append(
+            (currentAuth == state.username) ? messageElement.addClass("list-group-item-success") : messageElement
+        );
+        messageElement.append(
+            $("<p />").text(currentMsg.msg)
+        );
+        var messageStamps = $(messageElement).append($("<div />").addClass("msgmeta"));
+        messageStamps.append(
+            $("<span />").addClass("namestamp").text(currentAuth)
+        );
+        messageStamps.append(
+            $("<span />").addClass("timestamp").text(currentMsgTime)
+        );
+    }
+}
+
 $(function () {
     state.sessionID = getSessionIDFromURL();
 
@@ -127,6 +155,20 @@ $(function () {
         POST_Session(function (newSessionID) {
             navigateToURLForSession(newSessionID);
         });
+    });
+    $("#message-submit").click(function () {
+        var msgStr = $("#message-input").val();
+        if (msgStr == null || msgStr.trim().length == 0) return;
+
+        var m = {
+            wbID: state.sessionID,
+            messageID: -1,
+            username: state.username,
+            message: $("#message-input").val(),
+            msg: msgStr.trim(),
+            timestamp: null
+        }
+        websocketApp.handleMessage(m);
     });
 });
 
@@ -424,6 +466,12 @@ var websocketApp = (function () {
             socket.send(JSON.stringify(h));
         },
 
+        handleMessage = function (message) {
+            if (state.sessionID == null || state.username == null) return;
+
+            socket.send("message:" + JSON.stringify(message));
+        },
+
         setupEventHandlers = function () {
             socket.onopen = function (event) {
                 socket.send("login:" + state.sessionID + "," + state.username);
@@ -441,6 +489,15 @@ var websocketApp = (function () {
 
                 if (message.startsWith('refreshUsers')) {
                     if (message.substring(message.indexOf(':') + 1) == state.sessionID) { refreshUsersList(); }
+                    return;
+                }
+
+                if (message.startsWith('message')) {
+                    var msg = JSON.parse(message.substring(8));
+                    if (msg.wbID == state.sessionID) {
+                        state.messages.push(msg);
+                        refreshMessagesList();
+                    }
                     return;
                 }
 
@@ -469,6 +526,7 @@ var websocketApp = (function () {
     return {
         init: init,
         close: close,
-        handleEdit: handleEdit
+        handleEdit: handleEdit,
+        handleMessage: handleMessage
     };
 }());
