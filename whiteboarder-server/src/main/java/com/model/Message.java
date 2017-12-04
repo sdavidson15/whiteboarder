@@ -3,7 +3,7 @@ package com.model;
 import java.util.Date;
 
 public class Message {
-    public static final int MAX_MSG_LENGTH = 200;
+	public static final int MAX_MSG_LENGTH = 200;
 
 	private int messageID;
 	private String wbID;
@@ -14,8 +14,8 @@ public class Message {
 	public Message(int messageID, String wbID, String username, String msg) {
 		this.wbID = wbID;
 		this.messageID = messageID;
-        this.username = username;
-        this.msg = msg;
+		this.username = username;
+		this.msg = msg;
 		this.timestamp = new Date();
 	}
 
@@ -33,15 +33,15 @@ public class Message {
 
 	public String getUsername() {
 		return this.username;
-    }
-    
-    public String getMessage() {
-        return this.msg;
-    }
+	}
 
-    public void setMessage() {
-        this.msg = msg;
-    }
+	public String getMessage() {
+		return this.msg;
+	}
+
+	public void setMessage() {
+		this.msg = msg;
+	}
 
 	public Date getTimestamp() {
 		return this.timestamp;

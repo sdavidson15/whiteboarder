@@ -182,7 +182,7 @@ public class WhiteboarderApplication extends WebSocketApplication {
         }
 
         Logger.log.info("User " + wws.getUser() + " in session " + wws.getSessionID() + " is broadcasting a Message.");
-        broadcast(jsonData);
+        broadcast("message:" + jsonData);
     }
 
     private void broadcast(String jsonData) {

@@ -79,3 +79,7 @@ label {
 	margin: 0;
 	float: left;
 }
+
+#joined-members {
+	height: 12rem;
+}
