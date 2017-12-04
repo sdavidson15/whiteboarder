@@ -97,10 +97,19 @@ function refreshMessagesList() {
     for (var i = 0; i < state.messages.length; i++) {
         alert('iterating');
         var currentMsg = state.messages[i];
+        var currentAuth = currentMsg.username;
+        var currentMsgTime = currentMsg.timestamp;
         $("#messagebox").append(
-            (currentMsg.username == state.username) ?
-                $("<li />").addClass("list-group-item").addClass("list-group-item-success").text(currentMsg.msg) :
-                $("<li />").addClass("list-group-item").text(currentMsg.msg)
+            (currentAuth == state.username) ?
+                $("<li />").addClass("list-group-item").addClass("list-group-item-success").text(currentMsg.msg).attr("data-toggle", "popover").attr("data-placement", "right").attr("data-content", currentMsgTime) :
+                $("<li />").addClass("list-group-item").text(currentMsg.msg).attr("data-toggle", "popover").attr("data-placement", "right").attr("data-content", currentMsgTime)
+        );
+        if (currentAuth != state.username)
+            $("#messagebox").append(
+                $("<a />").text(currentAuth)
+            );
+        $("#messagebox").append(
+            $("<br />")
         );
     }
 }

@@ -68,14 +68,13 @@ label {
 }
 
 #message-submit {
-	width: 40%;
+	width: 15%;
 	margin: 0;
 	float: right;
 }
 
 #message-input {
-	width: 60%;
-	height: 100%;
+	width: 85%;
 	margin: 0;
 	float: left;
 }

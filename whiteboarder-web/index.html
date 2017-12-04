@@ -166,11 +166,17 @@
                             <div class="card-body">
                                 <div class="card-title text-center">Messages</div>
                                 <ol class="pre-scrollable list-group" id="messagebox">
+                                    <li class="list-group-item" data-toggle="popover" data-placement="right" data-content="time">heres a message</li>
+                                    <a>author name</a>
+                                    <br />
+                                    <li class="list-group-item">another message a long message this time to see what happens when the message rolls over onto another line well we shall see</li>
                                 </ol>
-                                <div id="message-send">
-                                    <input type="text" id="message-input">
-                                    <input type="button" id="message-submit" value="Send" class="btn btn-primary">
-                                </div>
+                                <form>
+                                    <div id="message-send" class="input-group input-group-sm">
+                                        <input type="text" id="message-input">
+                                        <input type="button" id="message-submit" value="Send" class="btn btn-primary">
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -188,6 +194,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.19.0/URI.js"></script>
     <script src="qrcodejs/qrcode.js"></script>
     <script src="whiteboarder.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="popover"]').popover(); 
+        });
+    </script>
 </body>
 
 </html>
