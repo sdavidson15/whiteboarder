@@ -6,7 +6,8 @@ var state = {
     refreshIteration: 0,
     sessionID: null,
     username: null,
-    users: null
+    users: null,
+    messages: {}
 };
 
 // `callback` will be called with one parameter: the new sessionID.
@@ -91,6 +92,18 @@ function refreshUsersList() {
         }
         redrawUsers();
     });
+}
+
+function refreshMessagesList() {
+    if (!state.sessionID) return;
+    
+    var redrawMessages = function () {
+        //$("#messagebox").empty();
+        var msg = state.messages[state.messages.length - 1]; // will this get the right message?
+        $("messagebox").append(
+            $("<li />").addClass("list-group-item").text(msg['message'])
+        );
+    }
 }
 
 $(function () {
@@ -423,6 +436,12 @@ var websocketApp = (function () {
             socket.send(JSON.stringify(h));
         },
 
+        handleMessage = function (message) {
+            if (state.sessionID == null || state.username == null) return;
+
+            socket.send("message:" + JSON.stringify(m));
+        },
+
         setupEventHandlers = function () {
             socket.onopen = function (event) {
                 socket.send("login:" + state.sessionID + "," + state.username);
@@ -441,6 +460,14 @@ var websocketApp = (function () {
                 if (message.startsWith('refreshUsers')) {
                     if (message.substring(message.indexOf(':') + 1) == state.sessionID) { refreshUsersList(); }
                     return;
+                }
+
+                if (message.startsWith('message')) {
+                    var msg = JSON.parse(message.substring(8));
+                    if (message.wbID == state.sessionID) {
+                        state.messages.push(msg);
+                        refreshMessagesList();
+                    }
                 }
 
                 var h = JSON.parse(message);
