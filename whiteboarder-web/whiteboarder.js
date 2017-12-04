@@ -107,10 +107,10 @@ function refreshMessagesList() {
         );
         var messageStamps = $(messageElement).append($("<div />").addClass("msgmeta"));
         messageStamps.append(
-            $("span />").addClass("namestamp").text(currentAuth)
+            $("<span />").addClass("namestamp").text(currentAuth)
         );
         messageStamps.append(
-            $("span />").addClass("timestamp").text(currentMsgTime)
+            $("<span />").addClass("timestamp").text(currentMsgTime)
         );
     }
 }
