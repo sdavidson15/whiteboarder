@@ -61,6 +61,7 @@ public class DatabaseConnector {
 				stmt.addBatch(MySQL.REMOVE_EDITS_TABLE);
 				stmt.addBatch(MySQL.REMOVE_POINTS_TABLE);
 				stmt.addBatch(MySQL.REMOVE_USERS_TABLE);
+				stmt.addBatch(MySQL.REMOVE_MESSAGES_TABLE);
 				stmt.executeBatch();
 				stmt.close();
 			} catch (Exception e) {
@@ -76,6 +77,7 @@ public class DatabaseConnector {
 			stmt.addBatch(MySQL.CREATE_EDITS_TABLE);
 			stmt.addBatch(MySQL.CREATE_POINTS_TABLE);
 			stmt.addBatch(MySQL.CREATE_USERS_TABLE);
+			stmt.addBatch(MySQL.CREATE_MESSAGES_TABLE);
 			stmt.executeBatch();
 			stmt.close();
 		} catch (Exception e) {
@@ -259,6 +261,39 @@ public class DatabaseConnector {
 			stmt.close();
 		} catch (Exception e) {
 			throw new WbException(WbException.DB_REMOVE_USER, e);
+		}
+	}
+
+	public Message addMessage(Message msg) throws WbException {
+		Logger.log.info("Adding a Message.");
+		try {
+			PreparedStatement stmt = c.prepareStatement(MySQL.ADD_MESSAGE);
+			stmt.setString(1, msg.getWbID());
+			stmt.setString(2, msg.getUsername());
+			stmt.setString(3, msg.getMessage());
+			stmt.setTimestamp(4, new Timestamp(msg.getTimestamp().getTime()));
+			stmt.executeUpdate();
+			ResultSet rs = stmt.getGeneratedKeys();
+			rs.next();
+			msg.setMessageID(rs.getInt(1));
+			stmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new WbException(WbException.DB_ADD_MESSAGE, e);
+		}
+
+		return msg;
+	}
+
+	public void removeMessage(Message msg) throws WbException {
+		Logger.log.info("Removing a Message.");
+		try {
+			PreparedStatement stmt = c.prepareStatement(MySQL.REMOVE_MESSAGE);
+			stmt.setInt(1, msg.getMessageID());
+			stmt.executeUpdate();
+			stmt.close();
+		} catch (Exception e) {
+			throw new WbException(WbException.DB_REMOVE_MESSAGE, e);
 		}
 	}
 

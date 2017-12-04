@@ -35,6 +35,8 @@ public class WbException extends Exception {
     public static final String DB_ADD_POINTS = "Failed to insert a set of Points into the database.";
     public static final String DB_REMOVE_POINTS = "Failed to remove a set of Points from the database.";
     public static final String DB_GET_POINTS = "Failed to retrieve Points from the database.";
+    public static final String DB_ADD_MESSAGE = "Failed to send Message.";
+    public static final String DB_REMOVE_MESSAGE = "Failed to remove Message.";
 
     public static final String INVALID_USER = "Failed to create session with a null user.";
     public static final String INVALID_CONTEXT = "Invalid context.";

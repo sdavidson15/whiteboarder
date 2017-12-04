@@ -106,7 +106,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="card-title">Active Collaborators</div>
-                                <ul id="joined-members" class="list-group"></ul>
+                                <ul id="joined-members" class="pre-scrollable list-group"></ul>
                             </div>
                         </div>
                         <div class="card">
@@ -162,10 +162,22 @@
                                 </label>
                             </div>
                         </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title text-center">Messages</div>
+                                <ol class="pre-scrollable list-group" id="messagebox">
+                                </ol>
+                                <form>
+                                    <div id="message-send" class="input-group input-group-sm">
+                                        <input type="text" id="message-input">
+                                        <input type="button" id="message-submit" value="Send" class="btn btn-primary">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
     </div>
@@ -178,6 +190,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.19.0/URI.js"></script>
     <script src="qrcodejs/qrcode.js"></script>
     <script src="whiteboarder.js"></script>
+
 </body>
 
 </html>
