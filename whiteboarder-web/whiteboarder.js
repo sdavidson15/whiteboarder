@@ -146,7 +146,7 @@ $(function () {
             wbID: state.sessionID,
             messageID: -1,
             username: state.username,
-            message: $("#message-submit").val(),
+            message: $("#message-input").val(),
             timestamp: null
         }
         websocketApp.handleMessage(m);
