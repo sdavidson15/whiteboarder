@@ -141,6 +141,16 @@ $(function () {
             navigateToURLForSession(newSessionID);
         });
     });
+    $("#message-submit").click(function () {
+        var m = {
+            wbID: state.sessionID,
+            messageID: -1,
+            username: state.username,
+            message: $("#message-submit").val(),
+            timestamp: null
+        }
+        websocketApp.handleMessage(m);
+    });
 });
 
 // ------------------------------------------- Drawing App ------------------------------------------- //
@@ -496,6 +506,7 @@ var websocketApp = (function () {
     return {
         init: init,
         close: close,
-        handleEdit: handleEdit
+        handleEdit: handleEdit,
+        handleMessage: handleMessage
     };
 }());
