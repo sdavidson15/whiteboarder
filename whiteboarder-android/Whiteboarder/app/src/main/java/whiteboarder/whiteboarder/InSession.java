@@ -13,9 +13,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class InSession extends AppCompatActivity {
     private static final String SHARE_LINK_LABEL = "Share Link";
@@ -48,8 +50,36 @@ public class InSession extends AppCompatActivity {
             }
         });
 
+
+        findViewById(R.id.refresh_user_list).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                refreshConnectedUserList();
+            }
+        });
+
+        refreshConnectedUserList();
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+    }
+
+    protected void refreshConnectedUserList() {
+        new RESTClient2().getUsers(SessionInfo.sessionID, new RESTClient2.Callback<List<RESTClient2.User>>() {
+            @Override
+            void success(List<RESTClient2.User> data) {
+                TextView textView = (TextView) findViewById(R.id.connected_user_list);
+                textView.setText(data.toString());
+            }
+
+            @Override
+            void fail() {
+                Snackbar.make(
+                        findViewById(R.id.drawer_layout),
+                        "There was an issue fetching the user list :(",
+                        Snackbar.LENGTH_SHORT
+                ).show();
+            }
+        });
     }
 
     @Override

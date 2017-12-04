@@ -34,8 +34,8 @@ public class RESTClient2 {
     }
 
     public class User {
-        private String wbID;
-        private String username;
+        public String wbID;
+        public String username;
     }
 
 

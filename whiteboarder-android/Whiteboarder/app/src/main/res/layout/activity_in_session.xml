@@ -13,11 +13,18 @@
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/new_image_button"
+        android:id="@+id/new_image_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Take New Image" />
+
+        <Button
+            android:id="@+id/refresh_user_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Take New Image" />
+            android:text="Refresh User List" />
 
         <Space
             android:layout_width="match_parent"
