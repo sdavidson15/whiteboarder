@@ -5,6 +5,7 @@ import com.core.Manager;
 import com.core.WbException;
 import com.core.Logger;
 import com.model.Edit;
+import com.model.Message;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -62,36 +63,12 @@ public class WhiteboarderApplication extends WebSocketApplication {
             return;
         }
 
-        WhiteboarderWebSocket wws = (WhiteboarderWebSocket) websocket;
-        if (wws.getSessionID() == null || wws.getUser() == null)
-            return;
-
-        Gson gson = new GsonBuilder().create();
-        HandleEdit h = null;
-        try {
-            h = gson.fromJson(jsonData, new TypeToken<HandleEdit>() {
-            }.getType());
-            h.edit.setNewTimestamp();
-        } catch (JsonSyntaxException e) {
-            Logger.log.warning("Recieved web socket message with bad json syntax.");
+        if (jsonData != null && jsonData.startsWith("message:")) {
+            handleMessage(websocket, jsonData);
             return;
         }
 
-        Logger.log.info("Recieved web socket message to handle an Edit.");
-        try {
-            if (h.isRemove)
-                Manager.removeEdit(ctx, h.edit);
-            else {
-                h.edit = Manager.applyEdit(ctx, h.edit);
-                jsonData = gson.toJson(h);
-            }
-        } catch (WbException e) {
-            Logger.log.severe("Error while handling edit: " + e.getMessage());
-            return;
-        }
-
-        Logger.log.info("User " + wws.getUser() + " in session " + wws.getSessionID() + " is broadcasting an Edit.");
-        broadcast(jsonData);
+        handleEdit(websocket, jsonData);
     }
 
     @Override
@@ -142,6 +119,70 @@ public class WhiteboarderApplication extends WebSocketApplication {
         members.add(websocket);
         Logger.log.info(wws.getUser() + " joined session " + wws.getSessionID());
         refreshUsers(sessionID);
+    }
+
+    private void handleEdit(WebSocket websocket, String jsonData) {
+        WhiteboarderWebSocket wws = (WhiteboarderWebSocket) websocket;
+        if (wws.getSessionID() == null || wws.getUser() == null)
+            return;
+
+        Gson gson = new GsonBuilder().create();
+        HandleEdit h = null;
+        try {
+            h = gson.fromJson(jsonData, new TypeToken<HandleEdit>() {
+            }.getType());
+            h.edit.setNewTimestamp();
+        } catch (JsonSyntaxException e) {
+            Logger.log.warning("Recieved web socket message with bad json syntax.");
+            return;
+        }
+
+        Logger.log.info("Recieved web socket message to handle an Edit.");
+        try {
+            if (h.isRemove)
+                Manager.removeEdit(ctx, h.edit);
+            else {
+                h.edit = Manager.applyEdit(ctx, h.edit);
+                jsonData = gson.toJson(h);
+            }
+        } catch (WbException e) {
+            Logger.log.severe("Error while handling edit: " + e.getMessage());
+            return;
+        }
+
+        Logger.log.info("User " + wws.getUser() + " in session " + wws.getSessionID() + " is broadcasting an Edit.");
+        broadcast(jsonData);
+    }
+
+    private void handleMessage(WebSocket websocket, String jsonData) {
+        WhiteboarderWebSocket wws = (WhiteboarderWebSocket) websocket;
+        String jsonMsg = jsonData.substring(8);
+        if (wws.getSessionID() == null || wws.getUser() == null)
+            return;
+
+        Gson gson = new GsonBuilder().create();
+        Message m = null;
+        try {
+            m = gson.fromJson(jsonMsg, new TypeToken<Message>() {
+            }.getType());
+            m.setNewTimestamp();
+        } catch (JsonSyntaxException e) {
+            Logger.log.warning("Recieved web socket message with bad json syntax.");
+            return;
+        }
+
+        Logger.log.info("Recieved web socket message to handle a Message object.");
+        try {
+            // unable to remove messages at this time
+            m = Manager.sendMessage(ctx, m);
+            jsonData = gson.toJson(m);
+        } catch (WbException e) {
+            Logger.log.severe("Error while handling Message: " + m.getMessage());
+            return;
+        }
+
+        Logger.log.info("User " + wws.getUser() + " in session " + wws.getSessionID() + " is broadcasting a Message.");
+        broadcast("message:" + jsonData);
     }
 
     private void broadcast(String jsonData) {

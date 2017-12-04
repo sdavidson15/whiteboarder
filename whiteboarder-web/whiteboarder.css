@@ -51,6 +51,10 @@ label {
 	height: 27.25rem;
 }
 
+#messagebox {
+	height: 16rem;
+}
+
 #image {
 	width: 95%;
 	height: 25rem;
@@ -61,4 +65,38 @@ label {
 	width: 95%;
 	height: 25rem;
 	position: absolute;
+}
+
+#message-submit {
+	width: 15%;
+	margin: 0;
+	float: right;
+}
+
+#message-input {
+	width: 85%;
+	margin: 0;
+	float: left;
+}
+
+#joined-members {
+	height: 12rem;
+}
+
+.namestamp {
+	float: left;
+	font-size: .8rem;
+	color: gray;
+	max-width: 60%;
+}
+
+.timestamp {
+	float: right;
+	font-size: .8rem;
+	color: gray;
+	max-width: 40%;
+}
+
+.msgmeta {
+	width: 100%;
 }
