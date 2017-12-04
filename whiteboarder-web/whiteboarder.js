@@ -104,11 +104,14 @@ function refreshMessagesList() {
         );
         messageElement.append(
             $("<p />").text(currentMsg.msg)
-        )
-        if (currentAuth != state.username)
-            $(messageElement).append(
-                $("<small />").text(currentAuth + " | " + currentMsgTime).addClass("text-muted")
-            );
+        );
+        var messageStamps = $(messageElement).append($("<div />").addClass("msgmeta"));
+        messageStamps.append(
+            $("span />").addClass("namestamp").text(currentAuth)
+        );
+        messageStamps.append(
+            $("span />").addClass("timestamp").text(currentMsgTime)
+        );
     }
 }
 

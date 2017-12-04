@@ -82,3 +82,21 @@ label {
 #joined-members {
 	height: 12rem;
 }
+
+.namestamp {
+	float: left;
+	font-size: .8rem;
+	color: gray;
+	max-width: 60%;
+}
+
+.timestamp {
+	float: right;
+	font-size: .8rem;
+	color: gray;
+	max-width: 40%;
+}
+
+.msgmeta {
+	width: 100%;
+}
