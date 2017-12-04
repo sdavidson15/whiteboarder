@@ -116,25 +116,13 @@ public class ReadQR extends AppCompatActivity implements ZXingScannerView.Result
 
     @Override
     public void handleResult(Result rawResult) {
-        final Activity parentActivity = ReadQR.this;
-
         final String result = rawResult.getText();
         Log.d("QRCodeScanner", rawResult.getText());
         Log.d("QRCodeScanner", rawResult.getBarcodeFormat().toString());
         SessionInfo.sessionID = result;
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Scan Result");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mScannerView.stopCamera();
-                mScannerView.stopCameraPreview();
-                parentActivity.finish();
-            }
-        });
-        builder.setMessage(rawResult.getText());
-        AlertDialog alert1 = builder.create();
-        alert1.show();
+        mScannerView.stopCamera();
+        mScannerView.stopCameraPreview();
+        finish();
     }
 }
