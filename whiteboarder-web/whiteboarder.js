@@ -156,9 +156,11 @@ $(function () {
             navigateToURLForSession(newSessionID);
         });
     });
-    $("#message-submit").click(function () {
+
+    var sendMessage = function () {
         var msgStr = $("#message-input").val();
         if (msgStr == null || msgStr.trim().length == 0) return;
+        $('#message-input').val('');
 
         var m = {
             wbID: state.sessionID,
@@ -169,6 +171,13 @@ $(function () {
             timestamp: null
         }
         websocketApp.handleMessage(m);
+    }
+
+    $("#message-submit").click(sendMessage);
+    $('#message-input').on('keypress', function(e) {
+        if (e.which == 13) {
+            sendMessage();
+        }
     });
 });
 
@@ -530,3 +539,4 @@ var websocketApp = (function () {
         handleMessage: handleMessage
     };
 }());
+
