@@ -96,7 +96,7 @@ function refreshMessagesList() {
         //$("#messagebox").empty();
         var msg = state.messages[state.messages.length - 1]; // will this get the right message?
         $("messagebox").append(
-            $("<li />").addClass("list-group-item").text(msg['message'])
+            $("<li />").addClass("list-group-item").text(msg.message)
         );
     }
 }

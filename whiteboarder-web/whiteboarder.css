@@ -52,7 +52,7 @@ label {
 }
 
 #messagebox {
-	height: 6rem;
+	height: 16rem;
 }
 
 #image {
@@ -65,4 +65,17 @@ label {
 	width: 95%;
 	height: 25rem;
 	position: absolute;
+}
+
+#message-submit {
+	width: 40%;
+	margin: 0;
+	float: right;
+}
+
+#message-input {
+	width: 60%;
+	height: 100%;
+	margin: 0;
+	float: left;
 }
