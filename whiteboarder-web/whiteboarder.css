@@ -48,17 +48,15 @@ label {
 }
 
 #imagebox {
-	height: 27.25rem;
 }
 
 #image {
 	width: 95%;
-	height: 25rem;
+	min-height: 5rem;
 	position: absolute;
 }
 
 #canvas {
 	width: 95%;
-	height: 25rem;
 	position: absolute;
 }
