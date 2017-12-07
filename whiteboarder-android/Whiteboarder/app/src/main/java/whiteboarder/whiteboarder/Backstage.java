@@ -12,6 +12,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+/**
+ * Backstage gives access to under the hood information about the app and an ongoing session, as well
+ * as providing app maintainer controls not accessible to a regular user.
+ * @author Alexander Campbell
+ */
 public class Backstage extends AppCompatActivity {
     private final View.OnClickListener createSessionOnClickListener = new View.OnClickListener() {
         @Override
@@ -28,8 +33,8 @@ public class Backstage extends AppCompatActivity {
 
                 @Override
                 public void fail() {
-                    Snackbar.make(view, "error creating session", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    Snackbar.make(view, "error creating session", Snackbar.LENGTH_LONG).setAction("Action", null)
+                            .show();
                 }
             });
         }
@@ -57,10 +62,10 @@ public class Backstage extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void doPermissionsCheck() {
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
-            requestPermissions(new String[]{Manifest.permission.CAMERA}, 0);
+            requestPermissions(new String[] { Manifest.permission.CAMERA }, 0);
 
         if (checkSelfPermission(Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED)
-            requestPermissions(new String[]{Manifest.permission.INTERNET}, 0);
+            requestPermissions(new String[] { Manifest.permission.INTERNET }, 0);
     }
 
     private void updateViewsWithSessionInfo() {

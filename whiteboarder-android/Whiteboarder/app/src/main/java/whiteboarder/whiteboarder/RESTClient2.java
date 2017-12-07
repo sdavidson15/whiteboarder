@@ -16,10 +16,14 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 
-// RESTClient2 is a replacement for RESTClient that makes use of the Retrofit library.
-//
-// See https://square.github.io/retrofit/ for information on the library in use.
-// RESTClient2 is *unaware* of the SessionInfo singleton.
+/**
+ * RESTClient2 is responsible for http communication with the server.
+ * RESTClient2 is a replacement for RESTClient that makes use of the Retrofit library.
+ *
+ * See https://square.github.io/retrofit/ for information on the library in use.
+ * RESTClient2 is "unaware" of the SessionInfo singleton.
+ * @author Alexander Campbell
+ */
 public class RESTClient2 {
     // TODO: change this to point to the permanent location of our server,
     // or at least make it configurable.
@@ -30,6 +34,7 @@ public class RESTClient2 {
 
     public abstract static class Callback<T> {
         abstract void success(T data);
+
         abstract void fail();
     }
 
@@ -37,7 +42,6 @@ public class RESTClient2 {
         public String wbID;
         public String username;
     }
-
 
     private interface WhiteboarderServer {
         @POST("/whiteboarder/session")
@@ -52,8 +56,7 @@ public class RESTClient2 {
     }
 
     private static final Retrofit retrofit = new Retrofit.Builder().baseUrl(HOST)
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(ScalarsConverterFactory.create()).addConverterFactory(GsonConverterFactory.create())
             .build();
     private final WhiteboarderServer service = retrofit.create(WhiteboarderServer.class);
 

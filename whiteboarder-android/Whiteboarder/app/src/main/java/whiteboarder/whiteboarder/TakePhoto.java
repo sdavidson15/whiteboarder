@@ -22,6 +22,11 @@ import java.io.IOException;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
+/**
+ * TakePhoto activity allows a user to capture a background image for a whiteboard, and uses
+ * RESTClient2 to upload the image to the server.
+ * @author Alexander Campbell
+ */
 public class TakePhoto extends AppCompatActivity {
     private Camera camera;
 
@@ -87,10 +92,10 @@ public class TakePhoto extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void doPermissionsCheck() {
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
-            requestPermissions(new String[]{Manifest.permission.CAMERA}, 0);
+            requestPermissions(new String[] { Manifest.permission.CAMERA }, 0);
 
         if (checkSelfPermission(Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED)
-            requestPermissions(new String[]{Manifest.permission.INTERNET}, 0);
+            requestPermissions(new String[] { Manifest.permission.INTERNET }, 0);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -122,10 +127,12 @@ public class TakePhoto extends AppCompatActivity {
             }
 
             @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+            }
 
             @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {}
+            public void surfaceDestroyed(SurfaceHolder holder) {
+            }
         });
     }
 
@@ -138,18 +145,18 @@ public class TakePhoto extends AppCompatActivity {
         int rotation = this.getWindowManager().getDefaultDisplay().getRotation();
         int degrees = 0;
         switch (rotation) {
-            case Surface.ROTATION_0:
-                degrees = 0;
-                break;
-            case Surface.ROTATION_90:
-                degrees = 90;
-                break;
-            case Surface.ROTATION_180:
-                degrees = 180;
-                break;
-            case Surface.ROTATION_270:
-                degrees = 270;
-                break;
+        case Surface.ROTATION_0:
+            degrees = 0;
+            break;
+        case Surface.ROTATION_90:
+            degrees = 90;
+            break;
+        case Surface.ROTATION_180:
+            degrees = 180;
+            break;
+        case Surface.ROTATION_270:
+            degrees = 270;
+            break;
         }
 
         int result;

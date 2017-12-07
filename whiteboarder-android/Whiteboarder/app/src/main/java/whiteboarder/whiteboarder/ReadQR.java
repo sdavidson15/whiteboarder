@@ -18,12 +18,15 @@ import android.widget.Toast;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import com.google.zxing.Result;
 
-
 import static android.Manifest.permission.CAMERA;
 
+/**
+ * Activity responsible for scanning a qr code for a session id.
+ * @author Jared Gorton
+ */
 public class ReadQR extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
-    private static final int REQUEST_CAMERA = 1;    // used when getting permission from user for camera
+    private static final int REQUEST_CAMERA = 1; // used when getting permission from user for camera
     private ZXingScannerView mScannerView;
     Button b1, b2;
 
@@ -44,49 +47,48 @@ public class ReadQR extends AppCompatActivity implements ZXingScannerView.Result
     }
 
     private boolean checkPermission() {
-        return (ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA) == PackageManager.PERMISSION_GRANTED);
+        return (ContextCompat.checkSelfPermission(getApplicationContext(),
+                CAMERA) == PackageManager.PERMISSION_GRANTED);
     }
 
     private void requestPermission() {
-        ActivityCompat.requestPermissions(this, new String[]{CAMERA}, REQUEST_CAMERA);
+        ActivityCompat.requestPermissions(this, new String[] { CAMERA }, REQUEST_CAMERA);
     }
 
     public void onRequestPermissionsResult(int requestCode, String Permissions[], int[] grantResults) {
         switch (requestCode) {
-            case REQUEST_CAMERA:
-                if (grantResults.length > 0) {
-                    boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    if (cameraAccepted) {
-                        Toast.makeText(getApplicationContext(), "Permission granted: Now you may access camera", Toast.LENGTH_LONG).show();
-                    }
-                    else {
-                        Toast.makeText(getApplicationContext(), "Permission denied: You may not access camera", Toast.LENGTH_LONG).show();
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            if (shouldShowRequestPermissionRationale(CAMERA)) {
-                                showMessageOKCancel("You need to allow access to both the permissions", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                            requestPermissions(new String[]{CAMERA}, REQUEST_CAMERA);
+        case REQUEST_CAMERA:
+            if (grantResults.length > 0) {
+                boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                if (cameraAccepted) {
+                    Toast.makeText(getApplicationContext(), "Permission granted: Now you may access camera",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Permission denied: You may not access camera",
+                            Toast.LENGTH_LONG).show();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (shouldShowRequestPermissionRationale(CAMERA)) {
+                            showMessageOKCancel("You need to allow access to both the permissions",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                requestPermissions(new String[] { CAMERA }, REQUEST_CAMERA);
+                                            }
                                         }
-                                    }
-                                });
-                                return;
-                            }
+                                    });
+                            return;
                         }
                     }
                 }
-                break;
+            }
+            break;
         }
     }
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new android.support.v7.app.AlertDialog.Builder(ReadQR.this)
-                .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
+        new android.support.v7.app.AlertDialog.Builder(ReadQR.this).setMessage(message)
+                .setPositiveButton("OK", okListener).setNegativeButton("Cancel", null).create().show();
     }
 
     @Override
@@ -96,7 +98,7 @@ public class ReadQR extends AppCompatActivity implements ZXingScannerView.Result
         int currentapiVersion = android.os.Build.VERSION.SDK_INT;
         if (currentapiVersion >= android.os.Build.VERSION_CODES.M) {
             if (checkPermission()) {
-                if(mScannerView == null) {
+                if (mScannerView == null) {
                     mScannerView = new ZXingScannerView(this);
                     setContentView(mScannerView);
                 }

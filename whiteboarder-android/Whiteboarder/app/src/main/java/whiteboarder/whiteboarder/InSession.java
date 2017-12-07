@@ -19,13 +19,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * InSession is the activity responsible for showing an ongoing session, including a connected
+ * users list, session meta, and options to update the whiteboard image and share a link.
+ * @author Stephen Davidson
+ */
 public class InSession extends AppCompatActivity {
     private static final String SHARE_LINK_LABEL = "Share Link";
     private static final String UPDATE_BOARD_LABEL = "Take New Photo";
 
-    private String[] drawerItemLabels = new String[]{
-            "Administrative controls coming soon!"
-    };
+    private String[] drawerItemLabels = new String[] { "Administrative controls coming soon!" };
     private ActionBarDrawerToggle drawerToggle;
 
     @Override
@@ -39,7 +42,9 @@ public class InSession extends AppCompatActivity {
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,null, R.string.drawer_open, R.string.drawer_close) {};
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, null, R.string.drawer_open,
+                R.string.drawer_close) {
+        };
         drawerLayout.addDrawerListener(drawerToggle);
 
         ((TextView) findViewById(R.id.meta_session_id)).setText("Session ID: " + SessionInfo.sessionID);
@@ -69,7 +74,7 @@ public class InSession extends AppCompatActivity {
             void success(List<RESTClient2.User> data) {
                 TextView textView = (TextView) findViewById(R.id.connected_user_list);
                 String text = "";
-                for (RESTClient2.User user: data) {
+                for (RESTClient2.User user : data) {
                     text = text + user.username + "\n";
                 }
                 textView.setText(text);
@@ -77,11 +82,8 @@ public class InSession extends AppCompatActivity {
 
             @Override
             void fail() {
-                Snackbar.make(
-                        findViewById(R.id.drawer_layout),
-                        "There was an issue fetching the user list :(",
-                        Snackbar.LENGTH_SHORT
-                ).show();
+                Snackbar.make(findViewById(R.id.drawer_layout), "There was an issue fetching the user list :(",
+                        Snackbar.LENGTH_SHORT).show();
             }
         });
     }

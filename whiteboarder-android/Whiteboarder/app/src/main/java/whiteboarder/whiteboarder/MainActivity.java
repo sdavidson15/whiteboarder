@@ -6,6 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * Home page of the Whiteboarder app. Only accessed on startup when the user is
+ * not yet connected to an ongoing session, or when the user disconnects from a session.
+ * @author Alexander Campbell
+ */
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
