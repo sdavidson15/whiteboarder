@@ -13,7 +13,19 @@ import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
+/**
+ * Rest is the class responsible for instantiating the rest server and registering all necessary resources.
+ * @author Stephen Davidson
+ */
 public class Rest {
+
+	/**
+	 * setupServer registers necessary resources and sets up the rest api and static file handler
+	 * to be served.
+	 * @param ctx the server context.
+	 * @param uriStr uri where the rest server will be served from.
+	 * @param port access port.
+	 */
 	public static HttpServer setupServer(Context ctx, String uriStr, int port) {
 		Routes.ctx = ctx;
 

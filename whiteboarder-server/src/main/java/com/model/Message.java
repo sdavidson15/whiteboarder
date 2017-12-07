@@ -2,6 +2,10 @@ package com.model;
 
 import java.util.Date;
 
+/**
+ * Model class Message is a message sent between users in a whiteboarder session.
+ * @author Jared Gorton
+ */
 public class Message {
 	public static final int MAX_MSG_LENGTH = 200;
 
@@ -11,6 +15,13 @@ public class Message {
 	private String msg;
 	private Date timestamp;
 
+	/**
+	 * Class constructor.
+	 * @param messageID id.
+	 * @param wbID id of this message's whiteboarder session.
+	 * @param username name of the user who sent this message.
+	 * @param msg message text.
+	 */
 	public Message(int messageID, String wbID, String username, String msg) {
 		this.wbID = wbID;
 		this.messageID = messageID;
@@ -19,34 +30,51 @@ public class Message {
 		this.timestamp = new Date();
 	}
 
+	/**
+	 * @return this messge's id.
+	 */
 	public int getMessageID() {
 		return this.messageID;
 	}
 
+	/**
+	 * @param messageID message id to be set.
+	 */
 	public void setMessageID(int messageID) {
 		this.messageID = messageID;
 	}
 
+	/**
+	 * @return this message's whiteboarder session id.
+	 */
 	public String getWbID() {
 		return this.wbID;
 	}
 
+	/**
+	 * @return the name of the user who sent this message.
+	 */
 	public String getUsername() {
 		return this.username;
 	}
 
+	/**
+	 * @return this message's message text.
+	 */
 	public String getMessage() {
 		return this.msg;
 	}
 
-	public void setMessage() {
-		this.msg = msg;
-	}
-
+	/**
+	 * @return the time that this message was sent.
+	 */
 	public Date getTimestamp() {
 		return this.timestamp;
 	}
 
+	/**
+	 * setNewTimestamp sets this message's timestamp to the current time.
+	 */
 	public void setNewTimestamp() {
 		this.timestamp = new Date();
 	}

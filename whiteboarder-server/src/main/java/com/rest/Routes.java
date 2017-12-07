@@ -35,6 +35,12 @@ import javax.ws.rs.Produces;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
+/**
+ * Routes houses the rest api, defining the endpoint and handing requests to the
+ * appropriate management functions.
+ * @author Stephen Davidson
+ * @author Jared Gorton
+ */
 @Path("/")
 public class Routes {
 
@@ -52,6 +58,10 @@ public class Routes {
 
 	public static Context ctx;
 
+	/**
+	 * @param sessionID the id of the requested whiteboarder session.
+	 * @return the session corresponding to the requested id. 
+	 */
 	@GET
 	@Path("/session/{sessionID}")
 	@Produces(APPLICATION_JSON)
@@ -67,6 +77,9 @@ public class Routes {
 		return Response.ok(gson.toJson(wb), APPLICATION_JSON).build();
 	}
 
+	/**
+	 * createSession creates a new whiteboarder session.
+	 */
 	@POST
 	@Path("/session")
 	@Produces(TEXT_PLAIN)
@@ -86,6 +99,10 @@ public class Routes {
 		return Response.ok(wb.getWbID(), TEXT_PLAIN).build();
 	}
 
+	/**
+	 * renameSession renames a session.
+	 * @param payload JSON payload containing the session id, original name, and new name.
+	 */
 	@PUT
 	@Path("/session")
 	@Consumes(APPLICATION_JSON)
@@ -108,6 +125,10 @@ public class Routes {
 		return Response.ok("Session renamed.").build();
 	}
 
+	/**
+	 * getImage returns the most recent image uploaded to a session.
+	 * @param sessionID the id of the requested session.
+	 */
 	@GET
 	@Path("/image/{sessionID}")
 	@Produces(APPLICATION_OCTET_STREAM)
@@ -129,6 +150,12 @@ public class Routes {
 				.header("Content-Disposition", "inline; filename=\"" + sessionID + ".jpg\"").build();
 	}
 
+	/**
+	 * uploadImage adds a background image to a specified whiteboarder session.
+	 * @param file the image file.
+	 * @param fileDetail meta information about the image file, including the file name.
+	 * @param sessionID the id of the requested session.
+	 */
 	@POST
 	@Path("/image/{sessionID}")
 	@Consumes(MULTIPART_FORM_DATA)
@@ -158,6 +185,10 @@ public class Routes {
 		return Response.ok("Image uploaded.").build();
 	}
 
+	/**
+	 * getUsers returns the set of users currently in a specified whiteboarder session.
+	 * @param sessionID the id of the requested session.
+	 */
 	@GET
 	@Path("/users/{sessionID}")
 	public Response getUsers(@PathParam("sessionID") String sessionID) {

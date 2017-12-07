@@ -11,7 +11,18 @@ import org.glassfish.grizzly.websockets.WebSocketAddOn;
 import org.glassfish.grizzly.websockets.WebSocketApplication;
 import org.glassfish.grizzly.websockets.WebSocketEngine;
 
+/**
+ * WebSocketServer is class responsible for registering the web socket application and serving
+ * the web socket.
+ * @author Stephen Davidson
+ */
 public class WebSocketServer {
+
+    /**
+     * startServer regiester the whiteboarder web socket application and starts the server.
+     * @param ctx the server context.
+     * @param server the rest server (api and static file handler).
+     */
     public static void startServer(Context ctx, HttpServer server) throws Exception {
         final WebSocketApplication wbApp = new WhiteboarderApplication(ctx);
         ctx.setWbApp((WhiteboarderApplication) wbApp);

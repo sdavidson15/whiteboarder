@@ -5,7 +5,11 @@ import com.model.Message;
 import com.model.User;
 import com.model.Whiteboard;
 
-
+/**
+ * MySQL is a class that simply houses all the MySQL strings used to query and update the database.
+ * @author Stephen Davidson
+ * @author Jared Gorton
+ */
 public class MySQL {
 	// Create Tables
 	final static String CREATE_WHITEBOARDS_TABLE = "CREATE TABLE IF NOT EXISTS Whiteboards ("
@@ -23,7 +27,8 @@ public class MySQL {
 			+ "PRIMARY KEY (WhiteboardID,Username));";
 	final static String CREATE_MESSAGES_TABLE = "CREATE TABLE IF NOT EXISTS Messages (MessageID INT AUTO_INCREMENT, "
 			+ "WhiteboardID CHAR(36) NOT NULL, Username VARCHAR(" + User.MAX_USER_NAME_LENGTH + "), "
-			+ "Message VARCHAR(" + Message.MAX_MSG_LENGTH + "), Timestamp TIMESTAMP NOT NULL, " + "PRIMARY KEY (MessageID));";
+			+ "Message VARCHAR(" + Message.MAX_MSG_LENGTH + "), Timestamp TIMESTAMP NOT NULL, "
+			+ "PRIMARY KEY (MessageID));";
 
 	// Remove Tables
 	final static String REMOVE_WHITEBOARDS_TABLE = "DROP TABLE IF EXISTS Whiteboards;";

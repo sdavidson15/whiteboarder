@@ -1,10 +1,21 @@
 package com.core;
 
+/**
+ * WbException is the class that all exceptions are converted into before being thrown.
+ * Also houses all the exception message strings.
+ * @author Stephen Davidson
+ */
 public class WbException extends Exception {
+    /**
+     * Class constructor.
+     */
     public WbException(String msg) {
         super(msg);
     }
 
+    /**
+     * Class constructor.
+     */
     public WbException(String msg, Exception e) {
         super(msg, e);
     }

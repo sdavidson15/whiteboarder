@@ -20,6 +20,10 @@ import java.util.Scanner;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 
+/**
+ * Main is responsible for server startup and configuration.
+ * @author Stephen Davidson
+ */
 public class Main {
 
 	public static final int DB_CONNECTION_NUM_RETRIES = 5;
@@ -37,6 +41,10 @@ public class Main {
 	public static final String PROD_URI = "http://proj-309-yt-c-1.cs.iastate.edu/whiteboarder/";
 	public static final int PROD_PORT = 80;
 
+	/**
+	 * Startup point of the Whiteboarder server.
+	 * @param args specifies whether or not the server is running on the prod server.
+	 */
 	public static void main(String[] args) throws Exception {
 		boolean isLocal = true;
 		if (args.length == 1 && args[0].equals("prod"))
@@ -59,6 +67,11 @@ public class Main {
 		endDatabaseConnection(dbc);
 	}
 
+	/**
+	 * Write run type writes a file to the statically served web directory with
+	 * run configuration information for the client.
+	 * @param isLocal whether or not the server is running locally.
+	 */
 	public static void writeRunType(boolean isLocal) throws IOException {
 		File f = new File("../whiteboarder-web/runtype.txt");
 		f.delete();
@@ -69,6 +82,14 @@ public class Main {
 		Files.write(path, line, Charset.forName("UTF-8"));
 	}
 
+	/**
+	 * startDatabaseConnection establishes a connection the the MySQL database.
+	 * @param host the host name for the database connection.
+	 * @param user the user name for the database connection.
+	 * @param password the password for the database connection.
+	 * @param isLocal whether or not the server is running locally.
+	 * @return the connection to the MySQL database.
+	 */
 	public static DatabaseConnector startDatabaseConnection(String host, String user, String password,
 			boolean isLocal) {
 
@@ -85,6 +106,10 @@ public class Main {
 		return null;
 	}
 
+	/**
+	 * endDatabase connection closes the connection to the MySQl database
+	 * @param dbc the database connection.
+	 */
 	public static void endDatabaseConnection(DatabaseConnector dbc) {
 		int retry = 0;
 		while (retry < DB_CONNECTION_NUM_RETRIES) {

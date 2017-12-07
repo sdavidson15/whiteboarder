@@ -28,6 +28,11 @@ import org.glassfish.grizzly.websockets.WebSocket;
 import org.glassfish.grizzly.websockets.WebSocketApplication;
 import org.glassfish.grizzly.websockets.WebSocketListener;
 
+/**
+ * WhiteboarderApplication handles all websocket communication.
+ * @author Stephen Davidson
+ * @author Jared Gorton
+ */
 public class WhiteboarderApplication extends WebSocketApplication {
     // Internal class for JSON serialization
     class HandleEdit {
@@ -42,6 +47,10 @@ public class WhiteboarderApplication extends WebSocketApplication {
 
     private Context ctx;
 
+    /**
+     * Class constructor.
+     * @param ctx the server context.
+     */
     public WhiteboarderApplication(Context ctx) {
         super();
         this.ctx = ctx;
@@ -50,12 +59,18 @@ public class WhiteboarderApplication extends WebSocketApplication {
     private Set<WebSocket> members = Collections.newSetFromMap(new ConcurrentHashMap<WebSocket, Boolean>());
     private final Broadcaster broadcaster = new OptimizedBroadcaster();
 
+    /**
+     * createSocket instantiates a WhiteboarderWebSocket with the provided resources.
+     */
     @Override
     public WebSocket createSocket(ProtocolHandler handler, HttpRequestPacket request, WebSocketListener... listeners) {
         Logger.log.info("Creating a web socket.");
         return new WhiteboarderWebSocket(handler, request, listeners);
     }
 
+    /**
+     * onMessage handles incoming client messages.
+     */
     @Override
     public void onMessage(WebSocket websocket, String jsonData) {
         if (jsonData != null && jsonData.startsWith("login:")) {
@@ -71,11 +86,17 @@ public class WhiteboarderApplication extends WebSocketApplication {
         handleEdit(websocket, jsonData);
     }
 
+    /**
+     * onConnect handles the event of a new client connecting to the web socket.
+     */
     @Override
     public void onConnect(WebSocket websocket) {
         // Have to override this and do nothing.
     }
 
+    /**
+     * onClose handles the event of a client leaving the web socket connection.
+     */
     @Override
     public void onClose(WebSocket websocket, DataFrame frame) {
         WhiteboarderWebSocket wws = (WhiteboarderWebSocket) websocket;
@@ -88,10 +109,20 @@ public class WhiteboarderApplication extends WebSocketApplication {
         members.remove(websocket);
     }
 
+    /**
+     * refreshImage broadcasts to all connected clients a command for each client to re-retrieve
+     * the specified session's background image.
+     * @param sessionID the id of the session to refresh.
+     */
     public void refreshImage(String sessionID) {
         broadcast("refreshImage:" + sessionID);
     }
 
+    /**
+     * refreshUsers broadcasts to all connected clients a command for each client to re-retrieve
+     * the specified session's set of users.
+     * @param sessionID the id of the session to refresh.
+     */
     public void refreshUsers(String sessionID) {
         broadcast("refreshUsers:" + sessionID);
     }
