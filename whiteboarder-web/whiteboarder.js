@@ -1,7 +1,8 @@
 
 const routePrefix = "/whiteboarder";
 
-// Put all mutable variables in this object.
+// State contains all the mutable variables of the program.
+// No state variables are allowed to be declared outside of this singleton.
 var state = {
     refreshIteration: 0,
     sessionID: null,
@@ -25,6 +26,9 @@ function POST_Session(callback) {
     });
 }
 
+// Redirect the current browser page to the page for the given sessionID. Note
+// that if the sessionID is equivalent to the current sessionID, the page will
+// **not** be refreshed.
 function navigateToURLForSession(sessionID) {
     var parsedURL = new URL(window.location.href);
     var currentURLSessionID = parsedURL.searchParams.get("sessionID");
@@ -120,7 +124,8 @@ $(function () {
     state.sessionID = getSessionIDFromURL();
 
     if (state.sessionID) {
-        // If we are connected to a session
+        // If we are connected to a session, show the connected section and hide
+        // the welcome page.
         $("#section-welcome").hide();
         $("#section-connected").show();
 
@@ -140,7 +145,9 @@ $(function () {
         websocketApp.close();
     }
 
-    // set up button triggers
+    /**
+     * All button triggers are set up here.
+     */
     $("#navbar-title").click(function () { navigateToURLForSession(null); });
     $("#navbar-home-link").click(function () { navigateToURLForSession(null); });
     $("#session-id-button-navbar").click(function () {
@@ -181,8 +188,8 @@ $(function () {
     });
 });
 
-// ------------------------------------------- Drawing App ------------------------------------------- //
-
+// drawingApp contains all the logic of the "drawing" capability in the
+// application, including the different colors and sizes of markers.
 var drawingApp = (function () {
     var canvas,
         context,
@@ -250,7 +257,7 @@ var drawingApp = (function () {
             color = color.concat(cachedColor);
             size = size.concat(cachedSize);
 
-            // This for loop takes care of the actual drawing
+            // This `for` loop takes care of the actual drawing on the canvas.
             for (i = 0; i < x.length; i++) {
                 context.beginPath();
                 if (drag[i] && i > 0) {
@@ -276,6 +283,7 @@ var drawingApp = (function () {
             context.restore();
         },
 
+        // Begin a new click.
         addClick = function (x, y, isDragging) {
             cachedX.push(x);
             cachedY.push(y);
@@ -326,6 +334,7 @@ var drawingApp = (function () {
             websocketApp.handleEdit(edit, false);
         },
 
+        // Clear the client-side cache of edits.
         resetEditCache = function () {
             cachedX = [];
             cachedY = [];
@@ -334,6 +343,9 @@ var drawingApp = (function () {
             cachedDrag = [];
         },
 
+        // Add triggers to the HTML elements to ensure we are notified when the
+        // user performs an action. This includes the different marker colors
+        // and sizing buttons.
         setupListeners = function () {
             document.getElementById("marker").addEventListener("click", function () {
                 if (currentTool != "marker") {
@@ -429,6 +441,7 @@ var drawingApp = (function () {
             canvas.addEventListener("mouseout", cancel, false);
         },
 
+        // Begin the program. Note that this function calls `setupListeners()`.
         init = function () {
             canvasWidth = $('#imagebox').width();
             canvasHeight = $('#imagebox').height();
@@ -461,8 +474,9 @@ var drawingApp = (function () {
     };
 }());
 
-// ------------------------------------------- Websocket App ------------------------------------------- //
 
+// The websocketApp encapsulates the entirety of the websocket logic, making it
+// easier to code the rest of the application over this abstraction.
 var websocketApp = (function () {
     var socket,
         url,
@@ -515,8 +529,9 @@ var websocketApp = (function () {
                     drawingApp.addEdit(h.edit);
             };
             socket.onclose = function (event) {
-                // drawingApp = null;
-                // FIXME: Find a better way to close the drawing app.
+                // There's not much we can do with an onclose event, so we
+                // essentially wait for the user to refresh. This shouldn't
+                // occur unless there are serious connectivity issues.
             };
         },
 
